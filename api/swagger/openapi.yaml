@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: X-point REST API test
+  description: |-
+    Open APIを試しに使ってみるサンプルです。
+    
+    # APIテストサーバーについて
+    ■localhost:8003
+    
+    モックサーバーです。
+    
+    ■localhost
+    
+    ローカルのX-pointサーバーです。`但し、Swaggerのドメインがlocalhost以外である場合はCORSエラーが発生します。`
+    
+    ■{サブドメイン}.atledcloud.jp
+    
+    X-pointサーバーです。`但し、ドメインが違うためCORSエラーが発生します。`
+  version: v3.6.00
+servers:
+  - url: http://localhost:8003
+    description: モックサーバー
+  - url: https://localhost
+    description: X-piontローカル環境
+  - url: https://{sub_domain}.atledcloud.jp
+    description: X-point環境
+    variables:
+      sub_domain:
+        default: "xpoint-develop"
+tags:
+  - name: Documents
+    description: 書類操作に関するAPI
+security:
+  - Bearer: []
+  - XP-API-Token: []
+paths:
+  /xpoint/api/v1/documents:
+    post:
+      tags:
+        - Documents
+      summary: 書類作成
+      description: 新しく書類を作成します。
+      requestBody:
+        description: 作成する書類情報を指定します。
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDocument'
+        required: true
+      responses:
+        '200':
+          description: 書類作成成功時
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDocument'
+        '400':
+          description: リクエストボディの指定値が不正
+        '500':
+          description: 書類作成中にエラー発生
+components:
+  schemas:
+    PostDocument:
+      required:
+        - form_code
+        - form_name
+        - route_code
+        - datas
+      type: object
+      properties:
+        lumpapply:
+          type: boolean
+          example: false
+          default: true
+          description: 自動申請設定を使用して作成する場合はtrue。使用しない場合はfalse。
+        draft:
+          type: boolean
+          example: false
+          default: false
+          description: 書類を下書き作成する場合はtrue。申請する場合はfalse。
+        form_code:
+          type: string
+          example: formb
+          description: form_codeもしくはform_nameのどちらかの指定が必須。
+        form_name:
+          type: string
+          example: フォームB
+          description: form_codeもしくはform_nameのどちらかの指定が必須。
+        route_code:
+          type: string
+          example: routeB
+          description: 書類の承認ルートを承認ルートコードで指定する。
+        datas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+      xml:
+        name: postdocument
+    Page:
+      type: object
+      properties:
+        page_no:
+          type: integer
+          format: int32
+          example: 1
+          description: 書類のページ番号。
+        fields:
+          $ref: '#/components/schemas/Field'
+      xml:
+        name: page
+    Field:
+      type: object
+      properties:
+        textfield1:
+          type: string
+          example: テスト
+          description: 入力対象のフィールドIDに入力したい値を指定する。
+        busho2:
+          type: string
+          example: Open API
+          description: 入力対象のフィールドIDに入力したい値を指定する。
+      xml:
+        name: field
+    ResponseDocument:
+      type: object
+      properties:
+        docid:
+          type: integer
+          format: int64
+          example: 1000
+        message_type:
+          type: integer
+          format: int32
+          example: 3
+        message:
+          type: string
+          example: 書類が提出されました(ID = 1000)
+      xml:
+        name: responsedocument
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: X-point access token
+    XP-API-Token:
+      type: apiKey
+      in: header
+      description: X-point APIトークン認証
+      name: X-ATLED-Generic-API-Token
