@@ -23,6 +23,7 @@ tags:
   - name: Approvals
   - name: Search
   - name: Query
+  - name: Adminrole
   - name: Other
   - name: Users
   - name: Groups
@@ -1080,6 +1081,21 @@ paths:
           $ref: "#/components/responses/GetQueryGraphResponses200"
         "404":
           $ref: "#/components/responses/ErrorResponses404"
+
+  # --------------------------------------------------------------------------------------------------
+  
+  /api/v1/adminrole:
+    get:
+      tags:
+        - Adminrole
+      summary: ユーザ権限情報取得
+      description: |
+        認証ユーザが持つ管理者権限の一覧を取得します。
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/GetAdminroleResponses200"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -6158,6 +6174,33 @@ components:
       content:
         image/png: {}
         image/jpeg: {}
+
+    # --------------------------------------------------------------------------------------------------
+    
+    GetAdminroleResponses200:
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              role:
+                example:
+                  - "domain"
+                  - "form"
+                  - "user"
+                  - "master"
+                  - "query"
+                  - "wkfl"
+                description: |
+                  権限情報リスト。<br>
+                  いずれの権限も持たない一般ユーザの場合は空配列が返却されます。
+                  - "domain": ドメイン管理権限
+                  - "form": フォーム管理権限
+                  - "user": ユーザ管理権限
+                  - "master": マスタ管理権限
+                  - "query": クエリ管理権限
+                  - "wkfl": ワークフロー管理権限
 
     # --------------------------------------------------------------------------------------------------
 
