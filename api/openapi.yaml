@@ -39,12 +39,27 @@ paths:
         REST API による書類の作成（申請・下書き）を行います。<br>
         書類の作成にはフォームの特定に必要なフォームコードもしくはフォーム名称、承認ルートコードを指定する必要があります。<br>
         書類作成後の応答には X-point 上で書類を一意に特定する為の書類 ID が含まれます。<br>
-        取得した書類 ID は、以後の書類操作に必須となるため、書類作成APIを使用したシステム側で保存する事が望ましい情報となります。<br>
-        <br>
-        **注意事項**<br>
-        * 自動申請設定を使用して書類作成（下書き、申請）する場合、書類は自動申請登録と同様の制約を受けます。<br>
-        制約内容の詳細は「管理者機能マニュアル ～自動申請～」を参照してください。<br>
-        * 自動申請設定を使用する場合、自動申請と同様に登録時のデータに含める事ができる表定義はフォーム内の１つのみになります。
+        取得した書類 ID は、以後の書類操作に必須となるため、書類作成APIを使用したシステム側で保存する事が望ましい情報となります。
+        
+        **APIトークンの必要権限**
+        * 追加権限
+        
+        **注意事項**
+        * 通常の書類作成時に行える以下の事項は書類作成APIで行うことができません。
+          * ファイルの添付、コメントの追加はできません。添付ファイル追加APIやコメント追加APIを利用してください。
+          * 未定義ステップの承認者追加や、回覧ステップへの回覧者追加を行うことはできません。
+          * 申請者が複数部署に所属していても申請部署を変更することはできません。
+          * 各フィールドの初期値、初期取得値は登録されません。リクエスト内容の書類データに初期値、初期取得値を含める必要があります。
+          * 各フィールドの入力値の書式チェックはできません。各フィールドの書式に合わせてリクエスト内容の書類データを指定する必要があります。
+          * フォームに設定されたJavaScript、自動計算、マスタ検索、書類制御、ミラー項目は書類作成時に実行されません。
+          * イメージアップロード・フィールドに画像をアップロードすることはできません。
+        * 自動申請設定を使用する場合は自動申請と同様にリクエスト時のデータに含める事ができる表定義はフォーム内の１つのみになります。自動申請設定を利用しない場合は「表定義は１つのみ」の制約が無くなり、全ての表定義をリクエスト時のデータに含めることができます。
+        * 管理者サイトの「フォーム管理＞フィールド編集権限」で設定した編集禁止フィールド設定は効きません。
+        * 電帳法対応オプションの添付型フォーム書類を申請する場合、添付ファイル(電子取引データ・取引関係書類)が添付されていない状態でも申請されます。
+        
+        **補足**
+        * 申請ステップで添付ファイルが必須の承認ルートの書類を申請した場合はエラーレスポンスが返されます。<br>
+        ファイルを添付して申請したい場合は、書類作成APIで下書き書類を作成し、作成した下書き書類に添付ファイルを追加してから下書き提出してください。
       requestBody:
         $ref: "#/components/requestBodies/PostDocumentRequest"
       security:
@@ -70,12 +85,27 @@ paths:
         - Documents
       summary: 書類のワークフロー操作・編集・更新
       description: |
-        指定された ID の書類内容を、送信されたフィールド項目について更新します。<br>
-        <br>
+        指定された ID の書類内容を、送信されたフィールド項目について更新します。
+        
+        **APIトークンの必要権限**
+        * 更新権限
+        
         **注意事項**<br>
-        * ワークフロー操作のみを行う場合は、項目「datas」（書類データ）無しでリクエストしてください。<br>
-        * 書類データの更新のみを行う場合は、項目「wf_type」（ワークフロー種別）無しでリクエストしてください。<br>
-        * 書類データの更新は、更新したいフィールドのみを項目「datas」（書類データ）内に指定してリクエストします。
+        * ワークフロー操作のみを行う場合は、リクエストボディ「datas」（書類データ）無しでリクエストしてください。
+        * 書類データの更新のみを行う場合は、リクエストボディ「wf_type」（ワークフロー種別）無しでリクエストしてください。
+        * 書類データの更新は、更新したいフィールドのみをリクエストボディ「datas」（書類データ）内に指定してリクエストします。
+        * 通常の書類操作時に行える以下の事項は書類のワークフロー操作・編集・更新APIで行うことができません。
+          * ファイルの添付、コメントの追加はできません。添付ファイル追加APIやコメント追加APIを利用してください。
+          * 未定義ステップの承認者追加や、回覧ステップへの回覧者追加を行うことはできません。
+          * 申請者が複数部署に所属していても申請部署を変更することはできません。
+          * 各フィールドの初期値、初期取得値は登録されません。リクエスト内容の書類データに初期値、初期取得値を含める必要があります。
+          * 各フィールドの入力値の書式チェックはできません。各フィールドの書式に合わせてリクエスト内容の書類データを指定する必要があります。
+          * フォームに設定されたJavaScript、自動計算、マスタ検索、書類制御、ミラー項目は書類操作時に実行されません。
+          * イメージアップロード・フィールドに画像をアップロードすることはできません。
+        * 自動申請設定を使用する場合は自動申請と同様にリクエスト時のデータに含めることができる表定義はフォーム内の１つのみになります。自動申請設定を使用しない場合は「表定義は１つのみ」の制約が無くなり、全ての表定義をリクエスト時のデータに含めることができます。
+        * 書類のワークフロー操作・編集・更新APIで承認操作を行う場合、「連続した承認ステップでの自動承認」は動作しますが、「下位役職承認のスキップ」は動作しません。
+        * 管理者サイトの「フォーム管理＞フィールド編集権限」で設定した編集禁止フィールド設定は効きません。
+        * 電帳法対応オプションの添付型フォーム書類をワークフロー操作する場合、添付ファイル(電子取引データ・取引関係書類)が添付されていない状態でも警告が発生せずワークフロー処理が進みます。
       requestBody:
         $ref: "#/components/requestBodies/PatchDocumentRequest"
       security:
@@ -103,9 +133,12 @@ paths:
       summary: 書類内容取得
       description: |
         指定された ID の書類を取得し応答として返します。<br>
-        応答には、コメント情報、添付ファイル情報が含まれますが、添付ファイルは別途用意されている添付ファイル取得API（GetAttachments）を利用してダウンロードします。<br>
-        <br>
-        **注意事項**<br>
+        応答には、コメント情報、添付ファイル情報が含まれますが、添付ファイルは別途用意されている添付ファイル取得API（GetAttachments）を利用してダウンロードします。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
+        
+        **注意事項**
         * OAuth2 認証で REST API を利用する場合、認証ユーザーが書類に対するアクセス権限を保持している必要があります。
       security:
         - bearerAuth: []
@@ -126,7 +159,11 @@ paths:
       tags:
         - Documents
       summary: 書類削除
-      description: 指定された ID の書類を削除します。
+      description: |
+        指定された ID の書類を削除します。
+        
+        **APIトークンの必要権限**
+        * 削除権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -149,6 +186,9 @@ paths:
       summary: コメント追加
       description: |
         指定された ID の書類にコメントを追加します。
+        
+        **APIトークンの必要権限**
+        * 更新権限
       requestBody:
         $ref: "#/components/requestBodies/PostCommentsRequest"
       security:
@@ -174,6 +214,9 @@ paths:
       summary: コメント取得
       description: |
         指定された ID の書類に登録されているコメントを一括で取得します。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -198,6 +241,9 @@ paths:
       summary: コメント更新
       description: |
         指定された ID の書類に登録されているコメントの内容を更新します。
+        
+        **APIトークンの必要権限**
+        * 更新権限
       requestBody:
         $ref: "#/components/requestBodies/PatchCommentsRequest"
       security:
@@ -224,6 +270,9 @@ paths:
       summary: コメント削除
       description: |
         指定された ID の書類に登録されているコメントを削除します。
+        
+        **APIトークンの必要権限**
+        * 削除権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -248,9 +297,12 @@ paths:
         - Documents
       summary: PDFダウンロード
       description: |
-        指定された ID の書類の PDF がダウンロードできます。<br>
-        <br>
-        **注意事項**<br>
+        指定された ID の書類の PDF がダウンロードできます。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
+        
+        **注意事項**
         * OAuth2 認証で REST API を利用する場合、認証ユーザーが書類に対するアクセス権限を保持している必要があります。
       security:
         - bearerAuth: []
@@ -276,6 +328,9 @@ paths:
       summary: 書類表示
       description: |
         指定された ID の書類を表示するための HTML（JavaScript 含む）一式がダウンロードされます。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -301,6 +356,9 @@ paths:
       summary: 新規書類・関連書類作成
       description: |
         書類の新規作成、関連書類の作成を行うための書類ビューHTML がダウンロードされます。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -327,9 +385,12 @@ paths:
       summary: 新規書類・関連書類作成
       description: |
         リクエスト時に、表示する書類ビューのフィールドに事前入力する値、事前添付するファイルが指定可能な新規書類・関連書類作成 API です。<br>
-        GETメソッド版同様、書類の新規作成、関連書類の作成を行うための書類ビューHTML がダウンロードされます。<br>
-        <br>
-        **注意事項**<br>
+        GETメソッド版同様、書類の新規作成、関連書類の作成を行うための書類ビューHTML がダウンロードされます。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
+        
+        **注意事項**
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずに実行してください。
       requestBody:
@@ -354,6 +415,9 @@ paths:
       summary: 書類承認状況取得
       description: |
         指定された書類 ID の最新版の承認状況を取得します。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -379,6 +443,9 @@ paths:
       description: |
         指定された ID の書類の承認進捗状況を表示するための HTML 一式がダウンロードされます。<br>
         取得した HTML は X-point の承認状況を表す画面とほぼ同じ内容で、Webkit 等に表示する際に利用します。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -402,9 +469,12 @@ paths:
         - Attachments
       summary: 添付ファイル追加
       description: |
-        指定された ID の書類に添付ファイルのアップロード追加を行います。<br>
-        <br>
-        **注意事項**<br>
+        指定された ID の書類に添付ファイルのアップロード追加を行います。
+        
+        **APIトークンの必要権限**
+        * 更新権限
+        
+        **注意事項**
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずに実行してください。
       requestBody:
@@ -430,9 +500,12 @@ paths:
         - Attachments
       summary: 添付ファイル更新/削除
       description: |
-        指定された ID の書類に添付されている指定されたファイルを更新または削除します。<br>
-        <br>
-        **注意事項**<br>
+        指定された ID の書類に添付されている指定されたファイルを更新または削除します。
+        
+        **APIトークンの必要権限**
+        * 更新権限
+        
+        **注意事項**
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずに実行してください。
       requestBody:
@@ -460,7 +533,11 @@ paths:
       tags:
         - Attachments
       summary: 添付ファイル一覧取得
-      description: 指定された ID の書類に添付されている添付ファイルの一覧を取得します。
+      description: |
+        指定された ID の書類に添付されている添付ファイルの一覧を取得します。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -484,10 +561,10 @@ paths:
         - Attachments
       summary: 添付ファイル取得
       description: |
-        指定された ID の書類に添付されている添付ファイルをダウンロードします。<br>
-        <br>
-        ※ 添付番号<br>
-        　 書類内容（Documents）、添付ファイル一覧（Attachments）で取得した添付ファイル情報の “seq” 項目に設定された番号を指定する。
+        指定された ID の書類に添付されている添付ファイルをダウンロードします。
+        
+        **APIトークンの必要権限**
+        * 閲覧権限
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -526,10 +603,10 @@ paths:
         - System
       summary: 自動申請の定義情報取得
       description: |
-        指定された自動申請登録 ID に従い、登録されている自動申請の詳細設定を取得します。<br>
-        <br>
-        **注意事項**<br>
-        * 管理者権限を持つユーザーで認証した場合のみ自動申請の定義情報が取得できます。<br>
+        指定された自動申請登録 ID に従い、登録されている自動申請の詳細設定を取得します。
+        
+        **注意事項**
+        * 管理者権限を持つユーザで認証した場合のみ自動申請の定義情報が取得できます。<br>
         一般ユーザーの場合は権限エラーが返されます。
       security:
         - bearerAuth: []
@@ -553,17 +630,11 @@ paths:
         - System
       summary: フォーム定義情報取得
       description: |
-        フォームを構成するフィールドの詳細情報を取得します。<br>
-        <br>
-        **URL**<br>
-        【全てのユーザでリクエスト可能】<br>
-        　https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/forms/{フォーム ID}<br>
-        【管理者ユーザのみリクエスト可能】<br>
-        　https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/system/forms/{フォーム ID}<br>
-        <br>
-        **注意事項**<br>
-        * パスに「/system」が含まれる URL は管理者ユーザで認証した場合のみリクエスト可能です。<br>
-        * 上記 2 つの URL で取得できるフォーム定義情報は同一のものとなります。
+        フォームを構成するフィールドの詳細情報を取得します。
+        
+        **注意事項**
+        * 本APIは管理者ユーザで認証した場合のみフォーム定義が取得できます。
+        * 一般ユーザでフォーム定義を取得したい場合は「/api/v1/forms/{フォームID}」をリクエストしてください。
       security:
         - bearerAuth: []
       parameters:
@@ -584,9 +655,9 @@ paths:
         - System
       summary: 登録フォーム一覧取得
       description: |
-        管理者サイトの「フォーム管理」で表示される一覧相当のリストが取得できます。<br>
-        <br>
-        **注意事項**<br>
+        管理者サイトの「フォーム管理」で表示される一覧相当のリストが取得できます。
+        
+        **注意事項**
         * 管理者権限を持つユーザーで認証した場合のみ登録フォーム一覧情報が取得できます。<br>
         一般ユーザーの場合は権限エラーが返されます。
       security:
@@ -640,17 +711,16 @@ paths:
       summary: マスタデータ取得
       description: |
         管理者サイトの「マスタ管理＞マスタ一覧＞エクスポート」相当の機能の API です。<br>
-        簡易マスタ、ユーザ固有マスタのデータを JSON 形式もしくは CSV 形式で取得できます。<br>
-        <br>
+        簡易マスタ、ユーザ固有マスタのデータを JSON 形式もしくは CSV 形式で取得できます。
+        
         **URL**<br>
-        【JSON 形式で取得する場合】<br>
-        　https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/system/master/{マスタ識別情報}/data<br>
-        　https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/system/master/{マスタ識別情報}/data.json<br>
-        【CSV 形式で取得する場合】<br>
-        　https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/system/master/{マスタ識別情報}/data.csv<br>
-        <br>
-        ※ {マスタ識別情報}にはデータ取得対象のマスタが特定可能な情報を指定します。<br>
-        　 簡易マスタであれば「マスタコード」、ユーザ固有マスタであれば「テーブル名」を指定します。
+        エンドポイントの「data」を「data.json」とするとJSON形式で、「data.csv」とするとCSV形式でマスタデータが取得できます。
+        * 【JSON 形式で取得する場合】<br>
+        　/api/v1/system/master/{マスタ識別情報}/data<br>
+        　/api/v1/system/master/{マスタ識別情報}/data.json
+        <br><br>
+        * 【CSV 形式で取得する場合】<br>
+        　/api/v1/system/master/{マスタ識別情報}/data.csv
       security:
         - bearerAuth: []
       parameters:
@@ -704,12 +774,12 @@ paths:
       summary: ユーザ固有マスタデータアップロード
       description: |
         リモート入出力機能のマスタリモート入力機能相当の API です。<br>
-        ユーザ固有マスタのインポートに利用する CSV ファイルを X-point へアップロードすることが可能です。<br>
-        <br>
-        **注意事項**<br>
-        * ユーザ固有マスタデータアップロード API でインポートに利用する CSV ファイルをアップロードするには、対象のユーザ固有マスタの「ユーザ固有マスタインポートバッチ」を事前に登録しておく必要があります。<br>
+        ユーザ固有マスタのインポートに利用する CSV ファイルを X-point へアップロードすることが可能です。
+        
+        **注意事項**
+        * ユーザ固有マスタデータアップロード API でインポートに利用する CSV ファイルをアップロードするには、対象のユーザ固有マスタの「ユーザ固有マスタインポートバッチ」を事前に登録しておく必要があります。
         * ユーザ固有マスタデータアップロード API はマスタデータのインポート実行までは行いません。<br>
-        インポートの実行は管理者サイトのタスク管理画面から手動で実行するか、スケジュールを設定して実行する必要があります。<br>
+        インポートの実行は管理者サイトのタスク管理画面から手動で実行するか、スケジュールを設定して実行する必要があります。
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずにリクエストしてください。
       requestBody:
@@ -891,6 +961,9 @@ paths:
       tags:
         - Forms
       summary: 利用可能フォーム一覧取得
+      description: |
+        認証ユーザーが利用できるフォームのフォームID、名称を所属グループ（グループID、グループ名）とセットで取得します。<br>
+        代理申請者のユーザーコードを指定することで、代理申請可能なフォーム情報が取得できます。
       security:
         - bearerAuth: []
       parameters:
@@ -1451,7 +1524,11 @@ paths:
       tags:
         - Parts
       summary: 役職情報更新
-      description: パスに指定した役職 ID に紐づく役職の情報を全て更新します。
+      description: |
+        パスに指定した役職 ID に紐づく役職の情報を全て更新します。
+
+        **注意事項**
+        * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
       requestBody:
         $ref: "#/components/requestBodies/PutUpdatePartInfoRequest"
       security:
@@ -1581,7 +1658,9 @@ components:
       required: true
 
     path_attachSeq_required:
-      description: 添付番号
+      description: |
+        添付番号<br>
+        添付番号には書類内容取得（Documents）、添付ファイル一覧取得（Attachments）で取得した添付ファイル情報の “seq” 項目に設定された番号を指定します。
       name: attach_seq
       in: path
       schema:
@@ -1590,7 +1669,9 @@ components:
       required: true
 
     path_lumpapplyid_required:
-      description: 自動申請ID
+      description: |
+        自動申請ID<br>
+        自動申請IDには自動申請登録の一覧取得（Lumpapply）で取得したIDを指定します。
       name: lumpapplyid
       in: path
       schema:
@@ -2095,28 +2176,34 @@ components:
     query_keyword:
       description: |
         検索条件<br>
-        以下の【対象項目】に対して指定したキーワードで検索を行います。<br>
-        formgroup_name&emsp;：フォームグループ名称<br>
-        form_name&emsp;&emsp;&emsp;&nbsp;：フォーム名称<br>
-        form_code&emsp;&emsp;&emsp;&nbsp;：フォームコード<br>
-        route_name&emsp;&emsp;&emsp;：承認ルート名称<br>
-        route_code&emsp;&emsp;&emsp;：承認ルートコード
+        ※キーワードの指定方法についてはページを準備中※<br>
+        以下の【対象項目】に対して指定したキーワードで検索を行います。
+        |対象項目|説明|
+        |----|----|
+        |formgroup_name|フォームグループ名称|
+        |form_name|フォーム名称|
+        |form_code|フォームコード|
+        |route_name|承認ルート名称|
+        |route_code|承認ルートコード|
       name: keyword
       in: query
       schema:
         type: string
-        example: form_name eq "test"
+        example: form_name eq "フォーム01"
 
     query_order:
       description: |
         並び替え条件<br>
         以下の【対象項目】を指定してレスポンスの並び替えを行います。<br>
-        並び替え条件を指定しない場合 X-point提出画面で表示されるフォーム一覧と同じ並び順です。<br>
-        formgroup_name&emsp;：フォームグループ名称<br>
-        form_name&emsp;&emsp;&emsp;&nbsp;：フォーム名称<br>
-        form_code&emsp;&emsp;&emsp;&nbsp;：フォームコード<br>
-        route_name&emsp;&emsp;&emsp;：承認ルート名称<br>
-        route_code&emsp;&emsp;&emsp;：承認ルートコード
+        項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
+        並び替え条件を指定しない場合 X-point提出画面で表示されるフォーム一覧と同じ並び順です。
+        |対象項目|説明|
+        |----|----|
+        |formgroup_name|フォームグループ名称|
+        |form_name|フォーム名称|
+        |form_code|フォームコード|
+        |route_name|承認ルート名称|
+        |route_code|承認ルートコード|
       name: order
       in: query
       schema:
@@ -2206,11 +2293,11 @@ components:
         {対象日付}␣between␣"yyyy-MM-dd"␣and␣"yyyy-MM-dd"<br>
         <br>
         【フィルター指定例】<br>
-        ＜申請日で絞り込みを行う場合＞<br>
-        https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/approvals?stat=10&filter=cr_dt between "2022-01-01" and "2022-12-31"<br>
+        * 申請日で絞り込みを行う場合<br>
+        /api/v1/approvals?stat=10&filter=cr_dt between "2022-01-01" and "2022-12-31"<br>
         <br>
-        ＜最終更新日で絞り込みを行う場合＞<br>
-        https://{サブドメイン}.atledcloud.jp/xpoint/api/v1/approvals?stat=10&filter=up_dt between "2022-01-01" and "2022-12-31"
+        * 最終更新日で絞り込みを行う場合<br>
+        /api/v1/approvals?stat=10&filter=up_dt between "2022-01-01" and "2022-12-31"
       name: filter
       in: query
       schema:
@@ -2225,15 +2312,18 @@ components:
         クエリパラメータの「filter」にログイン ID またはユーザ CD を指定する事でユーザ情報の絞り込みができます。<br>
         <br>
         【フィルター指定形式】<br>
-        フィルターでログイン ID またはユーザ CD を指定する場合は以下のフォーマットで指定します。<br>
-        ・ログイン ID<br>
-        　userName eq "{ログイン ID}"<br>
-        ・ユーザ CD<br>
-        　userCode eq "{ユーザ CD}"<br>
-        <br>
+        フィルターでログイン ID またはユーザ CD を指定する場合は以下のフォーマットで指定します。
+        * ログイン ID<br>
+        userName eq "{ログイン ID}"
+        * ユーザ CD<br>
+        userCode eq "{ユーザ CD}"
+        <br><br>
+
         【フィルター指定例】<br>
-        ＜ユーザ CD で絞り込みを行う場合＞<br>
-        https://{サブドメイン}.atledcloud.jp/xpoint/scim/v2/{ドメイン CD}/Users?filter=userCode eq "u001"
+        * ログイン ID で絞り込みを行う場合<br>
+        /scim/v2/{ドメイン CD}/Users?filter=userName eq "u001"
+        * ユーザ CD で絞り込みを行う場合<br>
+        /scim/v2/{ドメイン CD}/Users?filter=userCode eq "u001"
       name: filter
       in: query
       schema:
@@ -2251,7 +2341,7 @@ components:
         groupCode eq "{グループ CD}"<br>
         <br>
         【フィルター指定例】<br>
-        https://{サブドメイン}.atledcloud.jp/xpoint/scim/v2/{ドメイン CD}/Groups?filter=groupCode eq "g001"
+        /scim/v2/{ドメイン CD}/Groups?filter=groupCode eq "g001"
       name: filter
       in: query
       schema:
@@ -2269,7 +2359,7 @@ components:
         partCode eq "{役職 CD}"<br>
         <br>
         【フィルター指定例】<br>
-        https://{サブドメイン}.atledcloud.jp/xpoint/scim/v2/{ドメイン CD}/Parts?filter=partCode eq "p001"
+        /scim/v2/{ドメイン CD}/Parts?filter=partCode eq "p001"
       name: filter
       in: query
       schema:
@@ -2379,12 +2469,6 @@ components:
 
   requestBodies:
     PostDocumentRequest:
-      description: |
-        **注意事項**<br>
-        * 自動申請設定を使用して書類を作成した場合、作成される書類に関わる注意事項は自動申請機能と同様になります。<br>
-        詳細は「管理者機能マニュアル ～自動申請～」を確認してください。<br>
-        * 管理者サイトの「フォーム管理＞フィールド編集権限」で設定した編集禁止フィールド設定は効きませんのでご注意ください。<br>
-        * 電帳法対応オプションの添付型フォーム書類を申請する場合、添付ファイル（電子取引データ・取引関係書類）が添付されていない状態でも申請されますのでご注意ください。
       content:
         application/json:
           schema:
@@ -2408,6 +2492,7 @@ components:
                         - g_field1: 名前
                           g_field2: 個数
                           g_field3: 価格
+                lumpapply: true
             書類申請:
               value:
                 draft: false
@@ -2422,17 +2507,11 @@ components:
                         - g_field1: 名前
                           g_field2: 個数
                           g_field3: 価格
+                lumpapply: false
 
     # --------------------------------------------------------------------------------------------------
 
     PatchDocumentRequest:
-      description: |
-        **注意事項**<br>
-        * 更新の際、フォーム内に指定された、マスタ検索、書類制御、ミラー項目は動作しません。<br>
-        更新する情報として合わせて送信する必要があります。<br>
-        * 書類のワークフロー操作・編集・更新 API で承認操作を行う場合、「連続した承認ステップでの自動承認」は動作しますが、「下位役職承認のスキップ」は動作しません。<br>
-        * 管理者サイトの「フォーム管理＞フィールド編集権限」で設定した編集禁止フィールド設定は効きませんのでご注意ください。<br>
-        * 電帳法対応オプションの添付型フォーム書類をワークフロー操作する場合、添付ファイル（電子取引データ・取引関係書類）が添付されていない状態でも警告が発生せずワークフロー処理が進みますのでご注意ください。
       content:
         application/json:
           schema:
@@ -2505,6 +2584,8 @@ components:
               attentionflg:
                 description: |
                   重要コメントフラグ
+                  * 0：通常コメント
+                  * 1：重要コメント
                 type: integer
                 example: 1
 
@@ -2514,9 +2595,6 @@ components:
       content:
         application/json:
           schema:
-            required:
-              - content
-              - attentionflg
             type: object
             properties:
               content:
@@ -2527,6 +2605,8 @@ components:
               attentionflg:
                 description: |
                   重要コメントフラグ
+                  * 0：通常コメント
+                  * 1：重要コメント
                 type: integer
                 example: 1
 
@@ -2536,6 +2616,8 @@ components:
       content:
         application/json:
           schema:
+            required:
+              - data
             type: object
             properties:
               overwrite:
@@ -2567,6 +2649,8 @@ components:
       content:
         application/json:
           schema:
+            required:
+              - url
             type: object
             properties:
               url:
@@ -2587,6 +2671,8 @@ components:
       content:
         application/json:
           schema:
+            required:
+              - fqdn
             type: object
             properties:
               fqdn:
@@ -2666,20 +2752,46 @@ components:
               value:
                 form_name: 経費申請書
             申請者指定:
-              description: 申請者のユーザCDが「u001」な書類を検索
+              description: |
+                申請者のユーザCDが「u001」な書類を検索<br>
+                type には「user」(ユーザ)または「group」(ユーザグループ)を指定します。<br>
+                code にはユーザコードまたはユーザグループコードを指定します。
               value:
                 writer_list:
                   - type: user
                     code: u001
             過去期間指定:
-              description: 書類の申請日が現在から20日前以内の書類を検索
+              description: |
+                書類の申請日が現在から20日前以内の書類を検索
+                * date_type (日付条件)<br>
+                「cr_dt」(新規更新日)または「up_dt」(最終更新日)を指定します。
+                * dt_cond_type (日付複合条件)<br>
+                「0」(過去期間指定)または「1」(日付直接指定)を指定します。
+                * date_span (過去期間)<br>
+                dt_cond_typeが0(過去期間指定)の時に過去期間を指定します。
+                * span_type (過去期間種別)<br>
+                dt_cond_typeが0(過去期間指定)の時に指定します。<br>
+                「0」(N日前)または「1」(Nか月前)を指定します。
               value:
                 date_type: cr_dt
                 dt_cond_type: 0
                 date_span: 20
                 span_type: 0
             日付直接指定:
-              description: 書類の申請日が「2022/01/01」から「2023/12/31」の書類を検索
+              description: |
+                書類の申請日が「2022/01/01」から「2023/12/31」の書類を検索
+                * date_type (日付条件)<br>
+                「cr_dt」(新規更新日)または「up_dt」(最終更新日)を指定します。
+                * dt_cond_type (日付複合条件)<br>
+                「0」(過去期間指定)または「1」(日付直接指定)を指定します。
+                * lower_year (開始年)
+                * lower_month (開始月)
+                * lower_day (開始日)<br>
+                dt_cond_typeが1(日付直接指定)の場合に開始年・月・日を指定します。
+                * upper_year (終了年)
+                * upper_month (終了月)
+                * upper_day (終了日)<br>
+                dt_cond_typeが1(日付直接指定)の場合に終了年・月・日を指定します。
               value:
                 date_type: cr_dt
                 dt_cond_type: 1
@@ -2689,6 +2801,137 @@ components:
                 upper_year: 2023
                 upper_month: 12
                 upper_day: 31
+            数値条件指定:
+              description: |
+                書類の金額フィールドの値が1000以上 5000以下の書類を検索
+                * fgid (フォームグループID)<br>
+                検索対象フィールドのフォームが所属するフォームグループのIDを指定します。<br>
+                数値条件、文字列条件を指定する場合は必須です。
+                * fid (フォームID)<br>
+                検索対象フィールドが存在するフォームのIDを指定します。<br>
+                数値条件、文字列条件を指定する場合は必須です。
+                * int_col_name1 (数値条件列1)
+                * int_col_name2 (数値条件列2)
+                * int_col_name3 (数値条件列3)<br>
+                col_name (対象列名) に検索対象のフィールドIDを指定します。<br>
+                page_no (ページ番号) は検索対象のフィールドが複数枚フォームの2ページ目以降に存在する場合にページ番号を指定します。<br>
+                単数枚フォームや複数枚フォームの1ページ目に存在するフィールドIDを指定する場合は省略可能です。
+                * int_and_or1 (数値条件区分1)
+                * int_and_or2 (数値条件区分2)<br>
+                複数の数値条件を指定する場合に「and」もしくは「or」を指定します。
+                * int_data1 (数値条件1)
+                * int_data2 (数値条件2)
+                * int_data3 (数値条件3)<br>
+                条件とする数値を指定します。
+                * compare_type1 (比較区分1)
+                * compare_type2 (比較区分2)
+                * compare_type3 (比較区分3)<br>
+                数値条件の比較区分を指定します。
+                  * 1：と等しい
+                  * 2：より大きい
+                  * 3：と同じか大きい
+                  * 4：より小さい
+                  * 5：と同じか小さい
+              value:
+                fgid: 1
+                fid: 1
+                int_col_name1:
+                  page_no: 1
+                  col_name: money
+                int_col_name2:
+                  page_no: 1
+                  col_name: money
+                int_and_or1: and
+                int_data1: 1000
+                int_data2: 5000
+                compare_type1: 3
+                compaer_type2: 5
+            文字列条件指定:
+              description: |
+                書類の商品コードフィールドの値が「A0001」または「B0001」の書類を検索
+                * fgid (フォームグループID)<br>
+                検索対象フィールドのフォームが所属するフォームグループのIDを指定します。<br>
+                数値条件、文字列条件を指定する場合は必須です。
+                * fid (フォームID)<br>
+                検索対象フィールドが存在するフォームのIDを指定します。<br>
+                数値条件、文字列条件を指定する場合は必須です。
+                * char_col_name1 (文字列条件列1)
+                * char_col_name2 (文字列条件列2)
+                * char_col_name3 (文字列条件列3)<br>
+                col_name (対象列名) に検索対象のフィールドIDを指定します。<br>
+                page_no (ページ番号) は検索対象のフィールドが複数枚フォームの2ページ目以降に存在する場合にページ番号を指定します。<br>
+                単数枚フォームや複数枚フォームの1ページ目に存在するフィールドIDを指定する場合は省略可能です。
+                * char_and_or1 (文字列条件区分1)
+                * char_and_or2 (文字列条件区分2)<br>
+                複数の文字列条件を指定する場合に「and」もしくは「or」を指定します。
+                * char_data1 (文字列条件1)
+                * char_data2 (文字列条件2)
+                * char_data3 (文字列条件3)<br>
+                条件とする文字列を指定します。
+              value:
+                fgid: 1
+                fid: 1
+                char_col_name1:
+                  page_no: 1
+                  col_name: product_code
+                char_col_name2:
+                  page_no: 1
+                  col_name: product_code
+                char_and_or1: or
+                char_data1: A0001
+                char_data2: B0001
+            コメント指定:
+              description: |
+                勝 太郎(ユーザコード:u001)が発言した重要コメントの内、コメント内容に「修正」が含まれる書類を検索
+                * comment_flg (コメントフラグ)
+                  * 0：条件なし
+                  * 1：コメントあり
+                  * 2：コメントなし
+                * comment_content (コメント内容)<br>
+                コメントの文字列を指定します。(部分一致)
+                * comment_writercd (発言者CD)<br>
+                コメントを発言したユーザのユーザコードを指定します。
+                * comment_attentionflg (重要コメントフラグ)<br>
+                  * 0：すべてのコメント
+                  * 1：重要コメントのみ
+              value:
+                comment_flg: 1
+                comment_content: 修正
+                comment_writercd: u001
+                comment_attentionflg: 1
+            添付ファイル指定:
+              description: |
+                添付ファイル名または添付ファイルの備考に「test.txt」が含まれる書類を検索
+                * attach_flg (添付ファイルフラグ)
+                  * 0：条件なし
+                  * 1：添付あり
+                  * 2：添付なし
+                * attach_name (コメント内容)<br>
+                添付ファイル名、備考の文字列を指定します。(部分一致)
+              value:
+                attach_flg: 1
+                attach_name: test.txt
+            並び替え指定:
+              description: |
+                検索結果を件名1の降順に並び替え
+                * order (並び替え条件)<br>
+                指定した以下の項目で並び替えを行います。<br>
+                項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
+                並び替え条件を指定しない場合は更新日時の降順で並び替えます。
+                  * docid：書類ID
+                  * title1：件名1
+                  * title2：件名2
+                  * form_code：フォームコード
+                  * form_name：フォーム名称
+                  * route_code：承認ルートコード
+                  * route_name：承認ルート名称
+                  * stat：承認状況
+                  * step：ステップ番号
+                  * update_datetime：更新日時
+                  * write_datetime：申請日時
+                  * writer：申請者
+              value:
+                order: -title1
             複数項目指定:
               value:
                 docid:
@@ -2758,14 +3001,16 @@ components:
 
     PostCreateDocumentsRequest:
       description: |
-        **注意事項**<br>
-        * 表示する書類ビューに事前添付できるファイルは 1 つまでになります。<br>
-        * file_name に設定するファイル名が日本語を含む場合は、UTF-8 でエンコードした内容を設定する必要があります。<br>
-        * 「detail_no」「evidence_type」は、電帳法対応オプションで添付型を設定したフォームにファイルを事前添付する時に指定する項目です。<br>
+        **注意事項**
+        * 表示する書類ビューに事前添付できるファイルは 1 つまでになります。
+        * file_name に設定するファイル名が日本語を含む場合は、UTF-8 でエンコードした内容を設定する必要があります。
+        * 「detail_no」「evidence_type」は、電帳法対応オプションで添付型を設定したフォームにファイルを事前添付する時に指定する項目です。
         電帳法対応オプションでデータ保存を設定していないフォームや電帳法対応オプションで X-point 内作成型を設定したフォームの場合は指定する必要はありません。
       content:
         multipart/form-data:
           schema:
+            required:
+              - routecd
             type: object
             properties:
               fcd:
@@ -2774,16 +3019,16 @@ components:
                   フォームコードかフォーム名称の何れかをクエリパラメータに指定します。<br>
                   どちらも指定されている場合はフォーム名称と一致するフォームで REST API が実行されます。
                 type: string
-                example: "{{fcd}}"
+                example: form01
               form_name:
                 description: フォーム名称
                 type: string
-                example: test
+                example: フォーム01
               routecd:
                 allOf:
                   - $ref: "#/components/schemas/route_code"
                 type: string
-                example: "{{routecd}}"
+                example: route01
               fromdocid:
                 description: 関連元書類ID
                 type: integer
@@ -2841,8 +3086,9 @@ components:
 
     PostAddAttachmentsRequest:
       description: |
-        **注意事項**<br>
-        * 一度に追加できるファイルは 1 つまでになります。<br>
+        **注意事項**
+        * 一度に追加できるファイルは 1 つまでになります。
+        * 添付ファイルのファイルサイズ制限は設けていませんが、ファイルサイズが大きいファイルを追加する場合はX-pointの応答速度に影響を与える可能性があります。
         * 「detail_no」「evidence_type」は、電帳法対応オプションで添付型を設定したフォームの書類にファイルを添付する時に指定する項目です。<br>
         電帳法対応オプションでデータ保存を設定していないフォームや電帳法対応オプションで X-point 内作成型を設定したフォームの場合は指定する必要はありません。
       content:
@@ -2911,8 +3157,9 @@ components:
 
     PatchUpdateAttachmentsRequest:
       description: |
-        **注意事項**<br>
-        * 一度に更新できるファイルは 1 つまでになります。<br>
+        **注意事項**
+        * 一度に更新できるファイルは 1 つまでになります。
+        * 添付ファイルのファイルサイズ制限は設けていませんが、ファイルサイズが大きいファイルを追加する場合はX-pointの応答速度に影響を与える可能性があります。
         * 「detail_no」「evidence_type」は、電帳法対応オプションで添付型を設定したフォームの添付ファイルを更新する時に指定できる項目です。<br>
         電帳法対応オプションでデータ保存を設定していないフォームや電帳法対応オプションで X-point 内作成型を設定したフォームの場合は指定する必要はありません。
       content:
@@ -2947,7 +3194,7 @@ components:
                 description: |
                   アップロードファイル名<br>
                   拡張子を含んだファイル名を指定する。<br>
-                  アップロードファイル情報が無い場合は指定の必要はありません。
+                  アップロードファイル情報を指定する場合は必須です。
                 type: string
                 example: sample.pdf
               remarks:
@@ -3613,85 +3860,6 @@ components:
                 displayKana: ダイヒョウトリシマリヤク
                 partCode: p001
 
-    # --------------------------------------------------------------------------------------------------
-
-    PostFormInsertRequest:
-      content:
-        multipart/form-data:
-          schema:
-            required:
-              - form_file
-            type: object
-            properties:
-              form_file:
-                description: tsfファイル
-                type: string
-                format: binary
-              project_category:
-                description: |
-                  業務カテゴリ<br>
-                  AgileWorks用パラメータ:AgileWorksのみ必須
-                type: string
-              form_group_id:
-                description: |
-                  所属するフォームグループID(複数可)<br>
-                  X-point用パラメータ:数値の配列で指定
-                type: array
-                items:
-                  example: []
-              file_name:
-                description: |
-                  tsfファイル名称<br>
-                  省略時はデフォルト名「formFile.tsf」となる
-                type: string
-
-    # --------------------------------------------------------------------------------------------------
-
-    PatchFormUpdateRequest:
-      content:
-        multipart/form-data:
-          schema:
-            required:
-              - form_file
-            type: object
-            properties:
-              form_file:
-                description: tsfファイル
-                type: string
-                format: binary
-              project_category:
-                description: |
-                  業務カテゴリ<br>
-                  AgileWorks用パラメータ:AgileWorksのみ必須
-                type: string
-              form_group_id:
-                description: |
-                  所属するフォームグループID(複数可)<br>
-                  X-point用パラメータ:数値の配列で指定
-                type: array
-                items:
-                  example: []
-              file_name:
-                description: |
-                  tsfファイル名称<br>
-                  省略時はデフォルト名「formFile.tsf」となる
-                type: string
-
-    # --------------------------------------------------------------------------------------------------
-
-    PostFormPreviewRequest:
-      content:
-        multipart/form-data:
-          schema:
-            required:
-              - form_file
-            type: object
-            properties:
-              form_file:
-                description: tsfファイル
-                type: string
-                format: binary
-
   # -----------------------------------------------
   # レスポンス components/responses
   # -----------------------------------------------
@@ -3841,119 +4009,131 @@ components:
                 type: object
                 properties:
                   docid:
+                    description: 書類ID
                     type: integer
                     example: 999
                   title1:
+                    description: 件名1
                     type: string
                     example: 件名
                   title2:
+                    description: 件名2
                     type: string
                     example: 件名2
                   form:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 99
-                      code:
-                        type: string
-                        example: form01
-                      name:
-                        type: string
-                        example: 経費申請書
+                    allOf:
+                      - $ref: "#/components/schemas/doc_form"
                   route:
+                    description: |
+                      承認ルート情報<br>
+                      通常フォームの場合は応答に承認ルートコードと承認ルート名称は含まれません。
                     type: object
                     properties:
                       code:
+                        description: 承認ルートコード
                         type: string
                         example: route01
                       name:
+                        description: 承認ルート名称
                         type: string
                         example: 営業部ルート
                   writer:
+                    description: 申請情報
                     type: object
                     properties:
                       user:
+                        description: 申請者情報
                         type: object
                         properties:
                           code:
+                            description: 申請者ユーザコード
                             type: string
                             example: u001
                           name:
+                            description: 申請者ユーザ名
                             type: string
                             example: 田中
                           stampname:
+                            description: 申請者印影名
                             type: string
                             example: 田
                       group:
+                        description: 申請ユーザグループ情報
                         type: object
                         properties:
                           code:
+                            description: 申請ユーザグループコード
                             type: string
                             example: group01
                           name:
+                            description: 申請ユーザグループ名称
                             type: string
                             example: 営業部
                       proxy:
+                        description: |
+                          代理申請者情報
+                          代理申請していない書類の場合は、応答に代理申請者のユーザコードとユーザ名は含まれません。
                         type: object
                         properties:
                           code:
+                            description: 代理申請者ユーザコード
                             type: string
                             example: u002
                           name:
+                            description: 代理申請者ユーザ名
                             type: string
                             example: 佐藤
                       datetime:
+                        description: 申請日時
                         type: string
                         example: 2023/01/01 12:00:00
                   lastaprv:
+                    description: 最終承認者情報
                     type: object
                     properties:
                       user:
+                        description: 承認者情報
                         type: object
                         properties:
                           code:
+                            description: 最終承認者ユーザコード
                             type: string
                             example: u003
                           name:
+                            description: 最終承認者ユーザ名
                             type: string
                             example: 加藤
                           stampname:
+                            description: 最終承認者印影名
                             type: string
                             example: 加
                       datetime:
+                        description: ワークフロー操作日時
                         type: string
                         example: 2023/01/01 12:00:00
                   step:
-                    type: object
-                    properties:
-                      max:
-                        type: integer
-                        example: 5
-                      current:
-                        type: integer
-                        example: 3
+                    allOf:
+                      - $ref: "#/components/schemas/step"
                   version:
+                    description: 版数
                     type: integer
                     example: 3
                   status:
-                    type: object
-                    properties:
-                      code:
-                        type: integer
-                        example: 0
-                      name:
-                        type: string
-                        example: 承認中
+                    allOf:
+                      - $ref: "#/components/schemas/status"
               pages:
                 type: array
                 items:
                   type: object
                   properties:
                     page_no:
+                      description: ページ番号
                       type: integer
                       example: 1
                     fields:
+                      description: |
+                        書類データ<br>
+                        fields内のキーはフィールドIDを指定するため、フォーム毎に異なります。
                       type: object
                       properties:
                         field1:
@@ -3996,33 +4176,46 @@ components:
                   type: object
                   properties:
                     writer:
+                      description: コメント登録者情報
                       type: object
                       properties:
                         code:
+                          description: コメント登録者ユーザコード
                           type: string
                           example: u001
                         name:
+                          description: コメント登録者ユーザ名
                           type: string
                           example: 田中
                         date:
+                          description: コメント登録日時
                           type: string
                           example: 2023/01/01 12:00:00
                     update:
+                      description: コメント更新者情報
                       type: object
                       properties:
                         code:
+                          description: コメント更新者ユーザコード
                           type: string
                           example: u002
                         name:
+                          description: コメント更新者ユーザ名
                           type: string
                           example: 佐藤
                         date:
+                          description: コメント更新日時
                           type: string
                           example: 2023/01/01 12:00:00
                     content:
+                      description: コメント内容
                       type: string
                       example: コメント本文
                     flags:
+                      description: |
+                        コメントタイプ
+                        * back：差し戻しコメントまたは却下コメント
+                        * attention：重要コメント
                       type: array
                       items:
                         type: string
@@ -4456,161 +4649,157 @@ components:
             type: object
             properties:
               lumpapply:
-                description: |
-                  自動申請情報<br>
-                  自動申請が設定されていない場合は空配列を返します。
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      description: 自動申請登録名称
-                      type: string
-                      example: 営業部の経費申請書作成
-                    form:
-                      description: フォーム情報
+                description: 自動申請情報
+                type: object
+                properties:
+                  name:
+                    description: 自動申請登録名称
+                    type: string
+                    example: 営業部の経費申請書作成
+                  form:
+                    description: フォーム情報
+                    type: object
+                    properties:
+                      name:
+                        description: フォーム名称
+                        type: string
+                        example: 経費申請書
+                      code:
+                        description: フォームコード
+                        type: string
+                        example: form01
+                  route:
+                    description: 承認ルート情報
+                    type: object
+                    properties:
+                      name:
+                        description: ルート名称
+                        type: string
+                        example: 営業部ルート
+                      code:
+                        description: ルートコード
+                        type: string
+                        example: route01
+                  import_file:
+                    description: 取込ファイル情報
+                    type: object
+                    properties:
+                      name:
+                        description: 取込ファイル名称
+                        type: string
+                        example: input.csv
+                      success:
+                        description: 取込ファイル成功時処理(数値)
+                        type: integer
+                        example: 0
+                      success_str:
+                        description: 取込ファイル成功時処理(文字列)
+                        type: string
+                        example: 何もしない
+                      failed:
+                        description: 取込ファイル失敗時処理(数値)
+                        type: integer
+                        example: 0
+                      failed_str:
+                        description: 取込ファイル失敗時処理(文字列)
+                        type: string
+                        example: 何もしない
+                  first_row:
+                    description: 取込ファイル1行目の処理（数値）
+                    type: integer
+                    example: 1
+                  first_row_str:
+                    description: 取込ファイル1行目の処理（文字列）
+                    type: string
+                    example: 項目行として無視する
+                  first_colum:
+                    description: 申請書類の切り替え判定項目（数値）
+                    type: integer
+                    example: 1
+                  first_colum_str:
+                    description: 申請書類の切り替え判定項目（文字列）
+                    type: string
+                    example: 先頭列を書類切換えに利用（先頭行文字「*」  継続行文字「」）
+                  remarks:
+                    description: 備考
+                    type: string
+                    example: 営業部用
+                  apply:
+                    description: 申請者情報
+                    type: object
+                    properties:
+                      usertype:
+                        description: 申請者種別
+                        type: string
+                        example: ユーザ指定
+                      usercode:
+                        description: 申請者コード
+                        type: string
+                        example: domain_admin
+                      username:
+                        description: 申請者氏名
+                        type: string
+                        example: 管理者
+                  create:
+                    description: 作成者情報
+                    type: object
+                    properties:
+                      username:
+                        description: 作成者氏名
+                        type: string
+                        example: 管理者
+                      datetime:
+                        description: 作成日
+                        type: string
+                        example: 2023/01/01 12:00
+                  lastaprv:
+                    description: 最終更新者情報
+                    type: object
+                    properties:
+                      username:
+                        description: 最終更新者氏名
+                        type: string
+                        example: 管理者
+                      datetime:
+                        description: 更新日
+                        type: string
+                        example: 2023/01/01 12:00
+                  csv_format:
+                    description: CSVフォーマット情報
+                    type: array
+                    items:
                       type: object
                       properties:
-                        name:
-                          description: フォーム名称
-                          type: string
-                          example: 経費申請書
-                        code:
-                          description: フォームコード
-                          type: string
-                          example: form01
-                    route:
-                      description: 承認ルート情報
-                      type: object
-                      properties:
-                        name:
-                          description: ルート名称
-                          type: string
-                          example: 営業部ルート
-                        code:
-                          description: ルートコード
-                          type: string
-                          example: route01
-                    import_file:
-                      description: 取込ファイル情報
-                      type: object
-                      properties:
-                        name:
-                          description: 取込ファイル名称
-                          type: string
-                          example: input.csv
-                        success:
-                          description: 取込ファイル成功時処理(数値)
+                        seq:
+                          description: シーケンス番号
                           type: integer
-                          example: 0
-                        success_str:
-                          description: 取込ファイル成功時処理(文字列)
+                          example: 1
+                        field_id:
+                          description: フィールドID
                           type: string
-                          example: 何もしない
-                        failed:
-                          description: 取込ファイル失敗時処理(数値)
+                          example: usercode
+                        field_name:
+                          description: フィールド名称
+                          type: string
+                          example: ユーザコード
+                        page_no:
+                          description: ページ番号
                           type: integer
-                          example: 0
-                        failed_str:
-                          description: 取込ファイル失敗時処理(文字列)
-                          type: string
-                          example: 何もしない
-                    first_row:
-                      description: 取込ファイル1行目の処理（数値）
-                      type: integer
-                      example: 1
-                    first_row_str:
-                      description: 取込ファイル1行目の処理（文字列）
-                      type: string
-                      example: 項目行として無視する
-                    first_colum:
-                      description: 申請書類の切り替え判定項目（数値）
-                      type: integer
-                      example: 1
-                    first_colum_str:
-                      description: 申請書類の切り替え判定項目（文字列）
-                      type: string
-                      example: 先頭列を書類切換えに利用（先頭行文字「*」  継続行文字「」）
-                    remarks:
-                      description: 備考
-                      type: string
-                      example: 営業部用
-                    apply:
-                      description: 申請者情報
-                      type: object
-                      properties:
-                        usertype:
-                          description: 申請者種別
-                          type: string
-                          example: ユーザ指定
-                        usercode:
-                          description: 申請者コード
-                          type: string
-                          example: domain_admin
-                        username:
-                          description: 申請者氏名
-                          type: string
-                          example: 管理者
-                    create:
-                      description: 作成者情報
-                      type: object
-                      properties:
-                        username:
-                          description: 作成者氏名
-                          type: string
-                          example: 管理者
-                        datetime:
-                          description: 作成日
-                          type: string
-                          example: 2023/01/01 12:00
-                    lastaprv:
-                      description: 最終更新者情報
-                      type: object
-                      properties:
-                        username:
-                          description: 最終更新者氏名
-                          type: string
-                          example: 管理者
-                        datetime:
-                          description: 更新日
-                          type: string
-                          example: 2023/01/01 12:00
-                    csv_format:
-                      description: CSVフォーマット情報
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          seq:
-                            description: シーケンス番号
-                            type: integer
-                            example: 1
-                          field_id:
-                            description: フィールドID
-                            type: string
-                            example: usercode
-                          field_name:
-                            description: フィールド名称
-                            type: string
-                            example: ユーザコード
-                          page_no:
-                            description: ページ番号
-                            type: integer
-                            example: 1
-                          apply_user:
-                            description: |
-                              申請ユーザー使用判定<br>
-                              true：申請ユーザー<br>
-                              false：申請ユーザーではない
-                            type: boolean
-                            example: true
-                          group_key:
-                            description: |
-                              グループキー使用判定<br>
-                              true：グループキー<br>
-                              false：グループキーではない
-                            type: boolean
-                            example: false
+                          example: 1
+                        apply_user:
+                          description: |
+                            申請ユーザー使用判定<br>
+                            true：申請ユーザー<br>
+                            false：申請ユーザーではない
+                          type: boolean
+                          example: true
+                        group_key:
+                          description: |
+                            グループキー使用判定<br>
+                            true：グループキー<br>
+                            false：グループキーではない
+                          type: boolean
+                          example: false
 
     # --------------------------------------------------------------------------------------------------
 
@@ -4631,6 +4820,7 @@ components:
                   route:
                     - code: route01
                       name: 営業部ルート
+                      condroute: false
                   pages:
                     - page_no: 1
                       fields:
@@ -4725,6 +4915,7 @@ components:
                   route:
                     - code: route01
                       name: 営業部ルート
+                      condroute: true
                   pages:
                     - page_no: 1
                       form_code: form01
@@ -4924,6 +5115,12 @@ components:
 
     GetMasterDataResponses200:
       description: Successful response
+      headers:
+        Content-Disposition:
+          description: 「filename*」はファイル名がRFC5987に従いエンコーディングされているため、受信時にデコードが必要になります。受信環境が自動的にデコードを行う場合はデコード不要になります。
+          schema:
+            type: string
+            example: attachment; filename="{ファイル名}"; filename*=UTF-8''{URLエンコードされたファイル名}
       content:
         application/json:
           schema:
@@ -4964,7 +5161,12 @@ components:
                       name: 株式会社えいとれっど商社
                       kana: カブシキガイシャエイトレッドショウシャ
                       bank_name: えいとれっど銀行
-        text/csv: {}
+        text/csv:
+          examples:
+            簡易マスタ:
+              value: "\"itemcd\",\"itemval\"\n\"item1\",\"アイテム1\"\n\"item2\",\"アイテム2\""
+            ユーザ固有マスタ:
+              value: "\"code\",\"name\",\"kana\",\"bank_name\"\n\"1\",\"株式会社えいとれっど商事\",\"カブシキガイシャエイトレッドショウジ\",\"えいとれっど銀行\"\n\"2\",\"株式会社えいとれっど商社\",\"カブシキガイシャエイトレッドショウシャ\",\"えいとれっど銀行\""
 
     # --------------------------------------------------------------------------------------------------
 
@@ -5627,8 +5829,8 @@ components:
                   properties:
                     id:
                       description: フォームグループID
-                      type: string
-                      example: group01
+                      type: integer
+                      example: 10
                     name:
                       description: フォームグループ名称
                       type: string
@@ -5655,9 +5857,15 @@ components:
                               route:
                                 - id: -1
                                   name: (自動選択ルート)
-                                - id: 999
-                                  code: route01
+                                - id: 1000
+                                  code: route02
                                   name: 営業部ルート
+                            - id: 3
+                              name: 顧客カード
+                              code: form03
+                              route: 
+                                - id: -1
+                                  name: ""
 
     # --------------------------------------------------------------------------------------------------
 
@@ -5745,9 +5953,7 @@ components:
             type: object
             properties:
               status_list:
-                description: |
-                  承認状況リスト<br>
-                  承認状況情報（承認状況種別、承認状況名称、承認待ち件数）
+                description: 承認状況リスト
                 allOf:
                   - $ref: "#/components/schemas/status_list"
                   - example:
@@ -5785,9 +5991,7 @@ components:
                         name: 承認完了(承認)
                         count: 0
               wait_list:
-                description: |
-                  承認待ち書類リスト<br>
-                  承認待ち書類情報（書類 ID、フォーム名称、件名 1、申請者氏名、申請日時）
+                description: 承認待ち書類リスト
                 allOf:
                   - $ref: "#/components/schemas/wait_list"
                   - example:
@@ -5970,122 +6174,197 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              query:
-                description: クエリ情報
-                type: object
-                properties:
-                  query_id:
-                    description: クエリID
-                    type: integer
-                    example: 100
-                  query_code:
-                    description: クエリコード
-                    type: string
-                    example: query01
-                  query_name:
-                    description: クエリ名
-                    type: string
-                    example: 営業部経費一覧クエリ
-                  query_type:
-                    description: |
-                      クエリ種別<br>
-                      "list"(一覧) / "summary"(サマリ) /"cross"(クロス集計)
-                    type: string
-                    example: list
-                  form_count:
-                    description: |
-                      フォーム件数<br>
-                      クエリが参照するフォームの件数
-                    type: integer
-                    example: 1
-                  fid:
-                    description: |
-                      フォームID<br>
-                      フォーム件数が 1 の場合に出力される
-                    type: integer
-                    example: 200
-                  form_name:
-                    description: |
-                      フォーム名<br>
-                      フォーム件数が 1 の場合に出力される
-                    type: string
-                    example: 経費申請書
-                  subtbl:
-                    description: |
-                      表定義<br>
-                      フォーム件数が 1 の場合に出力される
-                    type: string
-                    example: ""
-                  toprowmark:
-                    description: 先頭行文字
-                    type: string
-                    example: "*"
-                  secondmark:
-                    description: 継続行文字
-                    type: string
-                    example: ""
-                  csv_filename:
-                    description: CSVファイル名
-                    type: string
-                    example: 営業部.csv
-                  csv_header_flg:
-                    description: |
-                      CSV ファイルのヘッダー表示<br>
-                      true（表示する） / false（表示しない）
-                    type: boolean
-                    example: true
-                  csvexport_manage_type:
-                    description: |
-                      CSV ファイル出力済み管理グラフ<br>
-                      "auto"(csv ファイル自動出力された書類だけを出力済みにする) / "all"(クエリ機能で出力された書類を全て出力済みにする)
-                    type: string
-                    example: auto
-                  remarks:
-                    description: 備考
-                    type: string
-                    example: ""
-                  cr_dt:
-                    description: |
-                      新規作成<br>
-                      書式：YYYY/MM/DD hh:mm:ss
-                    type: string
-                    example: 2023/01/01 12:00:00
-                  up_dt:
-                    description: |
-                      最終更新<br>
-                      書式：YYYY/MM/DD hh:mm:ss
-                    type: string
-                    example: 2023/01/01 12:00:00
-              exec_result:
-                description: |
-                  検索結果<br>
-                  実行結果取得フラグが false の場合はnull
-                type: object
-                properties:
+            allOf:
+              - $ref: "#/components/schemas/GetQueryResponses200"
+            oneOf:
+              - $ref: "#/components/schemas/list_queries_data"
+              - $ref: "#/components/schemas/summary_queries_data"
+              - $ref: "#/components/schemas/cross_queries_data"
+          examples:
+            一覧クエリ(クエリ実行ON):
+              value:
+                query:
+                  query_id: 100
+                  query_code: query01
+                  query_name: 営業部経費一覧クエリ
+                  query_type: list
+                  form_count: 1
+                  fid: 200
+                  form_name: 経費申請書
+                  subtbl: ""
+                  toprowmark: "*"
+                  secondmark: ""
+                  csv_filename: 営業部.csv
+                  csv_header_flg: true
+                  csvexport_manage_type: auto
+                  remarks: ""
+                  cr_dt: 2023/01/01 12:00:00
+                  up_dt: 2023/01/01 12:00:00
+                exec_result:
                   data:
-                    description: クエリデータ
-                    allOf:
-                      - $ref: "#/components/schemas/queries_data"
-                      - example:
-                          - docid: 100
-                            record:
-                              "件名1": 客先訪問
-                              "件名2": 営業部
-                              "書類No": 200
-                              "訪問先": 株式会社xxx
-                              "訪問要件": 商談
-                              "交通費": 1500
-                          - docid: 100
-                            record:
-                              "件名1": 客先訪問
-                              "件名2": 営業部
-                              "書類No": 200
-                              "訪問先": 株式会社yyy
-                              "訪問要件": 商談
-                              "交通費": 1800
-
+                    - docid: 100
+                      record:
+                        "件名1": 客先訪問
+                        "件名2": 営業部
+                        "書類No": 100
+                        "訪問先": 株式会社xxx
+                        "訪問要件": 商談
+                        "交通費": 1500
+                    - docid: 200
+                      record:
+                        "件名1": 客先訪問
+                        "件名2": 営業部
+                        "書類No": 200
+                        "訪問先": 株式会社yyy
+                        "訪問要件": 商談
+                        "交通費": 1800
+            一覧クエリ(クエリ実行OFF):
+              value:
+                query:
+                  query_id: 100
+                  query_code: query01
+                  query_name: 営業部経費一覧クエリ
+                  query_type: list
+                  form_count: 1
+                  fid: 200
+                  form_name: 経費申請書
+                  subtbl: ""
+                  toprowmark: "*"
+                  secondmark: ""
+                  csv_filename: 営業部.csv
+                  csv_header_flg: true
+                  csvexport_manage_type: auto
+                  remarks: ""
+                  cr_dt: 2023/01/01 12:00:00
+                  up_dt: 2023/01/01 12:00:00
+            一覧クエリ(連結クエリ):
+              value:
+                query:
+                  query_id: 101
+                  query_code: query02
+                  query_name: 営業部経費一覧連結クエリ
+                  query_type: list
+                  form_count: 1
+                  forms:
+                    - fid: 200
+                      form_name: 経費申請書(20年度)
+                      subtbl: "表定義グループ(group2)"
+                    - fid: 201
+                      form_name: 経費申請書(21年度)
+                      subtbl: "表定義グループ(group2)"
+                    - fid: 202
+                      form_name: 経費申請書(22年度)
+                      subtbl: "表定義グループ(group2)"
+                  subtbl: ""
+                  toprowmark: "*"
+                  secondmark: ""
+                  csv_filename: 営業部.csv
+                  csv_header_flg: true
+                  csvexport_manage_type: auto
+                  remarks: ""
+                  cr_dt: 2023/01/01 12:00:00
+                  up_dt: 2023/01/01 12:00:00
+                exec_result:
+                  data:
+                    - docid: 100
+                      record:
+                        "件名1": 客先訪問
+                        "件名2": 営業部
+                        "書類No": 100
+                        "訪問先": 株式会社xxx
+                        "訪問要件": 商談
+                        "交通費": 1500
+                    - docid: 200
+                      record:
+                        "件名1": 客先訪問
+                        "件名2": 営業部
+                        "書類No": 200
+                        "訪問先": 株式会社yyy
+                        "訪問要件": 商談
+                        "交通費": 1800
+            サマリクエリ:
+              value:
+                query:
+                  query_id: 102
+                  query_code: query03
+                  query_name: 営業部月別交通費合計金額
+                  query_type: summary
+                  form_count: 1
+                  fid: 203
+                  form_name: 交通費精算書
+                  subtbl: ""
+                  toprowmark: "*"
+                  secondmark: ""
+                  csv_filename: 営業部.csv
+                  csv_header_flg: true
+                  csvexport_manage_type: auto
+                  graph:
+                    graph_active_flg: true
+                    graph_type: bar
+                    graph3d: false
+                    graph_alpha: false
+                    graph_stack: false
+                    graph_direction: vertical
+                    graph_reverse: column
+                    graph_label_title: ""
+                    graph_label_category: ""
+                    graph_label_value: ""
+                    height: 300
+                    width: 400
+                    graph_category_angle: 0
+                  remarks: ""
+                  cr_dt: 2023/01/01 12:00:00
+                  up_dt: 2023/01/01 12:00:00
+                exec_result:
+                  data:
+                    - "年月": 2023/01
+                      "合計金額": 100000
+                    - "年月": 2023/02
+                      "合計金額": 50000
+                  calc_type: sum
+            クロス集計クエリ:
+              value:
+                query:
+                  query_id: 103
+                  query_code: query04
+                  query_name: 営業部月別残業時間集計
+                  query_type: cross
+                  form_count: 1
+                  fid: 204
+                  form_name: 残業報告書
+                  subtbl: ""
+                  toprowmark: "*"
+                  secondmark: ""
+                  csv_filename: 営業部.csv
+                  csv_header_flg: true
+                  csvexport_manage_type: auto
+                  graph:
+                    graph_active_flg: true
+                    graph_type: bar
+                    graph3d: true
+                    graph_alpha: true
+                    graph_stack: false
+                    graph_direction: vertical
+                    graph_reverse: column
+                    graph_label_title: ""
+                    graph_label_category: ""
+                    graph_label_value: ""
+                    height: 300
+                    width: 400
+                    graph_category_angle: 45
+                  remarks: ""
+                  cr_dt: 2023/01/01 12:00:00
+                  up_dt: 2023/01/01 12:00:00
+                exec_result:
+                  data:
+                    "2023/01":
+                      "勝 太郎": 5.5
+                      "木戸 武史": 3
+                    "2023/02":
+                      "勝 太郎": 8.8
+                      "木戸 武史": 0
+                  calc_type: sum
+    
     # --------------------------------------------------------------------------------------------------
 
     GetXpointInfoResponses200:
@@ -6127,6 +6406,12 @@ components:
       description: Successful response
       content:
         application/pdf: {}
+      headers:
+        Content-Disposition:
+          description: 「filename*」はファイル名がRFC5987に従いエンコーディングされているため、受信時にデコードが必要になります。受信環境が自動的にデコードを行う場合はデコード不要になります。
+          schema:
+            type: string
+            example: attachment; filename="{ファイル名}"; filename*=UTF-8''{URLエンコードされたファイル名}
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6159,13 +6444,21 @@ components:
     # --------------------------------------------------------------------------------------------------
 
     GetAttachmentsResponses200:
-      description: |
-        Successful response<br>
-        ※ Content-Typeは取得するファイルによって異なります。
+      description: Successful response
       content:
         text/plain: {}
         image/png: {}
         application/pdf: {}
+      headers:
+        Content-Type:
+          description: Content-Typeは取得するファイルによって異なります。
+          schema:
+            type: string
+        Content-Disposition:
+          description: 「filename*」はファイル名がRFC5987に従いエンコーディングされているため、受信時にデコードが必要になります。受信環境が自動的にデコードを行う場合はデコード不要になります。
+          schema:
+            type: string
+            example: attachment; filename="{ファイル名}"; filename*=UTF-8''{URLエンコードされたファイル名}
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6174,9 +6467,15 @@ components:
       content:
         image/png: {}
         image/jpeg: {}
+      headers:
+        Content-Disposition:
+          description: 「filename*」はファイル名がRFC5987に従いエンコーディングされているため、受信時にデコードが必要になります。受信環境が自動的にデコードを行う場合はデコード不要になります。
+          schema:
+            type: string
+            example: attachment; filename="{query_cd}.png"; filename*=UTF-8''{query_cd}.png
 
     # --------------------------------------------------------------------------------------------------
-    
+
     GetAdminroleResponses200:
       description: Successful response
       content:
@@ -7392,122 +7691,64 @@ components:
                     type: string
                     example: 備考
 
-    # --------------------------------------------------------------------------------------------------
-
-    PostFormInsertResponses200:
-      description: Successful response
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: "#/components/schemas/PostFormInsertResponses200"
-          examples:
-            TSF登録完了:
-              value:
-                form_cd: form01
-                form_id: 100
-                form_group_id:
-                  - 100
-                  - 101
-                  - 102
-            TSF登録完了 メッセージあり:
-              value:
-                form_cd: form01
-                form_id: 100
-                form_group_id:
-                  - 100
-                  - 101
-                  - 102
-                warning:
-                  - client_code で設定されているマスタ参照コンポーネント「顧客マスタ」の情報取得に失敗しました。\nフォーム作成後、コンポーネントが削除されたなどの可能性が考えられます。
-            TSF登録失敗:
-              value:
-                warning:
-                  - フォーム名称『経費申請書』は既に使われています。同じ名称ではフォームを作成できません。
-
-    # --------------------------------------------------------------------------------------------------
-
-    PatchFormUpdateResponses200:
-      description: Successful response
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              form_cd:
-                description: フォームCD
-                type: string
-                example: form01
-              form_id:
-                description: フォームID
-                type: string
-                example: 100
-              form_group_id:
-                description: |
-                  所属フォームグループID<br>
-                  数値の配列で指定
-                example:
-                  - 100
-                  - 101
-                  - 102
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetFormPreviewResponses200:
-      description: Successful response
-      content:
-        text/html: {}
-
-    # --------------------------------------------------------------------------------------------------
-
-    PostFormPreviewResponses200:
-      description: Successful response
-      content:
-        text/html: {}
-
-    # --------------------------------------------------------------------------------------------------
-
-    PatchFormDownloadResponses200:
-      description: Successful response
-      content:
-        application/octet-stream: {}
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetComponentListResponses200:
-      description: Successful response
-      content:
-        application/octet-stream:
-          schema:
-            type: object
-            properties:
-              master_window:
-                description: |
-                  マスタ参照コンポーネントウィンドウ<br>
-                  コンポーネントオブジェクトのリスト
-                type: array
-                items:
-                  allOf:
-                    - $ref: "#/components/schemas/master_items"
-                    - example:
-                        - comid: 1
-                          comname: 社員マスタ参照
-                          column:
-                            - id
-                            - name
-                            - age
-                        - comid: 2
-                          comname: 顧客マスタ参照
-                          column:
-                            - id
-                            - name
-                            - bank_name
-
   # -----------------------------------------------
   # スキーマ components/schemas
   # -----------------------------------------------
 
   schemas:
+    doc_form:
+      description: フォーム情報
+      type: object
+      properties:
+        id:
+          description: フォームID
+          type: integer
+          example: 99
+        code:
+          description: フォームコード
+          type: string
+          example: form01
+        name:
+          description: フォーム名称
+          type: string
+          example: 経費申請書
+
+    step:
+      description: ステップ情報
+      type: object
+      properties:
+        max:
+          description: 最大ステップ数
+          type: integer
+          example: 5
+        current:
+          description: 現在ステップ番号
+          type: integer
+          example: 3
+
+    status:
+      description: 書類状態
+      type: object
+      properties:
+        code:
+          description: |
+            書類状態コード
+            |コード|名称|
+            |----|----|
+            |0|下書き|
+            |1|承認中|
+            |2|保留中|
+            |3|却下|
+            |4|差し戻され|
+            |5|差し戻し|
+            |6|承認完了|
+          type: integer
+          example: 1
+        name:
+          description: 書類状態名称
+          type: string
+          example: 承認中
+
     g_field:
       type: object
       properties:
@@ -7522,26 +7763,48 @@ components:
       type: object
       properties:
         content_type:
+          description: ファイル種別
           type: string
         seq:
+          description: シーケンス番号
           type: integer
         name:
+          description: 添付ファイル名
           type: string
         size:
+          description: 添付ファイルサイズ
           type: integer
         remarks:
+          description: 備考
           type: string
-
+        detail_no:
+          description: 対応明細行No (電帳法対応オプション)
+          type: integer
+        evidence_type:
+          description: |
+            電帳法書類区分 (電帳法対応オプション)
+            |区分|名称|
+            |----|----|
+            |0|その他|
+            |1|電子取引|
+          type: integer
+        evidence_type_label:
+          description: 電帳法書類区分名称 (電帳法対応オプション)
+          type: string
     relations:
       type: object
       properties:
         docid:
+          description: 関連書類ID
           type: integer
         title1:
+          description: 関連書類件名1
           type: string
         title2:
+          description: 関連書類件名2
           type: string
         form_name:
+          description: 関連書類フォーム名称
           type: string
 
     comment_list:
@@ -7553,7 +7816,7 @@ components:
         attentionflg:
           description: |
             重要コメントフラグ<br>
-            rue：重要コメント<br>
+            true：重要コメント<br>
             false：通常のコメント
           type: boolean
         content:
@@ -7609,27 +7872,29 @@ components:
           type: string
         fieldtype:
           description: |
-            フィールドタイプ<br>
-            9 文字フィールド<br>
-            10 数値フィールド<br>
-            11 整数フィールド<br>
-            12 テキストエリア<br>
-            13 パスワード<br>
-            14 ボタン<br>
-            15 ラジオボタン<br>
-            16 チェックボックス<br>
-            17 コンボボックス<br>
-            18 リストボックス<br>
-            23 バーコード<br>
-            24 イメージ<br>
-            25 西暦フィールド<br>
-            26 月フィールド<br>
-            27 日フィールド<br>
-            28 曜日フィールド<br>
-            29 印影フィールド<br>
-            34 日時フィールド<br>
-            35 イメージアップロード<br>
-            99 不可視フィールド
+            フィールドタイプ
+            |タイプ|名称|
+            |----|----|
+            |9|文字フィールド|
+            |10|数値フィールド|
+            |11|整数フィールド|
+            |12|テキストエリア|
+            |13|パスワード|
+            |14|ボタン|
+            |15|ラジオボタン|
+            |16|チェックボックス|
+            |17|コンボボックス|
+            |18|リストボックス|
+            |23|バーコード|
+            |24|イメージ|
+            |25|西暦フィールド|
+            |26|月フィールド|
+            |27|日フィールド|
+            |28|曜日フィールド|
+            |29|印影フィールド|
+            |34|日時フィールド|
+            |35|イメージアップロード|
+            |99|不可視フィールド|
           type: integer
         maxlength:
           description: フィールド最大値
@@ -7691,10 +7956,7 @@ components:
           description: フォームコード
           type: string
         route:
-          description: |
-            承認ルート情報<br>
-            承認ルート情報（承認ルート ID、承認ルートコード、承認ルート名称）<br>
-            ※通常フォームまたは自動選択ルートの場合は、応答に承認ルートコードは含まれません。
+          description: 承認ルート情報
           type: array
           items:
             type: object
@@ -7702,6 +7964,11 @@ components:
               id:
                 description: 承認ルートID
                 type: integer
+              code:
+                description: |
+                  承認ルートコード<br>
+                  通常フォームまたは自動選択ルートの場合は、応答に承認ルートコードは含まれません。
+                type: string
               name:
                 description: 承認ルート名称
                 type: string
@@ -7967,9 +8234,7 @@ components:
       type: object
       properties:
         use:
-          description: |
-            代理ユーザ情報<br>
-            代理ユーザー情報（コード、氏名）
+          description: 代理ユーザ情報
           type: object
           properties:
             code:
@@ -8056,7 +8321,22 @@ components:
       type: object
       properties:
         type:
-          description: 承認状況種別
+          description: |
+            承認状況種別<br>
+            各承認状況種別は「承認待ち一覧取得」の承認状況タイプの小分類と対応します。
+            |承認状況種別|名称|承認状況タイプ(小分類)|
+            |----|----|----|
+            |0|承認待ち|11|
+            |1|差し戻され|12|
+            |2|下書き|31|
+            |3|保留|32|
+            |4|承認中(申請)|41|
+            |5|差し戻し|43|
+            |6|承認完了(申請)|51|
+            |7|却下|21|
+            |8|回覧|22|
+            |9|承認中(承認)|42|
+            |10|承認完了(承認)|52|
           type: integer
         name:
           description: 承認状況名称
@@ -8109,9 +8389,7 @@ components:
           description: 件名2
           type: string
         form:
-          description: |
-            フォーム情報<br>
-            フォーム情報（フォーム ID、フォームコード、フォーム名称）
+          description: フォーム情報
           type: object
           properties:
             id:
@@ -8124,9 +8402,7 @@ components:
               description: フォーム名称
               type: string
         route:
-          description: |
-            承認ルート情報<br>
-            承認ルート情報（承認ルートコード、承認ルート名称）
+          description: 承認ルート情報
           type: object
           properties:
             code:
@@ -8218,30 +8494,112 @@ components:
                 description: フォーム名
                 type: string
 
-    queries_data:
+    list_queries_data:
       type: object
       properties:
-        docid:
-          description: 書類ID
-          type: integer
-        record:
+        exec_result:
           description: |
-            クエリレコード情報<br>
-            ※クエリの設定により異なります
+            検索結果<br>
+            実行結果取得フラグが false の場合は応答に含まれない。
           type: object
           properties:
-            "件名1":
+            data:
+              description: クエリデータ
+              type: array
+              items:
+                type: object
+                properties:
+                  docid:
+                    description: 書類ID
+                    type: integer
+                  record:
+                    description: |
+                      クエリレコード情報<br>
+                      ※クエリの設定により異なります
+                    type: object
+                    properties:
+                      "件名1":
+                        type: string
+                      "件名2":
+                        type: string
+                      "書類No":
+                        type: integer
+                      "訪問先":
+                        type: string
+                      "訪問要件":
+                        type: string
+                      "交通費":
+                        type: integer
+    
+    summary_queries_data:
+      type: object
+      properties:
+        exec_result:
+          description: |
+            検索結果<br>
+            実行結果取得フラグが false の場合は応答に含まれない。
+          type: object
+          properties:
+            data:
+              description: |
+                クエリデータ<br>
+                ※クエリの設定により異なります
+              type: array
+              items:
+                type: object
+                properties:
+                  "年月":
+                    type: string
+                  "合計金額":
+                    type: string
+        calc_type:
+          description: |
+            計算種別
+            * sum：合計
+            * avg：平均
+            * num：件数
+            * max：最大
+            * min：最小
+          type: string
+    
+    cross_queries_data:
+      type: object
+      properties:
+        exec_result:
+          description: |
+            検索結果<br>
+            実行結果取得フラグが false の場合は応答に含まれない。
+          type: object
+          properties:
+            data:
+              description: |
+                クエリデータ<br>
+                ※クエリの設定により異なります
+              type: object
+              properties:
+                "2023/01":
+                  type: object
+                  properties:
+                    "勝 太郎":
+                      type: string
+                    "木戸 武史":
+                      type: string
+                "2023/02":
+                  type: object
+                  properties:
+                    "勝 太郎":
+                      type: string
+                    "木戸 武史":
+                      type: string
+            calc_type:
+              description: |
+                計算種別
+                * sum：合計
+                * avg：平均
+                * num：件数
+                * max：最大
+                * min：最小
               type: string
-            "件名2":
-              type: string
-            "書類No":
-              type: integer
-            "訪問先":
-              type: string
-            "訪問要件":
-              type: string
-            "交通費":
-              type: integer
 
     resources_item:
       type: object
@@ -8351,7 +8709,7 @@ components:
                   display:
                     description: ユーザグループ名
                     type: string
-                  $ref:
+                  ＄ref:
                     description: 指定ユーザグループ情報取得 API のリクエスト URL
                     type: string
                   groupCode:
@@ -8436,7 +8794,7 @@ components:
           items:
             type: object
             properties:
-              $ref:
+              ＄ref:
                 description: 指定ユーザ情報取得 APIのリクエスト URL
                 type: string
               value:
@@ -8617,7 +8975,6 @@ components:
           type: string
         wf_backstep:
           description: |
-            差戻先ステップ番号<br>
             差し戻し先ステップ番号<br>
             差し戻しの場合必須
           type: string
@@ -8704,6 +9061,16 @@ components:
           description: |
             検索条件「承認状況」<br>
             検索対象の承認状況をカンマ区切りで指定します。
+            |指定可能値|承認状況|
+            |----|----|
+            |-1|承認状況での絞り込み無し|
+            |0|下書き|
+            |1|承認中|
+            |2|保留|
+            |3|却下|
+            |4|申請者へ差し戻し|
+            |5|承認者へ差し戻し|
+            |6|承認完了|
         current_step:
           description: |
             検索条件「現在ステップ」<br>
@@ -8737,7 +9104,7 @@ components:
         dt_cond_type:
           description: |
             検索条件「日付複合条件」<br>
-            過去期間指定：0/ 日付直接指定：1
+            過去期間指定：0 / 日付直接指定：1
           type: string
         date_span:
           description: |
@@ -8748,8 +9115,7 @@ components:
         span_type:
           description: |
             検索条件「過去期間種別」<br>
-            N 日前：0<br>
-            / N ヶ月前：1
+            N 日前：0 / N ヶ月前：1
           type: integer
         lower_year:
           description: |
@@ -8806,7 +9172,11 @@ components:
               description: 対象列名
               type: string
         int_col_name2:
-          description: 検索条件「数値条件列2」
+          description: |
+            検索条件「数値条件列2」<br>
+            対象列名に検索対象項目のフィールドID を入力する。<br>
+            複数枚フォームの 2 枚目以降に存在するフィールド ID を対象とする場合はページ番号を指定する。<br>
+            単数枚フォームや、複数枚フォームの 1枚目に存在するフィールド ID の場合ページ番号は省略可能。
           type: object
           properties:
             page_no:
@@ -8816,7 +9186,11 @@ components:
               description: 対象列名
               type: string
         int_col_name3:
-          description: 検索条件「数値条件列3」
+          description: |
+            検索条件「数値条件列3」<br>
+            対象列名に検索対象項目のフィールドID を入力する。<br>
+            複数枚フォームの 2 枚目以降に存在するフィールド ID を対象とする場合はページ番号を指定する。<br>
+            単数枚フォームや、複数枚フォームの 1枚目に存在するフィールド ID の場合ページ番号は省略可能。
           type: object
           properties:
             page_no:
@@ -8895,7 +9269,11 @@ components:
               description: 対象列名
               type: string
         char_col_name2:
-          description: 検索条件「文字列条件列2」
+          description: |
+            検索条件「文字列条件列2」<br>
+            対象列名に検索対象項目のフィールドID を入力する。<br>
+            複数枚フォームの 2 枚目以降に存在するフィールド ID を対象とする場合はページ番号を指定する。<br>
+            単数枚フォームや、複数枚フォームの 1枚目に存在するフィールド ID の場合ページ番号は省略可能。
           type: object
           properties:
             page_no:
@@ -8905,7 +9283,11 @@ components:
               description: 対象列名
               type: string
         char_col_name3:
-          description: 検索条件「文字列条件列3」
+          description: |
+            検索条件「文字列条件列3」<br>
+            対象列名に検索対象項目のフィールドID を入力する。<br>
+            複数枚フォームの 2 枚目以降に存在するフィールド ID を対象とする場合はページ番号を指定する。<br>
+            単数枚フォームや、複数枚フォームの 1枚目に存在するフィールド ID の場合ページ番号は省略可能。
           type: object
           properties:
             page_no:
@@ -8962,7 +9344,7 @@ components:
         comment_attentionflg:
           description: |
             検索条件「重要コメントフラグ」<br>
-            すべてのコメント：0/ 重要コメントのみ：1
+            すべてのコメント：0 / 重要コメントのみ：1
           type: integer
         attach_flg:
           description: |
@@ -8980,7 +9362,22 @@ components:
           description: |
             並び替え条件<br>
             項目を指定してレスポンスの並び替えを行います。<br>
+            項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
             並び替え条件を指定しない場合は更新日時の降順になります。
+            |項目|説明|
+            |----|----|
+            |docid|書類ID|
+            |title1|件名1|
+            |title2|件名2|
+            |form_code|フォームコード|
+            |form_name|フォーム名称|
+            |route_code|承認ルートコード|
+            |route_name|承認ルート名称|
+            |stat|承認状況|
+            |step|ステップ番号|
+            |update_datetime|更新日時|
+            |write_datetime|申請日時|
+            |writer|申請者|
           type: string
 
     PostDocumentRequest:
@@ -9041,6 +9438,7 @@ components:
       type: object
       properties:
         docid:
+          description: 書類ID
           type: integer
         comment_list:
           allOf:
@@ -9151,81 +9549,91 @@ components:
           type: object
           properties:
             docid:
+              description: 書類ID
               type: integer
             title1:
+              description: 件名1
               type: string
             title2:
+              description: 件名2
               type: string
             form:
-              type: object
-              properties:
-                id:
-                  type: integer
-                code:
-                  type: string
-                name:
-                  type: string
+              allOf:
+                - $ref: "#/components/schemas/doc_form"
             route:
+              description: 承認ルート情報
               type: object
               properties:
                 code:
+                  description: 承認ルートコード
                   type: string
                 name:
+                  description: 承認ルート名称
                   type: string
             type:
+              description: |
+                フォーム種別
+                * standard：通常フォーム
+                * workflow：ワークフローフォーム
               type: string
             status:
-              type: object
-              properties:
-                code:
-                  type: integer
-                name:
-                  type: string
+              allOf:
+                - $ref: "#/components/schemas/status"
             step:
-              type: object
-              properties:
-                max:
-                  type: integer
-                current:
-                  type: integer
+              allOf:
+                - $ref: "#/components/schemas/step"
             current_version:
+              description: 版数
               type: integer
             writer:
               type: object
               properties:
                 usercode:
+                  description: 申請者ユーザコード
                   type: string
                 username:
+                  description: 申請者ユーザ名
                   type: string
                 stampname:
+                  description: 申請者印影名
                   type: string
                 datetime:
+                  description: 申請日時
                   type: string
             lastaprv:
               type: object
               properties:
                 usercode:
+                  description: 最終承認者ユーザコード
                   type: string
                 username:
+                  description: 最終承認者ユーザ名
                   type: string
                 stampname:
+                  description: 最終承認者印影名
                   type: string
                 datetime:
+                  description: 最終更新日時
                   type: string
             flow_versions:
+              description: 承認履歴情報 通常フォームの場合は空配列が返されます。
               type: array
               items:
                 properties:
                   flow_results:
+                    description: 承認状況情報
                     type: array
                     items:
                       type: object
                       properties:
                         stepno:
+                          description: ステップ番号
                           type: integer
                         steptitle:
+                          description: ステップタイトル
                           type: string
                         aprvusers:
+                          description: 処理者情報
                           type: array
                           items:
                             type: object
@@ -9234,34 +9642,69 @@ components:
                                 type: object
                                 properties:
                                   usercode:
+                                    description: ユーザコード
                                     type: string
                                   username:
+                                    description: ユーザ名
                                     type: string
                                   stampname:
+                                    description: 印影名
                                     type: string
                                   datetime:
+                                    description: ワークフロー操作日時
                                     type: string
                                   groupcd:
+                                    description: ユーザグループコード
                                     type: string
                                   groupname:
+                                    description: ユーザグループ名称
                                     type: string
                                   partcd:
+                                    description: 役職コード
                                     type: string
                                   partname:
+                                    description: 役職名称
                                     type: string
                               statuscode:
+                                description: |
+                                  ステップ状態コード<br><br>
+                                  ・申請ステップの場合
+                                  |コード|名称|
+                                  |----|----|
+                                  |0|申請|
+
+                                  ・承認ステップの場合
+                                  |コード|名称|
+                                  |----|----|
+                                  |0|未処理|
+                                  |1|承認|
+                                  |2|却下|
+                                  |3|差し戻し|
+                                  |4|保留|
+
+                                  ・回覧ステップの場合
+                                  |コード|名称|
+                                  |----|----|
+                                  |0|未読|
+                                  |1|既読|
                                 type: integer
                               status:
+                                description: ステップ状態名称
                                 type: string
                         cond:
+                          description: 承認条件
                           type: string
                         cond_num:
+                          description: 承認条件の指定人数
                           type: integer
                         adminskip:
+                          description: 管理者スキップフラグ
                           type: integer
                         skip:
+                          description: スキップフラグ
                           type: integer
                         backstepno:
+                          description: 差し戻し先ステップ番号
                           type: integer
 
     GetLumpapplyListResponses200:
@@ -9321,7 +9764,7 @@ components:
             route:
               description: |
                 フォームルート情報<br>
-                標準フォームの場合は空配列が返される。
+                通常フォームの場合は空配列が返される。
               type: array
               items:
                 type: object
@@ -9332,6 +9775,9 @@ components:
                   name:
                     description: ルート名称
                     type: string
+                  condroute:
+                    description: 条件付きルート
+                    type: boolean
             pages:
               description: フォームページ情報
               type: array
@@ -9412,7 +9858,9 @@ components:
       type: object
       properties:
         data:
-          description: ログデータ
+          description: |
+            ログデータ<br>
+            ログが存在しない場合は空配列が返されます。
           allOf:
             - $ref: "#/components/schemas/webhooklog_data"
 
@@ -9471,6 +9919,163 @@ components:
                   クエリグループに属するクエリの一覧
                 allOf:
                   - $ref: "#/components/schemas/queries"
+    
+    GetQueryResponses200:
+      type: object
+      properties:
+        query:
+          description: クエリ情報
+          type: object
+          properties:
+            query_id:
+              description: クエリID
+              type: integer
+            query_code:
+              description: クエリコード
+              type: string
+            query_name:
+              description: クエリ名
+              type: string
+            query_type:
+              description: |
+                クエリ種別<br>
+                "list"(一覧) / "summary"(サマリ) /"cross"(クロス集計)
+              type: string
+            form_count:
+              description: |
+                フォーム件数<br>
+                クエリが参照するフォームの件数
+              type: integer
+            fid:
+              description: |
+                フォームID<br>
+                フォーム件数が 1 の場合に出力される
+              type: integer
+            form_name:
+              description: |
+                フォーム名<br>
+                フォーム件数が 1 の場合に出力される
+              type: string
+            subtbl:
+              description: |
+                表定義<br>
+                フォーム件数が 1 の場合に出力される
+              type: string
+            forms:
+              description: |
+                フォーム情報<br>
+                フォーム件数が 2 以上の場合に出力される
+              type: object
+              properties:
+                fid:
+                  description: フォームID
+                  type: integer
+                form_name:
+                  description: フォーム名
+                  type: string
+                subtbl:
+                  description: 表定義
+                  type: string
+            toprowmark:
+              description: 先頭行文字
+              type: string
+            secondmark:
+              description: 継続行文字
+              type: string
+            csv_filename:
+              description: CSVファイル名
+              type: string
+            csv_header_flg:
+              description: |
+                CSV ファイルのヘッダー表示<br>
+                true（表示する） / false（表示しない）
+              type: boolean
+            csvexport_manage_type:
+              description: |
+                CSV ファイル出力済み管理グラフ<br>
+                "auto"(csv ファイル自動出力された書類だけを出力済みにする) / "all"(クエリ機能で出力された書類を全て出力済みにする)
+              type: string
+            graph:
+              description: |
+                グラフ情報<br>
+                サマリ・クロス集計クエリ以外の場合応答に含まれない。
+              type: object
+              properties:
+                graph_active_flg:
+                  description: |
+                    グラフ表示
+                    * true：グラフ表示する
+                    * false：グラフ表示しない
+                  type: boolean
+                graph_type:
+                  description: |
+                    グラフ種別
+                    * circle：円
+                    * bar：棒
+                    * line：折れ線
+                    * area：領域
+                  type: string
+                graph_3d:
+                  description: |
+                    3D表示
+                    * true：3D表示する
+                    * false：3D表示しない
+                  type: boolean
+                graph_alpha:
+                  description: |
+                    透過表示
+                    * true：透過表示する
+                    * false：透過表示しない
+                  type: boolean
+                graph_stack:
+                  description: |
+                    積上げ表示
+                    * true：積上げ表示する
+                    * false：積上げ表示しない
+                  type: boolean
+                graph_direction:
+                  description: |
+                    表示方向
+                    * vertical：縦
+                    * horizontal：横
+                  type: string
+                graph_reverse:
+                  description: |
+                    データマッピング
+                    * column：値 = 列項目
+                    * row：値 = 行項目
+                  type: string
+                graph_label_title:
+                  description: ラベル(題名)
+                  type: string
+                graph_label_category:
+                  description: ラベル(カテゴリー)
+                  type: string
+                graph_label_value:
+                  description: ラベル(値)
+                  type: string
+                height:
+                  description: 高さ(単位：px)
+                  type: integer
+                width:
+                  description: 幅(単位：px)
+                  type: integer
+                graph_category_angle:
+                  description: カテゴリー文字列の傾き(単位：度)
+                  type: integer
+            remarks:
+              description: 備考
+              type: string
+            cr_dt:
+              description: |
+                新規作成<br>
+                書式：YYYY/MM/DD hh:mm:ss
+              type: string
+            up_dt:
+              description: |
+                最終更新<br>
+                書式：YYYY/MM/DD hh:mm:ss
+              type: string
 
     PostFormInsertResponses200:
       type: object
