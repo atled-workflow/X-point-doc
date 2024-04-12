@@ -13,7 +13,7 @@ info:
     **認証情報**`Authorization`<br>
     OAuth2 認証のアクセストークンを指定する。
 servers:
-  - url: https://{sub_domain}.atledcloud.jp/xpoint
+  - url: https://sub_domain.atledcloud.jp/xpoint
 tags:
   - name: Documents
   - name: Attachments

@@ -15,5 +15,34 @@
     <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
     <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
     <script src="./swagger-initializer.js" charset="UTF-8"> </script>
+    <script>
+      window.onload = function() {
+        window.ui = SwaggerUIBundle({
+          url: "openapi.yaml",
+          urls: [
+            {
+              name: "openapi3.0.3",
+              url: "openapi.yaml"
+            },
+            {
+              name: "swagger2.0",
+              url: "swagger.yaml"
+            }
+          ],
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+          ],
+          plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+          ],
+          layout: "StandaloneLayout",
+          supportedSubmitMethods: [],
+          defaultModelsExpandDepth: -1
+        });
+      };
+    </script>
   </body>
 </html>
