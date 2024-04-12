@@ -1,0 +1,15 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "api-spec-converter": "api-spec-converter"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "api-spec-converter": "^2.12.0"
+  }
+}
