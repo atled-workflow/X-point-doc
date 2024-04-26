@@ -60,6 +60,7 @@ paths:
         **補足**
         * 申請ステップで添付ファイルが必須の承認ルートの書類を申請した場合はエラーレスポンスが返されます。<br>
         ファイルを添付して申請したい場合は、書類作成APIで下書き書類を作成し、作成した下書き書類に添付ファイルを追加してから下書き提出してください。
+      operationId: CreateDocument
       requestBody:
         $ref: "#/components/requestBodies/PostDocumentRequest"
       security:
@@ -106,6 +107,7 @@ paths:
         * 書類のワークフロー操作・編集・更新APIで承認操作を行う場合、「連続した承認ステップでの自動承認」は動作しますが、「下位役職承認のスキップ」は動作しません。
         * 管理者サイトの「フォーム管理＞フィールド編集権限」で設定した編集禁止フィールド設定は効きません。
         * 電帳法対応オプションの添付型フォーム書類をワークフロー操作する場合、添付ファイル(電子取引データ・取引関係書類)が添付されていない状態でも警告が発生せずワークフロー処理が進みます。
+      operationId: UpdateDocument
       requestBody:
         $ref: "#/components/requestBodies/PatchDocumentRequest"
       security:
@@ -140,6 +142,7 @@ paths:
         
         **注意事項**
         * OAuth2 認証で REST API を利用する場合、認証ユーザーが書類に対するアクセス権限を保持している必要があります。
+      operationId: GetDocument
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -164,6 +167,7 @@ paths:
         
         **APIトークンの必要権限**
         * 削除権限
+      operationId: DeleteDocument
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -189,6 +193,7 @@ paths:
         
         **APIトークンの必要権限**
         * 更新権限
+      operationId: AddComment
       requestBody:
         $ref: "#/components/requestBodies/PostCommentsRequest"
       security:
@@ -217,6 +222,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetComment
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -244,6 +250,7 @@ paths:
         
         **APIトークンの必要権限**
         * 更新権限
+      operationId: UpdateComment
       requestBody:
         $ref: "#/components/requestBodies/PatchCommentsRequest"
       security:
@@ -273,6 +280,7 @@ paths:
         
         **APIトークンの必要権限**
         * 削除権限
+      operationId: DeleteComment
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -304,6 +312,7 @@ paths:
         
         **注意事項**
         * OAuth2 認証で REST API を利用する場合、認証ユーザーが書類に対するアクセス権限を保持している必要があります。
+      operationId: DownloadPdf
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -331,6 +340,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: ViewDocument
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -359,6 +369,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: ViewNewDocument
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -393,6 +404,7 @@ paths:
         **注意事項**
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずに実行してください。
+      operationId: ViewNewDocumentMultipart
       requestBody:
         $ref: "#/components/requestBodies/PostCreateDocumentsRequest"
       security:
@@ -418,6 +430,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetDocumentStatus
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -446,6 +459,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: ViewDocumentStatus
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -477,6 +491,7 @@ paths:
         **注意事項**
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずに実行してください。
+      operationId: AddAttachment
       requestBody:
         $ref: "#/components/requestBodies/PostAddAttachmentsRequest"
       security:
@@ -508,6 +523,7 @@ paths:
         **注意事項**
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずに実行してください。
+      operationId: UpdateAttachment
       requestBody:
         $ref: "#/components/requestBodies/PatchUpdateAttachmentsRequest"
       security:
@@ -538,6 +554,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetAttachmentList
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -565,6 +582,7 @@ paths:
         
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetAttachment
       security:
         - bearerAuth: []
         - APIKeyAuth: []
@@ -589,6 +607,7 @@ paths:
         - System
       summary: 自動申請登録の一覧取得
       description: 認証ドメインの管理サイトに登録されている自動申請の一覧を取得します。
+      operationId: GetLumpapplyList
       security:
         - bearerAuth: []
       responses:
@@ -608,6 +627,7 @@ paths:
         **注意事項**
         * 管理者権限を持つユーザで認証した場合のみ自動申請の定義情報が取得できます。<br>
         一般ユーザーの場合は権限エラーが返されます。
+      operationId: GetLumpapplyDefinition
       security:
         - bearerAuth: []
       parameters:
@@ -635,6 +655,7 @@ paths:
         **注意事項**
         * 本APIは管理者ユーザで認証した場合のみフォーム定義が取得できます。
         * 一般ユーザでフォーム定義を取得したい場合は「/api/v1/forms/{フォームID}」をリクエストしてください。
+      operationId: GetFormDefinitionByAdmin
       security:
         - bearerAuth: []
       parameters:
@@ -660,6 +681,7 @@ paths:
         **注意事項**
         * 管理者権限を持つユーザーで認証した場合のみ登録フォーム一覧情報が取得できます。<br>
         一般ユーザーの場合は権限エラーが返されます。
+      operationId: GetRegistrationFormList
       security:
         - bearerAuth: []
       responses:
@@ -674,6 +696,7 @@ paths:
         - System
       summary: マスタ一覧取得
       description: 管理者サイトの「マスタ管理」で表示されるマスタ一覧相当のリストが取得できます。
+      operationId: GetMasterList
       security:
         - bearerAuth: []
       responses:
@@ -690,6 +713,7 @@ paths:
         - System
       summary: ユーザ固有マスタ情報取得
       description: 管理者サイトの「マスタ管理＞ユーザ固有マスタ＞取込＞ユーザ固有マスタプロパティ」で表示される情報相当が取得できます。
+      operationId: GetUserSpecificMasterInfo
       security:
         - bearerAuth: []
       parameters:
@@ -721,6 +745,7 @@ paths:
         <br><br>
         * 【CSV 形式で取得する場合】<br>
         　/api/v1/system/master/{マスタ識別情報}/data.csv
+      operationId: GetMasterData
       security:
         - bearerAuth: []
       parameters:
@@ -751,6 +776,7 @@ paths:
       description: |
         管理者サイトの「マスタ管理＞マスタ一覧＞インポート」相当の機能の API です。<br>
         JSON 形式のマスタデータを簡易マスタにインポートすることが可能です。
+      operationId: ImportSimpleMasterData
       requestBody:
         $ref: "#/components/requestBodies/PutMasterDataRequest"
       security:
@@ -782,6 +808,7 @@ paths:
         インポートの実行は管理者サイトのタスク管理画面から手動で実行するか、スケジュールを設定して実行する必要があります。
         * Content-Type に multipart/form-data を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
         エラーになる場合は Content-Type を指定せずにリクエストしてください。
+      operationId: UploadUserSpecificMasterData
       requestBody:
         $ref: "#/components/requestBodies/PostUserMasterUpdateRequest"
       security:
@@ -808,6 +835,7 @@ paths:
         - System
       summary: Webhookログ取得
       description: Webhook の送信日時等を指定して Webhook 送信ログを検索／取得します。
+      operationId: GetWebhookLog
       security:
         - bearerAuth: []
       parameters:
@@ -832,6 +860,7 @@ paths:
         - System
       summary: Webhook詳細ログ取得
       description: Webhook 送信ログの詳細情報であるリクエスト情報、レスポンス情報を取得できます。
+      operationId: GetWebhookLogDetail
       security:
         - bearerAuth: []
       parameters:
@@ -852,6 +881,7 @@ paths:
       description: |
         指定したフォームの Webhook 設定情報を取得します。<br>
         リクエストには FQDN に指定が必要で、指定した FQDN と Webhook 送信先 URL の FQDN が完全一致する Webhook 設定のみ取得できます。
+      operationId: GetWebhookConfig
       security:
         - bearerAuth: []
       parameters:
@@ -872,6 +902,7 @@ paths:
         - System
       summary: Webhook設定登録
       description: 指定したフォームに Webhook 設定を登録します。
+      operationId: RegistWebhookConfig
       requestBody:
         $ref: "#/components/requestBodies/PostWebhookInsertRequest"
       security:
@@ -896,6 +927,7 @@ paths:
       description: |
         指定したフォームの指定した Webhook 設定を更新します。<br>
         リクエストには FQDN に指定が必要で、指定した FQDN と Webhook 送信先 URL の FQDN が完全一致する場合のみ Webhook 設定が更新可能です。
+      operationId: UpdateWebhookConfig
       requestBody:
         $ref: "#/components/requestBodies/PatchWebhookUpdateRequest"
       security:
@@ -920,6 +952,7 @@ paths:
       description: |
         指定したフォームの指定した Webhook 設定を削除します。<br>
         リクエストには FQDN に指定が必要で、指定した FQDN と Webhook 送信先 URL の FQDN が完全一致する場合のみ Webhook 設定の削除が可能です。
+      operationId: DeleteWebhookConfig
       security:
         - bearerAuth: []
       parameters:
@@ -942,6 +975,7 @@ paths:
         - Forms
       summary: フォーム定義情報取得
       description: フォームを構成するフィールドの詳細情報を取得します。
+      operationId: GetFormDefinition
       security:
         - bearerAuth: []
       parameters:
@@ -964,6 +998,7 @@ paths:
       description: |
         認証ユーザーが利用できるフォームのフォームID、名称を所属グループ（グループID、グループ名）とセットで取得します。<br>
         代理申請者のユーザーコードを指定することで、代理申請可能なフォーム情報が取得できます。
+      operationId: GetAvailableFormList
       security:
         - bearerAuth: []
       parameters:
@@ -988,6 +1023,7 @@ paths:
       description: |
         認証ユーザ―が代理を許可されている、ユーザ―、ワークフロー操作（申請、承認）、フォーム・ステップに関わる応報を取得します。<br>
         代理ユーザ―情報を REST API 呼び出し際に指定することで、許可された範囲で代理者として情報を取得・操作する事ができます。
+      operationId: GetProxyInfo
       security:
         - bearerAuth: []
       responses:
@@ -1004,6 +1040,7 @@ paths:
       description: |
         ユーザ―サイトの「承認」で表示される一覧相当のリストを取得できます。<br>
         代理ユーザーのユーザーコードを指定することで、代理ユーザーの承認待ち一覧が取得できます。
+      operationId: GetApprovalList
       security:
         - bearerAuth: []
       parameters:
@@ -1034,6 +1071,7 @@ paths:
       description: |
         ＰＣブラウザを利用しユーザートップを表示した際に「承認」ガジェットに表示される内容を取得します。<br>
         認証ユーザー、もしくは指定されたユーザーの、承認待ち、差し戻され、却下、回覧、下書き、保留、承認中（申請）、承認中（承認）、差し戻し、承認完了（申請）、承認完了（承認）の１１種類の件数、及び最新の承認待ち書類５件について、件名、フォーム名、提出者、最終更新日時を取得します。
+      operationId: GetApprovalCount
       security:
         - bearerAuth: []
       parameters:
@@ -1058,6 +1096,7 @@ paths:
       description: |
         ユーザサイトの承認画面で設定できる承認完了書類の非表示／表示設定相当の設定を行う API です。<br>
         承認待ち一覧取得 API で取得した承認完了書類の書類 ID をまとめて指定して、非表示／表示設定を切り替えます。
+      operationId: SetCompDocumentDisplaySetting
       requestBody:
         $ref: "#/components/requestBodies/PutApprovalsHiddenRequest"
       security:
@@ -1076,6 +1115,7 @@ paths:
         - Search
       summary: 書類検索
       description: 指定された検索条件で検索を行い、検索結果を取得します。
+      operationId: SearchDocument
       requestBody:
         $ref: "#/components/requestBodies/PostSearchDocumentsRequest"
       security:
@@ -1098,6 +1138,7 @@ paths:
         - Query
       summary: 利用可能クエリ一覧取得
       description: 認証ユーザーが利用できるクエリ情報の一覧を取得します。
+      operationId: GetAvailableQueryList
       security:
         - bearerAuth: []
       responses:
@@ -1121,6 +1162,7 @@ paths:
         抽出条件設定を行っていた場合は、抽出条件設定にしたがって絞り込まれた状態で実行結果が出力されます。<br><br>
         なお、クエリの検索項目設定については本 API での取得には反映されず、<br>
         本 API によるクエリの実行時に絞り込み条件を付与することはできません。
+      operationId: GetQuery
       security:
         - bearerAuth: []
       parameters:
@@ -1144,6 +1186,7 @@ paths:
       description: |
         認証ユーザーが閲覧できるクエリをひとつ選択し、そのクエリに設定されているグラフを取得します。<br>
         グラフは PNG 形式か JPEG 形式かを任意で選択することができます。（デフォルトは PNG）
+      operationId: GetQueryGraph
       security:
         - bearerAuth: []
       parameters:
@@ -1164,6 +1207,7 @@ paths:
       summary: ユーザ権限情報取得
       description: |
         認証ユーザが持つ管理者権限の一覧を取得します。
+      operationId: GetAdminRole
       security:
         - bearerAuth: []
       responses:
@@ -1181,6 +1225,7 @@ paths:
         X-point のバージョンや利用できる機能、作成されたドメインが 1 つのみかの情報を取得します。<br>
         OAuth2 認証のアクセストークン取得時に、ドメインコードが省略可能か否かを判断する際に使用します。<br>
         ユーザー認証無しで利用可能です。
+      operationId: GetXpointInfo
       responses:
         "200":
           $ref: "#/components/responses/GetXpointInfoResponses200"
@@ -1193,6 +1238,7 @@ paths:
         - Users
       summary: ユーザ情報取得
       description: 指定された条件を元にユーザ情報を取得します。
+      operationId: GetUsers
       security:
         - bearerAuth: []
       parameters:
@@ -1213,6 +1259,7 @@ paths:
         - Users
       summary: ユーザ情報作成
       description: リクエストボディに指定したデータを元にユーザ情報を作成します。
+      operationId: CreateUser
       requestBody:
         $ref: "#/components/requestBodies/PostCreateUserRequest"
       security:
@@ -1237,6 +1284,7 @@ paths:
         - Users
       summary: 指定ユーザ情報取得
       description: パスに指定したユーザ ID に紐づくユーザの情報を取得します。
+      operationId: GetUser
       security:
         - bearerAuth: []
       parameters:
@@ -1259,6 +1307,7 @@ paths:
         <br>
         **注意事項**<br>
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
+      operationId: UpdateUser
       requestBody:
         $ref: "#/components/requestBodies/PutUpdateUserRequest"
       security:
@@ -1283,6 +1332,7 @@ paths:
         - Users
       summary: ユーザ情報一部更新
       description: パスに指定したユーザ ID に紐づくユーザ情報の指定項目のみを更新します。
+      operationId: PatchUser
       requestBody:
         $ref: "#/components/requestBodies/PatchUpdateUserRequest"
       security:
@@ -1307,6 +1357,7 @@ paths:
         - Users
       summary: ユーザ情報削除
       description: パスに指定したユーザ ID に紐づくユーザ情報を削除します。
+      operationId: DeleteUser
       security:
         - bearerAuth: []
       parameters:
@@ -1330,6 +1381,7 @@ paths:
         - Groups
       summary: ユーザグループ情報取得
       description: 指定された条件を元にユーザグループ情報を取得します。
+      operationId: GetGroups
       security:
         - bearerAuth: []
       parameters:
@@ -1350,6 +1402,7 @@ paths:
         - Groups
       summary: ユーザグループ情報作成
       description: リクエストボディに指定したデータを元にユーザグループ情報を作成します。
+      operationId: CreateGroup
       requestBody:
         $ref: "#/components/requestBodies/PostCreateUserGroupInfoRequest"
       security:
@@ -1374,6 +1427,7 @@ paths:
         - Groups
       summary: 指定ユーザグループ情報取得
       description: パスに指定したグループ ID に紐づくユーザグループの情報を取得します。
+      operationId: GetGroup
       security:
         - bearerAuth: []
       parameters:
@@ -1396,6 +1450,7 @@ paths:
         <br>
         **注意事項**<br>
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
+      operationId: UpdateGroup
       requestBody:
         $ref: "#/components/requestBodies/PutUpdateUserGroupInfoRequest"
       security:
@@ -1420,6 +1475,7 @@ paths:
         - Groups
       summary: ユーザグループ情報一部更新
       description: パスに指定したグループ ID に紐づくユーザグループ情報の指定項目のみを更新します。
+      operationId: PatchGroup
       requestBody:
         $ref: "#/components/requestBodies/PatchUpdateUserGroupInfoRequest"
       security:
@@ -1444,6 +1500,7 @@ paths:
         - Groups
       summary: ユーザグループ情報削除
       description: パスに指定したグループ ID に紐づくユーザグループ情報を削除します。
+      operationId: DeleteGroup
       security:
         - bearerAuth: []
       parameters:
@@ -1465,6 +1522,7 @@ paths:
         - Parts
       summary: 役職情報取得
       description: 指定された条件を元に役職情報を取得します。
+      operationId: GetParts
       security:
         - bearerAuth: []
       parameters:
@@ -1485,6 +1543,7 @@ paths:
         - Parts
       summary: 役職情報作成
       description: リクエストボディに指定したデータを元に役職情報を作成します。
+      operationId: CreatePart
       requestBody:
         $ref: "#/components/requestBodies/PostCreatePartInfoRequest"
       security:
@@ -1507,6 +1566,7 @@ paths:
         - Parts
       summary: 指定役職情報取得
       description: パスに指定した役職 ID に紐づく役職の情報を取得します。
+      operationId: GetPart
       security:
         - bearerAuth: []
       parameters:
@@ -1529,6 +1589,7 @@ paths:
 
         **注意事項**
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
+      operationId: UpdatePart
       requestBody:
         $ref: "#/components/requestBodies/PutUpdatePartInfoRequest"
       security:
@@ -1553,6 +1614,7 @@ paths:
         - Parts
       summary: 役職情報一部更新
       description: パスに指定した役職 ID に紐づく役職情報の指定項目のみを更新します。
+      operationId: PatchPart
       requestBody:
         $ref: "#/components/requestBodies/PatchUpdatePartInfoRequest"
       security:
@@ -1577,6 +1639,7 @@ paths:
         - Parts
       summary: 役職情報削除
       description: パスに指定した役職 ID に紐づく役職情報を削除します。
+      operationId: DeletePart
       security:
         - bearerAuth: []
       parameters:
@@ -1598,6 +1661,7 @@ paths:
         - Me
       summary: 認証ユーザ情報取得
       description: OAuth2 認証で認証したユーザの情報を返します。
+      operationId: GetSelfInfo
       security:
         - bearerAuth: []
       parameters:
@@ -3261,7 +3325,6 @@ components:
               - displayName
               - password
               - urn:atled:scim:schemas:1.0:User
-              - no
             type: object
             properties:
               userName:
@@ -3365,6 +3428,8 @@ components:
                     description: 予備項目情報
                     type: array
                     items:
+                      required:
+                        - no
                       type: object
                       properties:
                         no:
@@ -3391,7 +3456,6 @@ components:
               - displayName
               - password
               - urn:atled:scim:schemas:1.0:User
-              - no
             type: object
             properties:
               userName:
@@ -3495,6 +3559,8 @@ components:
                     description: 予備項目情報
                     type: array
                     items:
+                      required:
+                        - no
                       type: object
                       properties:
                         no:
@@ -3587,7 +3653,6 @@ components:
             required:
               - displayName
               - urn:atled:scim:schemas:1.0:Group
-              - groupCode
             type: object
             properties:
               displayName:
@@ -3613,6 +3678,8 @@ components:
                             partCode: part02
               urn:atled:scim:schemas:1.0:Group:
                 description: X-point 拡張属性（ユーザグループ）
+                required:
+                  - groupCode
                 type: object
                 properties:
                   groupCode:
@@ -3647,7 +3714,6 @@ components:
             required:
               - displayName
               - urn:atled:scim:schemas:1.0:Group
-              - groupCode
             type: object
             properties:
               displayName:
@@ -3673,6 +3739,8 @@ components:
                             partCode: part02
               urn:atled:scim:schemas:1.0:Group:
                 description: X-point 拡張属性（ユーザグループ）
+                required:
+                  - groupCode
                 type: object
                 properties:
                   groupCode:
