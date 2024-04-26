@@ -61,6 +61,7 @@ paths:
         - Adminrole
       description: |
         認証ユーザが持つ管理者権限の一覧を取得します。
+      operationId: GetAdminRole
       summary: ユーザ権限情報取得
   /api/v1/approvals:
     get:
@@ -249,6 +250,7 @@ paths:
       description: |
         ユーザ―サイトの「承認」で表示される一覧相当のリストを取得できます。<br>
         代理ユーザーのユーザーコードを指定することで、代理ユーザーの承認待ち一覧が取得できます。
+      operationId: GetApprovalList
       summary: 承認待ち一覧取得
   /api/v1/approvals/hidden:
     put:
@@ -331,6 +333,7 @@ paths:
       description: |
         ユーザサイトの承認画面で設定できる承認完了書類の非表示／表示設定相当の設定を行う API です。<br>
         承認待ち一覧取得 API で取得した承認完了書類の書類 ID をまとめて指定して、非表示／表示設定を切り替えます。
+      operationId: SetCompDocumentDisplaySetting
       summary: 承認完了書類非表示設定
   /api/v1/approvals/wait:
     get:
@@ -448,6 +451,7 @@ paths:
         ＰＣブラウザを利用しユーザートップを表示した際に「承認」ガジェットに表示される内容を取得します。<br>
 
         認証ユーザー、もしくは指定されたユーザーの、承認待ち、差し戻され、却下、回覧、下書き、保留、承認中（申請）、承認中（承認）、差し戻し、承認完了（申請）、承認完了（承認）の１１種類の件数、及び最新の承認待ち書類５件について、件名、フォーム名、提出者、最終更新日時を取得します。
+      operationId: GetApprovalCount
       summary: 承認待ち件数取得
   '/api/v1/attachments/{docid}':
     get:
@@ -508,6 +512,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetAttachmentList
       summary: 添付ファイル一覧取得
   '/api/v1/attachments/{docid}/{attach_seq}':
     get:
@@ -585,6 +590,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetAttachment
       summary: 添付ファイル取得
   /api/v1/documents:
     post:
@@ -710,6 +716,7 @@ paths:
         * 申請ステップで添付ファイルが必須の承認ルートの書類を申請した場合はエラーレスポンスが返されます。<br>
 
         ファイルを添付して申請したい場合は、書類作成APIで下書き書類を作成し、作成した下書き書類に添付ファイルを追加してから下書き提出してください。
+      operationId: CreateDocument
       summary: 書類作成
   /api/v1/documents/docview:
     get:
@@ -792,6 +799,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: ViewNewDocument
       summary: 新規書類・関連書類作成
   '/api/v1/documents/{docid}':
     delete:
@@ -850,6 +858,7 @@ paths:
 
         **APIトークンの必要権限**
         * 削除権限
+      operationId: DeleteDocument
       summary: 書類削除
     get:
       produces:
@@ -1134,6 +1143,7 @@ paths:
         **注意事項**
 
         * OAuth2 認証で REST API を利用する場合、認証ユーザーが書類に対するアクセス権限を保持している必要があります。
+      operationId: GetDocument
       summary: 書類内容取得
     patch:
       consumes:
@@ -1256,6 +1266,7 @@ paths:
 
         *
         電帳法対応オプションの添付型フォーム書類をワークフロー操作する場合、添付ファイル(電子取引データ・取引関係書類)が添付されていない状態でも警告が発生せずワークフロー処理が進みます。
+      operationId: UpdateDocument
       summary: 書類のワークフロー操作・編集・更新
   '/api/v1/documents/{docid}/comments':
     get:
@@ -1316,6 +1327,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetComment
       summary: コメント取得
     post:
       consumes:
@@ -1412,6 +1424,7 @@ paths:
 
         **APIトークンの必要権限**
         * 更新権限
+      operationId: AddComment
       summary: コメント追加
   '/api/v1/documents/{docid}/comments/{seq}':
     delete:
@@ -1493,6 +1506,7 @@ paths:
 
         **APIトークンの必要権限**
         * 削除権限
+      operationId: DeleteComment
       summary: コメント削除
     patch:
       consumes:
@@ -1592,6 +1606,7 @@ paths:
 
         **APIトークンの必要権限**
         * 更新権限
+      operationId: UpdateComment
       summary: コメント更新
   '/api/v1/documents/{docid}/openview':
     get:
@@ -1656,6 +1671,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: ViewDocument
       summary: 書類表示
   '/api/v1/documents/{docid}/pdf':
     get:
@@ -1722,6 +1738,7 @@ paths:
 
         **注意事項**
         * OAuth2 認証で REST API を利用する場合、認証ユーザーが書類に対するアクセス権限を保持している必要があります。
+      operationId: DownloadPdf
       summary: PDFダウンロード
   '/api/v1/documents/{docid}/status':
     get:
@@ -1782,6 +1799,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: GetDocumentStatus
       summary: 書類承認状況取得
   '/api/v1/documents/{docid}/statusview':
     get:
@@ -1841,6 +1859,7 @@ paths:
 
         **APIトークンの必要権限**
         * 閲覧権限
+      operationId: ViewDocumentStatus
       summary: 承認進捗状況表示
   /api/v1/forms:
     get:
@@ -1968,6 +1987,7 @@ paths:
       description: |
         認証ユーザーが利用できるフォームのフォームID、名称を所属グループ（グループID、グループ名）とセットで取得します。<br>
         代理申請者のユーザーコードを指定することで、代理申請可能なフォーム情報が取得できます。
+      operationId: GetAvailableFormList
       summary: 利用可能フォーム一覧取得
   '/api/v1/forms/{fid}':
     get:
@@ -2012,6 +2032,7 @@ paths:
       tags:
         - Forms
       description: フォームを構成するフィールドの詳細情報を取得します。
+      operationId: GetFormDefinition
       summary: フォーム定義情報取得
   /api/v1/proxy:
     get:
@@ -2031,6 +2052,7 @@ paths:
       description: |
         認証ユーザ―が代理を許可されている、ユーザ―、ワークフロー操作（申請、承認）、フォーム・ステップに関わる応報を取得します。<br>
         代理ユーザ―情報を REST API 呼び出し際に指定することで、許可された範囲で代理者として情報を取得・操作する事ができます。
+      operationId: GetProxyInfo
       summary: 代理権限情報取得
   /api/v1/query/:
     get:
@@ -2059,6 +2081,7 @@ paths:
       tags:
         - Query
       description: 認証ユーザーが利用できるクエリ情報の一覧を取得します。
+      operationId: GetAvailableQueryList
       summary: 利用可能クエリ一覧取得
   '/api/v1/query/graph/{query_code}':
     get:
@@ -2105,6 +2128,7 @@ paths:
       description: |
         認証ユーザーが閲覧できるクエリをひとつ選択し、そのクエリに設定されているグラフを取得します。<br>
         グラフは PNG 形式か JPEG 形式かを任意で選択することができます。（デフォルトは PNG）
+      operationId: GetQueryGraph
       summary: クエリグラフ表示
   '/api/v1/query/{query_code}':
     get:
@@ -2168,6 +2192,7 @@ paths:
         抽出条件設定を行っていた場合は、抽出条件設定にしたがって絞り込まれた状態で実行結果が出力されます。<br><br>
         なお、クエリの検索項目設定については本 API での取得には反映されず、<br>
         本 API によるクエリの実行時に絞り込み条件を付与することはできません。
+      operationId: GetQuery
       summary: クエリ取得
   /api/v1/search/documents:
     post:
@@ -2276,6 +2301,7 @@ paths:
       tags:
         - Search
       description: 指定された検索条件で検索を行い、検索結果を取得します。
+      operationId: SearchDocument
       summary: 書類検索
   /api/v1/system/forms:
     get:
@@ -2337,6 +2363,7 @@ paths:
         **注意事項**
         * 管理者権限を持つユーザーで認証した場合のみ登録フォーム一覧情報が取得できます。<br>
         一般ユーザーの場合は権限エラーが返されます。
+      operationId: GetRegistrationFormList
       summary: 登録フォーム一覧取得
   '/api/v1/system/forms/{fid}':
     get:
@@ -2386,6 +2413,7 @@ paths:
         **注意事項**
         * 本APIは管理者ユーザで認証した場合のみフォーム定義が取得できます。
         * 一般ユーザでフォーム定義を取得したい場合は「/api/v1/forms/{フォームID}」をリクエストしてください。
+      operationId: GetFormDefinitionByAdmin
       summary: フォーム定義情報取得
   /api/v1/system/lumpapply:
     get:
@@ -2403,6 +2431,7 @@ paths:
       tags:
         - System
       description: 認証ドメインの管理サイトに登録されている自動申請の一覧を取得します。
+      operationId: GetLumpapplyList
       summary: 自動申請登録の一覧取得
   '/api/v1/system/lumpapply/{lumpapplyid}':
     get:
@@ -2617,6 +2646,7 @@ paths:
         **注意事項**
         * 管理者権限を持つユーザで認証した場合のみ自動申請の定義情報が取得できます。<br>
         一般ユーザーの場合は権限エラーが返されます。
+      operationId: GetLumpapplyDefinition
       summary: 自動申請の定義情報取得
   /api/v1/system/master:
     get:
@@ -2645,6 +2675,7 @@ paths:
       tags:
         - System
       description: 管理者サイトの「マスタ管理」で表示されるマスタ一覧相当のリストが取得できます。
+      operationId: GetMasterList
       summary: マスタ一覧取得
   '/api/v1/system/master/{master_code}/data':
     get:
@@ -2775,6 +2806,7 @@ paths:
         <br><br>
         * 【CSV 形式で取得する場合】<br>
         　/api/v1/system/master/{マスタ識別情報}/data.csv
+      operationId: GetMasterData
       summary: マスタデータ取得
     put:
       consumes:
@@ -2913,6 +2945,7 @@ paths:
       description: |
         管理者サイトの「マスタ管理＞マスタ一覧＞インポート」相当の機能の API です。<br>
         JSON 形式のマスタデータを簡易マスタにインポートすることが可能です。
+      operationId: ImportSimpleMasterData
       summary: 簡易マスタデータインポート
   '/api/v1/system/master/{master_table_name}':
     get:
@@ -2980,6 +3013,7 @@ paths:
       tags:
         - System
       description: 管理者サイトの「マスタ管理＞ユーザ固有マスタ＞取込＞ユーザ固有マスタプロパティ」で表示される情報相当が取得できます。
+      operationId: GetUserSpecificMasterInfo
       summary: ユーザ固有マスタ情報取得
   /api/v1/system/webhooklog:
     get:
@@ -3049,6 +3083,7 @@ paths:
       tags:
         - System
       description: Webhook の送信日時等を指定して Webhook 送信ログを検索／取得します。
+      operationId: GetWebhookLog
       summary: Webhookログ取得
   '/api/v1/system/webhooklog/{uuid}':
     get:
@@ -3487,6 +3522,7 @@ paths:
       tags:
         - System
       description: Webhook 送信ログの詳細情報であるリクエスト情報、レスポンス情報を取得できます。
+      operationId: GetWebhookLogDetail
       summary: Webhook詳細ログ取得
   '/api/v1/system/{fid}/webhooks':
     get:
@@ -3542,6 +3578,7 @@ paths:
 
         リクエストには FQDN に指定が必要で、指定した FQDN と Webhook 送信先 URL の FQDN が完全一致する Webhook
         設定のみ取得できます。
+      operationId: GetWebhookConfig
       summary: Webhook設定取得
     post:
       consumes:
@@ -3609,6 +3646,7 @@ paths:
       tags:
         - System
       description: 指定したフォームに Webhook 設定を登録します。
+      operationId: RegistWebhookConfig
       summary: Webhook設定登録
   '/api/v1/system/{fid}/webhooks/{webhookId}':
     delete:
@@ -3675,6 +3713,7 @@ paths:
 
         リクエストには FQDN に指定が必要で、指定した FQDN と Webhook 送信先 URL の FQDN が完全一致する場合のみ
         Webhook 設定の削除が可能です。
+      operationId: DeleteWebhookConfig
       summary: Webhook設定削除
     patch:
       consumes:
@@ -3758,6 +3797,7 @@ paths:
 
         リクエストには FQDN に指定が必要で、指定した FQDN と Webhook 送信先 URL の FQDN が完全一致する場合のみ
         Webhook 設定が更新可能です。
+      operationId: UpdateWebhookConfig
       summary: Webhook設定更新
   '/multiapi/v1/attachments/{docid}':
     post:
@@ -3879,6 +3919,7 @@ paths:
         を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
 
         エラーになる場合は Content-Type を指定せずに実行してください。
+      operationId: AddAttachment
       summary: 添付ファイル追加
   '/multiapi/v1/attachments/{docid}/{attach_seq}':
     patch:
@@ -4016,6 +4057,7 @@ paths:
         を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
 
         エラーになる場合は Content-Type を指定せずに実行してください。
+      operationId: UpdateAttachment
       summary: 添付ファイル更新/削除
   /multiapi/v1/documents/docview:
     post:
@@ -4141,6 +4183,7 @@ paths:
         を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
 
         エラーになる場合は Content-Type を指定せずに実行してください。
+      operationId: ViewNewDocumentMultipart
       summary: 新規書類・関連書類作成
   '/multiapi/v1/system/master/{master_table_name}/data':
     post:
@@ -4287,6 +4330,7 @@ paths:
         を指定すると、アプリケーション側でリクエストに境界情報が付与できずエラーになる場合があります。<br>
 
         エラーになる場合は Content-Type を指定せずにリクエストしてください。
+      operationId: UploadUserSpecificMasterData
       summary: ユーザ固有マスタデータアップロード
   '/scim/v2/{domain_code}/Groups':
     get:
@@ -4450,6 +4494,7 @@ paths:
       tags:
         - Groups
       description: 指定された条件を元にユーザグループ情報を取得します。
+      operationId: GetGroups
       summary: ユーザグループ情報取得
     post:
       consumes:
@@ -4513,11 +4558,12 @@ paths:
                         example: 102
                         type: string
                     type: object
+                required:
+                  - groupCode
                 type: object
             required:
               - displayName
               - 'urn:atled:scim:schemas:1.0:Group'
-              - groupCode
             type: object
       responses:
         '200':
@@ -4627,6 +4673,7 @@ paths:
       tags:
         - Groups
       description: リクエストボディに指定したデータを元にユーザグループ情報を作成します。
+      operationId: CreateGroup
       summary: ユーザグループ情報作成
   '/scim/v2/{domain_code}/Groups/{groupId}':
     delete:
@@ -4674,6 +4721,7 @@ paths:
       tags:
         - Groups
       description: パスに指定したグループ ID に紐づくユーザグループ情報を削除します。
+      operationId: DeleteGroup
       summary: ユーザグループ情報削除
     get:
       produces:
@@ -4776,6 +4824,7 @@ paths:
       tags:
         - Groups
       description: パスに指定したグループ ID に紐づくユーザグループの情報を取得します。
+      operationId: GetGroup
       summary: 指定ユーザグループ情報取得
     patch:
       consumes:
@@ -4909,6 +4958,7 @@ paths:
       tags:
         - Groups
       description: パスに指定したグループ ID に紐づくユーザグループ情報の指定項目のみを更新します。
+      operationId: PatchGroup
       summary: ユーザグループ情報一部更新
     put:
       consumes:
@@ -4977,11 +5027,12 @@ paths:
                         example: 102
                         type: string
                     type: object
+                required:
+                  - groupCode
                 type: object
             required:
               - displayName
               - 'urn:atled:scim:schemas:1.0:Group'
-              - groupCode
             type: object
       responses:
         '200':
@@ -5095,6 +5146,7 @@ paths:
         <br>
         **注意事項**<br>
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
+      operationId: UpdateGroup
       summary: ユーザグループ情報更新
   '/scim/v2/{domain_code}/Me':
     get:
@@ -5222,6 +5274,7 @@ paths:
       tags:
         - Me
       description: OAuth2 認証で認証したユーザの情報を返します。
+      operationId: GetSelfInfo
       summary: 認証ユーザ情報取得
   '/scim/v2/{domain_code}/Parts':
     get:
@@ -5346,6 +5399,7 @@ paths:
       tags:
         - Parts
       description: 指定された条件を元に役職情報を取得します。
+      operationId: GetParts
       summary: 役職情報取得
     post:
       consumes:
@@ -5454,6 +5508,7 @@ paths:
       tags:
         - Parts
       description: リクエストボディに指定したデータを元に役職情報を作成します。
+      operationId: CreatePart
       summary: 役職情報作成
   '/scim/v2/{domain_code}/Parts/{partId}':
     delete:
@@ -5501,6 +5556,7 @@ paths:
       tags:
         - Parts
       description: パスに指定した役職 ID に紐づく役職情報を削除します。
+      operationId: DeletePart
       summary: 役職情報削除
     get:
       produces:
@@ -5577,6 +5633,7 @@ paths:
       tags:
         - Parts
       description: パスに指定した役職 ID に紐づく役職の情報を取得します。
+      operationId: GetPart
       summary: 指定役職情報取得
     patch:
       consumes:
@@ -5685,6 +5742,7 @@ paths:
       tags:
         - Parts
       description: パスに指定した役職 ID に紐づく役職情報の指定項目のみを更新します。
+      operationId: PatchPart
       summary: 役職情報一部更新
     put:
       consumes:
@@ -5813,6 +5871,7 @@ paths:
 
         **注意事項**
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
+      operationId: UpdatePart
       summary: 役職情報更新
   '/scim/v2/{domain_code}/Users':
     get:
@@ -5980,6 +6039,7 @@ paths:
       tags:
         - Users
       description: 指定された条件を元にユーザ情報を取得します。
+      operationId: GetUsers
       summary: ユーザ情報取得
     post:
       consumes:
@@ -6095,6 +6155,8 @@ paths:
                           description: 予備項目内容
                           example: 予備1
                           type: string
+                      required:
+                        - 'no'
                       type: object
                     type: array
                   kana:
@@ -6119,7 +6181,6 @@ paths:
               - displayName
               - password
               - 'urn:atled:scim:schemas:1.0:User'
-              - 'no'
             type: object
       responses:
         '201':
@@ -6225,6 +6286,7 @@ paths:
       tags:
         - Users
       description: リクエストボディに指定したデータを元にユーザ情報を作成します。
+      operationId: CreateUser
       summary: ユーザ情報作成
   '/scim/v2/{domain_code}/Users/{userId}':
     delete:
@@ -6283,6 +6345,7 @@ paths:
       tags:
         - Users
       description: パスに指定したユーザ ID に紐づくユーザ情報を削除します。
+      operationId: DeleteUser
       summary: ユーザ情報削除
     get:
       produces:
@@ -6383,6 +6446,7 @@ paths:
       tags:
         - Users
       description: パスに指定したユーザ ID に紐づくユーザの情報を取得します。
+      operationId: GetUser
       summary: 指定ユーザ情報取得
     patch:
       consumes:
@@ -6510,6 +6574,7 @@ paths:
       tags:
         - Users
       description: パスに指定したユーザ ID に紐づくユーザ情報の指定項目のみを更新します。
+      operationId: PatchUser
       summary: ユーザ情報一部更新
     put:
       consumes:
@@ -6630,6 +6695,8 @@ paths:
                           description: 予備項目内容
                           example: 予備1
                           type: string
+                      required:
+                        - 'no'
                       type: object
                     type: array
                   kana:
@@ -6654,7 +6721,6 @@ paths:
               - displayName
               - password
               - 'urn:atled:scim:schemas:1.0:User'
-              - 'no'
             type: object
       responses:
         '200':
@@ -6764,6 +6830,7 @@ paths:
         <br>
         **注意事項**<br>
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
+      operationId: UpdateUser
       summary: ユーザ情報更新
   /x/v1/service:
     get:
@@ -6807,6 +6874,7 @@ paths:
         X-point のバージョンや利用できる機能、作成されたドメインが 1 つのみかの情報を取得します。<br>
         OAuth2 認証のアクセストークン取得時に、ドメインコードが省略可能か否かを判断する際に使用します。<br>
         ユーザー認証無しで利用可能です。
+      operationId: GetXpointInfo
       summary: X-point情報取得
 definitions:
   GetAttachmentsListResponses200:
@@ -14194,11 +14262,12 @@ x-components:
                         example: 102
                         type: string
                     type: object
+                required:
+                  - groupCode
                 type: object
             required:
               - displayName
               - 'urn:atled:scim:schemas:1.0:Group'
-              - groupCode
             type: object
     PostCreateUserRequest:
       content:
@@ -14303,6 +14372,8 @@ x-components:
                           description: 予備項目内容
                           example: 予備1
                           type: string
+                      required:
+                        - 'no'
                       type: object
                     type: array
                   kana:
@@ -14327,7 +14398,6 @@ x-components:
               - displayName
               - password
               - 'urn:atled:scim:schemas:1.0:User'
-              - 'no'
             type: object
     PostDocumentRequest:
       content:
@@ -14858,11 +14928,12 @@ x-components:
                         example: 102
                         type: string
                     type: object
+                required:
+                  - groupCode
                 type: object
             required:
               - displayName
               - 'urn:atled:scim:schemas:1.0:Group'
-              - groupCode
             type: object
     PutUpdateUserRequest:
       content:
@@ -14967,6 +15038,8 @@ x-components:
                           description: 予備項目内容
                           example: 予備1
                           type: string
+                      required:
+                        - 'no'
                       type: object
                     type: array
                   kana:
@@ -14991,6 +15064,5 @@ x-components:
               - displayName
               - password
               - 'urn:atled:scim:schemas:1.0:User'
-              - 'no'
             type: object
 
