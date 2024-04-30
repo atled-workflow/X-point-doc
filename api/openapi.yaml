@@ -5751,7 +5751,8 @@ components:
                         type: array
                         items:
                           example: chunked
-                      "":
+                      x-empty-key:
+                        description: 実際のキーは空文字列になります。✕："x-empty-key" ◯：""
                         type: array
                         items:
                           example: HTTP/1.1 200 OK
@@ -9687,6 +9688,7 @@ components:
               description: 承認履歴情報 通常フォームの場合は空配列が返されます。
               type: array
               items:
+                type: object
                 properties:
                   flow_results:
                     description: 承認状況情報

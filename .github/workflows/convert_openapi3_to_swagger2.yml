@@ -26,9 +26,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # openapi3仕様ドキュメントをフラット化
+      - name: Flatten the OpenAPI3 document
+        run: npx openapi-flattener -s api/openapi.yaml -o api/openapi_flat.yaml
+
       # openapi3仕様からswagger2仕様に変換
       - name: Convert OpenAPI3 to Swagger2
-        run: npx api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml api/openapi.yaml > api/swagger.yaml
+        run: npx api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml api/openapi_flat.yaml > api/swagger.yaml
 
       # 変換したファイルをコミットしてプッシュ
       - name: Push changes
