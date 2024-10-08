@@ -1,25 +1,7 @@
 swagger: '2.0'
 info:
-  description: >
-    **認証情報**<br>
-
-    REST API の実行ではリクエストを X-point に送信する場合、ログイン ID
-    による認証を必要とする方法、予め登録されたトークンコードを使用する方法の2種類があります。<br>
-
-    接続に使用する情報は http ヘッダに指定する必要があります。<br>
-
-    ヘッダに、認証情報、トークンコードいずれかの指定が無い REST API 実行は必ずエラー応答になります。<br><br>
-
-    **トークン情報**`X-ATLED-Generic-API-Token`<br>
-
-    ドメインコード、ユーザーコード、管理者サイト「フォーム管理」で生成したトークンコードを”:”で連結して、Base64
-    エンコードした情報を指定する。<br>
-
-    <br>
-
-    **認証情報**`Authorization`<br>
-
-    OAuth2 認証のアクセストークンを指定する。
+  description: |
+    **[REST APIマニュアル](./doc/manual.html)**
   title: X-point API
   version: 1.0.0
 host: sub_domain.atledcloud.jp
@@ -132,37 +114,8 @@ paths:
 
             日付の範囲条件で承認待ち一覧を絞り込む際に指定します。<br>
 
-            <br>
-
-            クエリパラメータの「filter」に日付範囲条件を指定する事で、承認待ち一覧リストの絞り込みができます。<br>
-
-            承認待ち書類の申請日または最終更新日に対して絞り込みが可能です。<br>
-
-            <br>
-
-            【フィルター指定形式】<br>
-
-            フィルターで日付範囲条件を指定する場合は以下のフォーマットで指定します。<br>
-
-            {対象日付}には「cr_dt」（申請日）、「up_dt」（最終更新日）のいずれかを指定します。<br>
-
-            {対象日付}␣between␣"yyyy-MM-dd"␣and␣"yyyy-MM-dd"<br>
-
-            <br>
-
-            【フィルター指定例】<br>
-
-            * 申請日で絞り込みを行う場合<br>
-
-            /api/v1/approvals?stat=10&filter=cr_dt between "2022-01-01" and
-            "2022-12-31"<br>
-
-            <br>
-
-            * 最終更新日で絞り込みを行う場合<br>
-
-            /api/v1/approvals?stat=10&filter=up_dt between "2022-01-01" and
-            "2022-12-31"
+            日付範囲の指定方法についてはマニュアル[「2.8.3.
+            日付範囲」](./doc/manual.html#283-日付範囲)をご参照ください。
           in: query
           name: filter
           type: string
@@ -810,11 +763,17 @@ paths:
                   どちらも指定されていた場合はフォーム名称が優先されます。
                 type: string
               lumpapply:
-                description: |
+                description: >
                   自動申請設定使用フラグ<br>
+
                   true：自動申請設定を使用して書類を申請する。<br>
+
                   false：自動申請設定を使用せず書類を申請する。<br>
-                  デフォルトは true
+
+                  デフォルトは true<br>
+
+                  「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+                  書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
                 example: true
                 type: boolean
               route_code:
@@ -1511,15 +1470,29 @@ paths:
                       wrapped: true
                   form_code:
                     description: |
-                      フォームコード
+                      フォームコード<br>
+                      フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+                      どちらも指定されていた場合はフォーム名称が優先されます。
+                    type: string
+                  form_name:
+                    description: |
+                      フォーム名称<br>
+                      フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+                      どちらも指定されていた場合はフォーム名称が優先されます。
                     type: string
                   lumpapply:
                     allOf:
-                      - description: |
+                      - description: >
                           自動申請設定使用フラグ<br>
+
                           true：自動申請設定を使用して書類を申請する。<br>
+
                           false：自動申請設定を使用せず書類を申請する。<br>
-                          デフォルトは true
+
+                          デフォルトは true<br>
+
+                          「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+                          書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
                         example: true
                         type: boolean
                   reason:
@@ -1566,7 +1539,6 @@ paths:
                     type: integer
                 type: object
             required:
-              - form_code
               - route_code
       responses:
         '200':
@@ -2209,7 +2181,7 @@ paths:
               document:
                 properties:
                   current_version:
-                    description: 版数
+                    description: 現在バージョン番号
                     type: integer
                   docid:
                     description: 書類ID
@@ -2540,32 +2512,55 @@ paths:
           in: query
           name: proxy_user
           type: string
-        - description: |
+        - description: >
             検索条件<br>
-            ※キーワードの指定方法についてはページを準備中※<br>
+
             以下の【対象項目】に対して指定したキーワードで検索を行います。
+
             |対象項目|説明|
+
             |----|----|
+
             |formgroup_name|フォームグループ名称|
+
             |form_name|フォーム名称|
+
             |form_code|フォームコード|
+
             |route_name|承認ルート名称|
+
             |route_code|承認ルートコード|
+
+            キーワードの指定方法についてはマニュアル[「2.8.1
+            絞り込み条件」](./doc/manual.html#281-絞り込み条件)をご参照ください。
           in: query
           name: keyword
           type: string
-        - description: |
+        - description: >
             並び替え条件<br>
+
             以下の【対象項目】を指定してレスポンスの並び替えを行います。<br>
+
             項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
+
             並び替え条件を指定しない場合 X-point提出画面で表示されるフォーム一覧と同じ並び順です。
+
             |対象項目|説明|
+
             |----|----|
+
             |formgroup_name|フォームグループ名称|
+
             |form_name|フォーム名称|
+
             |form_code|フォームコード|
+
             |route_name|承認ルート名称|
+
             |route_code|承認ルートコード|
+
+            並び替え条件の指定方法についてはマニュアル[「2.8.2
+            並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
           in: query
           name: order
           type: string
@@ -2785,7 +2780,10 @@ paths:
                           description: ルートコード
                           type: string
                         condroute:
-                          description: 条件付きルート
+                          description: |
+                            条件付きルート<br>
+                            - 条件付きルート: true
+                            - ユーザ選択ルート: false
                           type: boolean
                         name:
                           description: ルート名称
@@ -3546,25 +3544,45 @@ paths:
                   「日付複合条件」が日付直接指定のとき必要。期間の開始年を指定する
                 type: integer
               order:
-                description: |
+                description: >
                   並び替え条件<br>
+
                   項目を指定してレスポンスの並び替えを行います。<br>
+
                   項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
+
                   並び替え条件を指定しない場合は更新日時の降順になります。
+
                   |項目|説明|
+
                   |----|----|
+
                   |docid|書類ID|
+
                   |title1|件名1|
+
                   |title2|件名2|
+
                   |form_code|フォームコード|
+
                   |form_name|フォーム名称|
+
                   |route_code|承認ルートコード|
+
                   |route_name|承認ルート名称|
+
                   |stat|承認状況|
+
                   |step|ステップ番号|
+
                   |update_datetime|更新日時|
+
                   |write_datetime|申請日時|
+
                   |writer|申請者|
+
+                  並び替え条件の指定方法についてはマニュアル[「2.8.2
+                  並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
                 type: string
               span_type:
                 description: |
@@ -3970,7 +3988,10 @@ paths:
                           description: ルートコード
                           type: string
                         condroute:
-                          description: 条件付きルート
+                          description: |
+                            条件付きルート<br>
+                            - 条件付きルート: true
+                            - ユーザ選択ルート: false
                           type: boolean
                         name:
                           description: ルート名称
@@ -10542,7 +10563,10 @@ definitions:
                   description: ルートコード
                   type: string
                 condroute:
-                  description: 条件付きルート
+                  description: |
+                    条件付きルート<br>
+                    - 条件付きルート: true
+                    - ユーザ選択ルート: false
                   type: boolean
                 name:
                   description: ルート名称
@@ -10952,7 +10976,7 @@ definitions:
       document:
         properties:
           current_version:
-            description: 版数
+            description: 現在バージョン番号
             type: integer
           docid:
             description: 書類ID
@@ -11284,14 +11308,28 @@ definitions:
           wrapped: true
       form_code:
         description: |
-          フォームコード
+          フォームコード<br>
+          フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+          どちらも指定されていた場合はフォーム名称が優先されます。
+        type: string
+      form_name:
+        description: |
+          フォーム名称<br>
+          フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+          どちらも指定されていた場合はフォーム名称が優先されます。
         type: string
       lumpapply:
-        description: |
+        description: >
           自動申請設定使用フラグ<br>
+
           true：自動申請設定を使用して書類を申請する。<br>
+
           false：自動申請設定を使用せず書類を申請する。<br>
-          デフォルトは true
+
+          デフォルトは true<br>
+
+          「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+          書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
         example: true
         type: boolean
       reason:
@@ -11496,11 +11534,17 @@ definitions:
           どちらも指定されていた場合はフォーム名称が優先されます。
         type: string
       lumpapply:
-        description: |
+        description: >
           自動申請設定使用フラグ<br>
+
           true：自動申請設定を使用して書類を申請する。<br>
+
           false：自動申請設定を使用せず書類を申請する。<br>
-          デフォルトは true
+
+          デフォルトは true<br>
+
+          「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+          書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
         example: true
         type: boolean
       route_code:
@@ -11516,28 +11560,6 @@ definitions:
           空文字を指定します。
         example: route01
         type: string
-    type: object
-  PostFormInsertResponses200:
-    properties:
-      form_cd:
-        description: |
-          フォームCD<br>
-          正常時は必ず出力
-        type: string
-      form_group_id:
-        description: |
-          所属フォームグループID<br>
-          正常時は必ず出力<br>
-          数値の配列で指定
-      form_id:
-        description: |
-          フォームID<br>
-          正常時は必ず出力
-        type: string
-      warning:
-        description: |
-          メッセージ内容<br>
-          文字列の配列で指定
     type: object
   PostSearchDocumentsRequest:
     properties:
@@ -11819,25 +11841,45 @@ definitions:
           「日付複合条件」が日付直接指定のとき必要。期間の開始年を指定する
         type: integer
       order:
-        description: |
+        description: >
           並び替え条件<br>
+
           項目を指定してレスポンスの並び替えを行います。<br>
+
           項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
+
           並び替え条件を指定しない場合は更新日時の降順になります。
+
           |項目|説明|
+
           |----|----|
+
           |docid|書類ID|
+
           |title1|件名1|
+
           |title2|件名2|
+
           |form_code|フォームコード|
+
           |form_name|フォーム名称|
+
           |route_code|承認ルートコード|
+
           |route_name|承認ルート名称|
+
           |stat|承認状況|
+
           |step|ステップ番号|
+
           |update_datetime|更新日時|
+
           |write_datetime|申請日時|
+
           |writer|申請者|
+
+          並び替え条件の指定方法についてはマニュアル[「2.8.2
+          並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
         type: string
       span_type:
         description: |
@@ -12193,11 +12235,17 @@ definitions:
         type: object
     type: object
   lumpapply:
-    description: |
+    description: >
       自動申請設定使用フラグ<br>
+
       true：自動申請設定を使用して書類を申請する。<br>
+
       false：自動申請設定を使用せず書類を申請する。<br>
-      デフォルトは true
+
+      デフォルトは true<br>
+
+      「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+      書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
     example: true
     type: boolean
   master:
@@ -13184,16 +13232,6 @@ x-components:
       schema:
         example: domain01
         type: string
-    path_fid2_required:
-      description: |
-        ダウンロードするフォームID<br>
-        数値で指定
-      in: path
-      name: fid
-      required: true
-      schema:
-        example: 999
-        type: integer
     path_fid_required:
       description: フォームID
       in: path
@@ -13339,15 +13377,6 @@ x-components:
       schema:
         example: 999
         type: integer
-    query_fcd2:
-      description: |
-        フォームコード<br>
-        ユニークなフォームコードを指定する必要あり
-      in: query
-      name: fcd
-      schema:
-        example: 999
-        type: integer
     query_fgid:
       description: |
         フォームグループID<br>
@@ -13395,42 +13424,10 @@ x-components:
         example: test.csv
         type: string
     query_filter:
-      description: >
+      description: |
         フィルター<br>
-
         日付の範囲条件で承認待ち一覧を絞り込む際に指定します。<br>
-
-        <br>
-
-        クエリパラメータの「filter」に日付範囲条件を指定する事で、承認待ち一覧リストの絞り込みができます。<br>
-
-        承認待ち書類の申請日または最終更新日に対して絞り込みが可能です。<br>
-
-        <br>
-
-        【フィルター指定形式】<br>
-
-        フィルターで日付範囲条件を指定する場合は以下のフォーマットで指定します。<br>
-
-        {対象日付}には「cr_dt」（申請日）、「up_dt」（最終更新日）のいずれかを指定します。<br>
-
-        {対象日付}␣between␣"yyyy-MM-dd"␣and␣"yyyy-MM-dd"<br>
-
-        <br>
-
-        【フィルター指定例】<br>
-
-        * 申請日で絞り込みを行う場合<br>
-
-        /api/v1/approvals?stat=10&filter=cr_dt between "2022-01-01" and
-        "2022-12-31"<br>
-
-        <br>
-
-        * 最終更新日で絞り込みを行う場合<br>
-
-        /api/v1/approvals?stat=10&filter=up_dt between "2022-01-01" and
-        "2022-12-31"
+        日付範囲の指定方法についてはマニュアル[「2.8.3. 日付範囲」](./doc/manual.html#283-日付範囲)をご参照ください。
       in: query
       name: filter
       schema:
@@ -13509,15 +13506,6 @@ x-components:
       schema:
         example: 経費申請書
         type: string
-    query_formname2:
-      description: |
-        フォーム名称<br>
-        名称の完全一致で指定する必要あり
-      in: query
-      name: formname
-      schema:
-        example: 経費申請書
-        type: string
     query_formname_flg:
       description: |
         フォームグループフラグ<br>
@@ -13577,17 +13565,27 @@ x-components:
         example: '50'
         type: integer
     query_keyword:
-      description: |
+      description: >
         検索条件<br>
-        ※キーワードの指定方法についてはページを準備中※<br>
+
         以下の【対象項目】に対して指定したキーワードで検索を行います。
+
         |対象項目|説明|
+
         |----|----|
+
         |formgroup_name|フォームグループ名称|
+
         |form_name|フォーム名称|
+
         |form_code|フォームコード|
+
         |route_name|承認ルート名称|
+
         |route_code|承認ルートコード|
+
+        キーワードの指定方法についてはマニュアル[「2.8.1
+        絞り込み条件」](./doc/manual.html#281-絞り込み条件)をご参照ください。
       in: query
       name: keyword
       schema:
@@ -13602,16 +13600,6 @@ x-components:
       name: limit
       schema:
         example: '10'
-        type: integer
-    query_limit2:
-      description: |
-        取得上限<br>
-        コンポーネントを取得する件数の上限(デフォルト:50)<br>
-        0を指定した場合は上限なし
-      in: query
-      name: limit
-      schema:
-        example: 0
         type: integer
     query_masterType_required:
       description: |
@@ -13654,16 +13642,6 @@ x-components:
       schema:
         example: 0
         type: integer
-    query_offset4:
-      description: |
-        オフセット値<br>
-        件数のオフセット値(デフォルト:0)<br>
-        上限なしの場合はオフセットもなし
-      in: query
-      name: offset
-      schema:
-        example: 0
-        type: integer
     query_offset_position:
       description: |
         取得開始位置<br>
@@ -13687,6 +13665,7 @@ x-components:
         |form_code|フォームコード|
         |route_name|承認ルート名称|
         |route_code|承認ルートコード|
+        並び替え条件の指定方法についてはマニュアル[「2.8.2 並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
       example: '-form_name'
       in: query
       name: order
@@ -13888,16 +13867,6 @@ x-components:
       schema:
         example: 2022/12/01
         type: string
-    query_type:
-      description: |
-        コンポーネント種別<br>
-        masterWindow / autoNumber / stamp / resource<br>
-        (一つだけ選択可)
-      in: query
-      name: type
-      schema:
-        example: masterWindow
-        type: string
     query_url:
       description: |
         送信先URL<br>
@@ -13907,16 +13876,6 @@ x-components:
       schema:
         example: google
         type: string
-    query_version:
-      description: |
-        TSFファイルの版数<br>
-        数値で指定<br>
-        最新版の場合は省略する
-      in: query
-      name: version
-      schema:
-        example: 1
-        type: integer
   responses:
     DeleteCommentsResponses200:
       content:
@@ -15248,7 +15207,10 @@ x-components:
                           description: ルートコード
                           type: string
                         condroute:
-                          description: 条件付きルート
+                          description: |
+                            条件付きルート<br>
+                            - 条件付きルート: true
+                            - ユーザ選択ルート: false
                           type: boolean
                         name:
                           description: ルート名称
@@ -16526,6 +16488,31 @@ x-components:
                           skip: 0
                           stepno: 3
                           steptitle: 承認
+                        - aprvusers:
+                            - aprv:
+                                datetime: '2023-01-01T12:00:00.000Z'
+                                groupcd: group01
+                                groupname: 営業部
+                                partcd: part01
+                                partname: 一般
+                                stampname: 田
+                                usercode: u001
+                                username: 田中
+                              status: 既読
+                              statuscode: 1
+                            - aprv:
+                                datetime: ''
+                                groupcd: group03
+                                groupname: 店舗
+                                partcd: part01
+                                partname: 一般
+                                stampname: 青
+                                usercode: u022
+                                username: 青木
+                              status: 未読
+                              statuscode: 0
+                          stepno: 4
+                          steptitle: 回覧
                   form:
                     code: form01
                     id: 99
@@ -16543,7 +16530,7 @@ x-components:
                     name: 承認中
                   step:
                     current: 2
-                    max: 4
+                    max: 3
                   title1: 件名1
                   title2: 件名2
                   type: workflow
@@ -16589,7 +16576,7 @@ x-components:
               document:
                 properties:
                   current_version:
-                    description: 版数
+                    description: 現在バージョン番号
                     type: integer
                   docid:
                     description: 書類ID
@@ -20417,7 +20404,7 @@ x-components:
           examples:
             書類の差し戻し:
               value:
-                form_code: form01
+                form_name: フォーム01
                 lumpapply: true
                 route_code: route01
                 wf_backstep: 1
@@ -20498,15 +20485,29 @@ x-components:
                       wrapped: true
                   form_code:
                     description: |
-                      フォームコード
+                      フォームコード<br>
+                      フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+                      どちらも指定されていた場合はフォーム名称が優先されます。
+                    type: string
+                  form_name:
+                    description: |
+                      フォーム名称<br>
+                      フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+                      どちらも指定されていた場合はフォーム名称が優先されます。
                     type: string
                   lumpapply:
                     allOf:
-                      - description: |
+                      - description: >
                           自動申請設定使用フラグ<br>
+
                           true：自動申請設定を使用して書類を申請する。<br>
+
                           false：自動申請設定を使用せず書類を申請する。<br>
-                          デフォルトは true
+
+                          デフォルトは true<br>
+
+                          「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+                          書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
                         example: true
                         type: boolean
                   reason:
@@ -20553,7 +20554,6 @@ x-components:
                     type: integer
                 type: object
             required:
-              - form_code
               - route_code
     PatchUpdateAttachmentsRequest:
       content:
@@ -21380,7 +21380,7 @@ x-components:
                           g_field3: 価格
                     page_no: 1
                 draft: false
-                form_code: form01
+                form_name: フォーム01
                 lumpapply: false
                 route_code: route01
           schema:
@@ -21436,11 +21436,17 @@ x-components:
                   どちらも指定されていた場合はフォーム名称が優先されます。
                 type: string
               lumpapply:
-                description: |
+                description: >
                   自動申請設定使用フラグ<br>
+
                   true：自動申請設定を使用して書類を申請する。<br>
+
                   false：自動申請設定を使用せず書類を申請する。<br>
-                  デフォルトは true
+
+                  デフォルトは true<br>
+
+                  「自動申請設定を使用する」の仕様についてはマニュアル[「3.1.
+                  書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
                 example: true
                 type: boolean
               route_code:
@@ -21488,12 +21494,19 @@ x-components:
               value:
                 form_name: 経費申請書
             並び替え指定:
-              description: |
+              description: >
                 検索結果を件名1の降順に並び替え
+
                 * order (並び替え条件)<br>
+
                 指定した以下の項目で並び替えを行います。<br>
+
                 項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
-                並び替え条件を指定しない場合は更新日時の降順で並び替えます。
+
+                並び替え条件を指定しない場合は更新日時の降順で並び替えます。<br>
+
+                並び替え条件の指定方法についてはマニュアル[「2.8.2
+                並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
                   * docid：書類ID
                   * title1：件名1
                   * title2：件名2
@@ -22041,25 +22054,45 @@ x-components:
                   「日付複合条件」が日付直接指定のとき必要。期間の開始年を指定する
                 type: integer
               order:
-                description: |
+                description: >
                   並び替え条件<br>
+
                   項目を指定してレスポンスの並び替えを行います。<br>
+
                   項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
+
                   並び替え条件を指定しない場合は更新日時の降順になります。
+
                   |項目|説明|
+
                   |----|----|
+
                   |docid|書類ID|
+
                   |title1|件名1|
+
                   |title2|件名2|
+
                   |form_code|フォームコード|
+
                   |form_name|フォーム名称|
+
                   |route_code|承認ルートコード|
+
                   |route_name|承認ルート名称|
+
                   |stat|承認状況|
+
                   |step|ステップ番号|
+
                   |update_datetime|更新日時|
+
                   |write_datetime|申請日時|
+
                   |writer|申請者|
+
+                  並び替え条件の指定方法についてはマニュアル[「2.8.2
+                  並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
                 type: string
               span_type:
                 description: |
