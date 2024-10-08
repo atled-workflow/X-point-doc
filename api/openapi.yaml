@@ -3,15 +3,7 @@ info:
   title: X-point API
   version: 1.0.0
   description: |
-    **認証情報**<br>
-    REST API の実行ではリクエストを X-point に送信する場合、ログイン ID による認証を必要とする方法、予め登録されたトークンコードを使用する方法の2種類があります。<br>
-    接続に使用する情報は http ヘッダに指定する必要があります。<br>
-    ヘッダに、認証情報、トークンコードいずれかの指定が無い REST API 実行は必ずエラー応答になります。<br><br>
-    **トークン情報**`X-ATLED-Generic-API-Token`<br>
-    ドメインコード、ユーザーコード、管理者サイト「フォーム管理」で生成したトークンコードを”:”で連結して、Base64 エンコードした情報を指定する。<br>
-    <br>
-    **認証情報**`Authorization`<br>
-    OAuth2 認証のアクセストークンを指定する。
+    **[REST APIマニュアル](./doc/manual.html)**
 servers:
   - url: https://sub_domain.atledcloud.jp/xpoint
 tags:
@@ -1672,8 +1664,6 @@ paths:
         "401":
           $ref: "#/components/responses/ErrorResponses401"
 
-  # --------------------------------------------------------------------------------------------------
-
 # -----------------------------------------------
 # コンポーネントの定義
 # -----------------------------------------------
@@ -1745,17 +1735,6 @@ components:
 
     path_fid_required:
       description: フォームID
-      name: fid
-      in: path
-      schema:
-        type: integer
-        example: 999
-      required: true
-
-    path_fid2_required:
-      description: |
-        ダウンロードするフォームID<br>
-        数値で指定
       name: fid
       in: path
       schema:
@@ -1905,28 +1884,8 @@ components:
         type: integer
         example: 999
 
-    query_fcd2:
-      description: |
-        フォームコード<br>
-        ユニークなフォームコードを指定する必要あり
-      name: fcd
-      in: query
-      schema:
-        type: integer
-        example: 999
-
     query_formname:
       description: フォーム名称
-      name: formname
-      in: query
-      schema:
-        type: string
-        example: 経費申請書
-
-    query_formname2:
-      description: |
-        フォーム名称<br>
-        名称の完全一致で指定する必要あり
       name: formname
       in: query
       schema:
@@ -2021,17 +1980,6 @@ components:
         一覧クエリのみ有効。<br>
         ※デフォルトは 0<br>
         ※0 以上で指定可能
-      name: offset
-      in: query
-      schema:
-        type: integer
-        example: 0
-
-    query_offset4:
-      description: |
-        オフセット値<br>
-        件数のオフセット値(デフォルト:0)<br>
-        上限なしの場合はオフセットもなし
       name: offset
       in: query
       schema:
@@ -2174,17 +2122,6 @@ components:
         type: integer
         example: "10"
 
-    query_limit2:
-      description: |
-        取得上限<br>
-        コンポーネントを取得する件数の上限(デフォルト:50)<br>
-        0を指定した場合は上限なし
-      name: limit
-      in: query
-      schema:
-        type: integer
-        example: 0
-
     query_fqdn_required:
       description: |
         取得したい Webhook 設定の Webhook 送信先 FQDN を指定します。<br>
@@ -2240,7 +2177,6 @@ components:
     query_keyword:
       description: |
         検索条件<br>
-        ※キーワードの指定方法についてはページを準備中※<br>
         以下の【対象項目】に対して指定したキーワードで検索を行います。
         |対象項目|説明|
         |----|----|
@@ -2249,6 +2185,7 @@ components:
         |form_code|フォームコード|
         |route_name|承認ルート名称|
         |route_code|承認ルートコード|
+        キーワードの指定方法についてはマニュアル[「2.8.1 絞り込み条件」](./doc/manual.html#281-絞り込み条件)をご参照ください。
       name: keyword
       in: query
       schema:
@@ -2268,6 +2205,7 @@ components:
         |form_code|フォームコード|
         |route_name|承認ルート名称|
         |route_code|承認ルートコード|
+        並び替え条件の指定方法についてはマニュアル[「2.8.2 並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
       name: order
       in: query
       schema:
@@ -2347,21 +2285,7 @@ components:
       description: |
         フィルター<br>
         日付の範囲条件で承認待ち一覧を絞り込む際に指定します。<br>
-        <br>
-        クエリパラメータの「filter」に日付範囲条件を指定する事で、承認待ち一覧リストの絞り込みができます。<br>
-        承認待ち書類の申請日または最終更新日に対して絞り込みが可能です。<br>
-        <br>
-        【フィルター指定形式】<br>
-        フィルターで日付範囲条件を指定する場合は以下のフォーマットで指定します。<br>
-        {対象日付}には「cr_dt」（申請日）、「up_dt」（最終更新日）のいずれかを指定します。<br>
-        {対象日付}␣between␣"yyyy-MM-dd"␣and␣"yyyy-MM-dd"<br>
-        <br>
-        【フィルター指定例】<br>
-        * 申請日で絞り込みを行う場合<br>
-        /api/v1/approvals?stat=10&filter=cr_dt between "2022-01-01" and "2022-12-31"<br>
-        <br>
-        * 最終更新日で絞り込みを行う場合<br>
-        /api/v1/approvals?stat=10&filter=up_dt between "2022-01-01" and "2022-12-31"
+        日付範囲の指定方法についてはマニュアル[「2.8.3. 日付範囲」](./doc/manual.html#283-日付範囲)をご参照ください。
       name: filter
       in: query
       schema:
@@ -2505,28 +2429,6 @@ components:
         type: integer
         example: 10
 
-    query_version:
-      description: |
-        TSFファイルの版数<br>
-        数値で指定<br>
-        最新版の場合は省略する
-      name: version
-      in: query
-      schema:
-        type: integer
-        example: 1
-
-    query_type:
-      description: |
-        コンポーネント種別<br>
-        masterWindow / autoNumber / stamp / resource<br>
-        (一つだけ選択可)
-      name: type
-      in: query
-      schema:
-        type: string
-        example: masterWindow
-
     # -----------------------------------------------
     # リクエスト components/requestBodies
     # -----------------------------------------------
@@ -2560,7 +2462,7 @@ components:
             書類申請:
               value:
                 draft: false
-                form_code: form01
+                form_name: フォーム01
                 route_code: route01
                 datas:
                   - page_no: 1
@@ -2580,7 +2482,6 @@ components:
         application/json:
           schema:
             required:
-              - form_code
               - route_code
             allOf:
               - $ref: "#/components/schemas/PatchDocumentRequest"
@@ -2608,7 +2509,7 @@ components:
                 wf_type: 3
                 wf_comment: 記載内容不備
                 wf_backstep: 1
-                form_code: form01
+                form_name: フォーム01
                 route_code: route01
                 lumpapply: true
             電帳法対対象の承認完了書類更新:
@@ -2981,7 +2882,8 @@ components:
                 * order (並び替え条件)<br>
                 指定した以下の項目で並び替えを行います。<br>
                 項目の先頭に「-」を指定した場合は降順に、項目のみ指定した場合は昇順に並び替えます。<br>
-                並び替え条件を指定しない場合は更新日時の降順で並び替えます。
+                並び替え条件を指定しない場合は更新日時の降順で並び替えます。<br>
+                並び替え条件の指定方法についてはマニュアル[「2.8.2 並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
                   * docid：書類ID
                   * title1：件名1
                   * title2：件名2
@@ -4455,19 +4357,19 @@ components:
                     code: 1
                     name: 承認中
                   step:
-                    max: 4
+                    max: 3
                     current: 2
                   current_version: 1
                   writer:
                     usercode: u001
                     username: 田中
                     stampname: 田
-                    datetime: 2023-01-01T12:00:00.000Z
+                    datetime: 2023-01-01 12:00:00
                   lastaprv:
                     usercode: u002
                     username: 佐藤
                     stampname: 佐
-                    datetime: 2023-01-01T12:00:00.000Z
+                    datetime: 2023-01-01 12:00:00
                   flow_versions:
                     - flow_results:
                         - stepno: 0
@@ -4477,7 +4379,7 @@ components:
                                 usercode: u001
                                 username: 田中
                                 stampname: 田
-                                datetime: 2023-01-01T12:00:00.000Z
+                                datetime: 2023-01-01 12:00:00
                                 groupcd: group01
                                 groupname: 営業部
                                 partcd: part01
@@ -4491,7 +4393,7 @@ components:
                                 usercode: u002
                                 username: 佐藤
                                 stampname: 佐
-                                datetime: 2023-01-01T12:00:00.000Z
+                                datetime: 2023-01-01 12:00:00
                                 groupcd: group01
                                 groupname: 営業部
                                 partcd: part02
@@ -4510,7 +4412,7 @@ components:
                                 usercode: u003
                                 username: 加藤
                                 stampname: 加
-                                datetime: 2023-01-01T12:00:00.000Z
+                                datetime: 2023-01-01 12:00:00
                                 groupcd: group01
                                 groupname: 営業部
                                 partcd: part03
@@ -4529,7 +4431,7 @@ components:
                                 usercode: u004
                                 username: 後藤
                                 stampname: 後
-                                datetime: 2023-01-01T12:00:00.000Z
+                                datetime: 2023-01-01 12:00:00
                                 groupcd: group02
                                 groupname: 営業部
                                 partcd: part04
@@ -4541,6 +4443,31 @@ components:
                           adminskip: 0
                           skip: 0
                           backstepno: 0
+                        - stepno: 4
+                          steptitle: 回覧
+                          aprvusers:
+                            - aprv:
+                                usercode: u001
+                                username: 田中
+                                stampname: 田
+                                datetime: 2023-01-01 12:00:00
+                                groupcd: group01
+                                groupname: 営業部
+                                partcd: part01
+                                partname: 一般
+                              statuscode: 1
+                              status: 既読
+                            - aprv:
+                                usercode: u022
+                                username: 青木
+                                stampname: 青
+                                datetime: ""
+                                groupcd: group03
+                                groupname: 店舗
+                                partcd: part01
+                                partname: 一般
+                              statuscode: 0
+                              status: 未読
             通常フォーム:
               value:
                 document:
@@ -7912,7 +7839,8 @@ components:
         自動申請設定使用フラグ<br>
         true：自動申請設定を使用して書類を申請する。<br>
         false：自動申請設定を使用せず書類を申請する。<br>
-        デフォルトは true
+        デフォルトは true<br>
+        「自動申請設定を使用する」の仕様についてはマニュアル[「3.1. 書類作成API／書類のワークフロー操作・編集・更新API」](./doc/manual.html#31-書類作成api書類のワークフロー操作編集更新api)をご確認ください。
       type: boolean
       example: true
 
@@ -9049,7 +8977,15 @@ components:
           type: string
         form_code:
           description: |
-            フォームコード
+            フォームコード<br>
+            フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+            どちらも指定されていた場合はフォーム名称が優先されます。
+          type: string
+        form_name:
+          description: |
+            フォーム名称<br>
+            フォームコードもしくはフォーム名称のどちらかが必須です。<br>
+            どちらも指定されていた場合はフォーム名称が優先されます。
           type: string
         route_code:
           allOf:
@@ -9447,6 +9383,7 @@ components:
             |update_datetime|更新日時|
             |write_datetime|申請日時|
             |writer|申請者|
+            並び替え条件の指定方法についてはマニュアル[「2.8.2 並び替え」](./doc/manual.html#282-並び替え)をご参照ください。
           type: string
 
     PostDocumentRequest:
@@ -9652,7 +9589,7 @@ components:
               allOf:
                 - $ref: "#/components/schemas/step"
             current_version:
-              description: 版数
+              description: 現在バージョン番号
               type: integer
             writer:
               type: object
@@ -9846,7 +9783,10 @@ components:
                     description: ルート名称
                     type: string
                   condroute:
-                    description: 条件付きルート
+                    description: |
+                      条件付きルート<br>
+                      - 条件付きルート: true
+                      - ユーザ選択ルート: false
                     type: boolean
             pages:
               description: フォームページ情報
@@ -10146,29 +10086,6 @@ components:
                 最終更新<br>
                 書式：YYYY/MM/DD hh:mm:ss
               type: string
-
-    PostFormInsertResponses200:
-      type: object
-      properties:
-        form_cd:
-          description: |
-            フォームCD<br>
-            正常時は必ず出力
-          type: string
-        form_id:
-          description: |
-            フォームID<br>
-            正常時は必ず出力
-          type: string
-        form_group_id:
-          description: |
-            所属フォームグループID<br>
-            正常時は必ず出力<br>
-            数値の配列で指定
-        warning:
-          description: |
-            メッセージ内容<br>
-            文字列の配列で指定
 
     PatchUpdateUserRequest:
       type: object
