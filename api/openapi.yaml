@@ -3,9 +3,14 @@ info:
   title: X-point API
   version: 1.0.0
   description: |
-    **[REST APIマニュアル](./doc/manual.html)**
+    **[X-point REST API利用ガイド](./doc/manual.html)**<br><br>
+    OpenAPI定義ファイル(openapi.yaml)はダウンロード後、APIを利用するためのツールに取り込むことができます。
 servers:
-  - url: https://sub_domain.atledcloud.jp/xpoint
+  - url: https://{sub_domain}.atledcloud.jp/xpoint
+    variables:
+      sub_domain:
+        default: sub_domain
+        description: X-pointのサブドメイン
 tags:
   - name: Documents
   - name: Attachments
@@ -1240,9 +1245,9 @@ paths:
         - $ref: "#/components/parameters/query_count"
       responses:
         "200":
-          $ref: "#/components/responses/GetUserInfoResponses200"
+          $ref: "#/components/responses/ScimUserResponse"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1253,20 +1258,20 @@ paths:
       description: リクエストボディに指定したデータを元にユーザ情報を作成します。
       operationId: CreateUser
       requestBody:
-        $ref: "#/components/requestBodies/PostCreateUserRequest"
+        $ref: "#/components/requestBodies/ScimUserRequest"
       security:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/path_domainCode_required"
       responses:
         "201":
-          $ref: "#/components/responses/PostCreateUserResponses201"
+          $ref: "#/components/responses/ScimUserResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -1284,9 +1289,9 @@ paths:
         - $ref: "#/components/parameters/path_userId_required"
       responses:
         "200":
-          $ref: "#/components/responses/GetTargetUserInfoResponses200"
+          $ref: "#/components/responses/ScimUserResponse"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1301,7 +1306,7 @@ paths:
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
       operationId: UpdateUser
       requestBody:
-        $ref: "#/components/requestBodies/PutUpdateUserRequest"
+        $ref: "#/components/requestBodies/ScimUserRequest"
       security:
         - bearerAuth: []
       parameters:
@@ -1309,13 +1314,13 @@ paths:
         - $ref: "#/components/parameters/path_userId_required"
       responses:
         "200":
-          $ref: "#/components/responses/PutUpdateUserResponses200"
+          $ref: "#/components/responses/ScimUserResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1334,13 +1339,13 @@ paths:
         - $ref: "#/components/parameters/path_userId_required"
       responses:
         "200":
-          $ref: "#/components/responses/PatchUpdateUserResponses200"
+          $ref: "#/components/responses/ScimUserResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1357,13 +1362,13 @@ paths:
         - $ref: "#/components/parameters/path_userId_required"
       responses:
         "204":
-          $ref: "#/components/responses/DeleteUserResponses204"
+          $ref: "#/components/responses/DeleteScimInfoResponses204"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -1383,9 +1388,9 @@ paths:
         - $ref: "#/components/parameters/query_count"
       responses:
         "200":
-          $ref: "#/components/responses/GetUserGroupInfoResponses200"
+          $ref: "#/components/responses/ScimGroupResponse"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1396,20 +1401,20 @@ paths:
       description: リクエストボディに指定したデータを元にユーザグループ情報を作成します。
       operationId: CreateGroup
       requestBody:
-        $ref: "#/components/requestBodies/PostCreateUserGroupInfoRequest"
+        $ref: "#/components/requestBodies/ScimGroupRequest"
       security:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/path_domainCode_required"
       responses:
         "200":
-          $ref: "#/components/responses/PostCreateUserGroupInfoResponses200"
+          $ref: "#/components/responses/ScimGroupResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -1427,9 +1432,9 @@ paths:
         - $ref: "#/components/parameters/path_groupId_required"
       responses:
         "200":
-          $ref: "#/components/responses/GetTargetUserGroupInfoResponses200"
+          $ref: "#/components/responses/ScimGroupResponse"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1444,7 +1449,7 @@ paths:
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
       operationId: UpdateGroup
       requestBody:
-        $ref: "#/components/requestBodies/PutUpdateUserGroupInfoRequest"
+        $ref: "#/components/requestBodies/ScimGroupRequest"
       security:
         - bearerAuth: []
       parameters:
@@ -1452,13 +1457,13 @@ paths:
         - $ref: "#/components/parameters/path_groupId_required"
       responses:
         "200":
-          $ref: "#/components/responses/PutUpdateUserGroupInfoResponses200"
+          $ref: "#/components/responses/ScimGroupResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1477,13 +1482,13 @@ paths:
         - $ref: "#/components/parameters/path_groupId_required"
       responses:
         "200":
-          $ref: "#/components/responses/PatchUpdateUserGroupInfoResponses200"
+          $ref: "#/components/responses/ScimGroupResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1500,11 +1505,11 @@ paths:
         - $ref: "#/components/parameters/path_groupId_required"
       responses:
         "204":
-          $ref: "#/components/responses/DeleteUserGroupInfoResponses204"
+          $ref: "#/components/responses/DeleteScimInfoResponses204"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1524,9 +1529,9 @@ paths:
         - $ref: "#/components/parameters/query_count"
       responses:
         "200":
-          $ref: "#/components/responses/GetPartInfoResponses200"
+          $ref: "#/components/responses/ScimPartResponse"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1537,18 +1542,18 @@ paths:
       description: リクエストボディに指定したデータを元に役職情報を作成します。
       operationId: CreatePart
       requestBody:
-        $ref: "#/components/requestBodies/PostCreatePartInfoRequest"
+        $ref: "#/components/requestBodies/ScimPartRequest"
       security:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/path_domainCode_required"
       responses:
         "200":
-          $ref: "#/components/responses/PostCreatePartInfoResponses200"
+          $ref: "#/components/responses/ScimPartResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -1566,9 +1571,9 @@ paths:
         - $ref: "#/components/parameters/path_partId_required"
       responses:
         "200":
-          $ref: "#/components/responses/GetTargetPartInfoResponses200"
+          $ref: "#/components/responses/ScimPartResponse"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1583,7 +1588,7 @@ paths:
         * リクエストボディで指定しなかった項目は削除、もしくは初期値に更新されますのでご注意ください。
       operationId: UpdatePart
       requestBody:
-        $ref: "#/components/requestBodies/PutUpdatePartInfoRequest"
+        $ref: "#/components/requestBodies/ScimPartRequest"
       security:
         - bearerAuth: []
       parameters:
@@ -1591,13 +1596,13 @@ paths:
         - $ref: "#/components/parameters/path_partId_required"
       responses:
         "200":
-          $ref: "#/components/responses/PutUpdatePartInfoResponses200"
+          $ref: "#/components/responses/ScimPartResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1616,13 +1621,13 @@ paths:
         - $ref: "#/components/parameters/path_partId_required"
       responses:
         "200":
-          $ref: "#/components/responses/PatchUpdatePartInfoResponses200"
+          $ref: "#/components/responses/ScimPartResponse"
         "400":
-          $ref: "#/components/responses/ErrorResponses400"
+          $ref: "#/components/responses/ScimErrorResponse400"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -1639,11 +1644,11 @@ paths:
         - $ref: "#/components/parameters/path_partId_required"
       responses:
         "204":
-          $ref: "#/components/responses/DeletePartInfoResponses204"
+          $ref: "#/components/responses/DeleteScimInfoResponses204"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
         "404":
-          $ref: "#/components/responses/ErrorResponses404"
+          $ref: "#/components/responses/ScimErrorResponse404"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -1662,7 +1667,7 @@ paths:
         "200":
           $ref: "#/components/responses/GetAuthorizeUserInfoResponses200"
         "401":
-          $ref: "#/components/responses/ErrorResponses401"
+          $ref: "#/components/responses/ScimErrorResponse401"
 
 # -----------------------------------------------
 # コンポーネントの定義
@@ -3218,138 +3223,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    PostCreateUserRequest:
-      content:
-        application/scim+json:
-          schema:
-            required:
-              - userName
-              - displayName
-              - password
-              - urn:atled:scim:schemas:1.0:User
-            type: object
-            properties:
-              userName:
-                description: ログインID
-                type: string
-                example: u001
-              displayName:
-                description: 氏名
-                type: string
-                example: 田中
-              name:
-                description: 氏名情報
-                type: object
-                properties:
-                  formatted:
-                    description: 氏名
-                    type: string
-                    example: 田中
-              active:
-                description: |
-                  ログイン拒否<br>
-                  true：ログイン拒否する。<br>
-                  false：ログイン拒否しない。<br>
-                  デフォルトは false です。
-                type: boolean
-                example: false
-              password:
-                description: パスワード
-                type: string
-                example: tanaka001
-              emails:
-                description: メールアドレス情報
-                type: array
-                items:
-                  type: object
-                  properties:
-                    value:
-                      description: メールアドレス
-                      type: string
-                      example: scim@example.com
-                    type:
-                      description: |
-                        メールタイプ<br>
-                        未使用項目のため指定する必要はありません。
-                      type: string
-                      example: ""
-                    primary:
-                      description: |
-                        優先フラグ<br>
-                        未使用項目のため指定する必要はありません。
-                      type: boolean
-                      example: ""
-              urn:atled:scim:schemas:1.0:User:
-                description: X-point 拡張属性
-                type: object
-                properties:
-                  userCode:
-                    description: ユーザCD
-                    type: string
-                    example: u001
-                  kana:
-                    description: 氏名カナ
-                    type: string
-                    example: タナカ
-                  groups:
-                    description: 所属グループ情報
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
-                          description: |
-                            ユーザグループ ID<br>
-                            ユーザグループ ID またはユーザグループ CDのいずれか指定必須。<br>
-                            どちらも指定されている場合はユーザグループ ID が優先されます。
-                          type: string
-                          example: 100
-                        groupCode:
-                          description: ユーザグループCD
-                          type: string
-                          example: group01
-                        primary:
-                          description: 優先フラグ
-                          type: boolean
-                          example: true
-                        partCode:
-                          description: |
-                            役職CD<br>
-                            partCode と part.partCode のどちらも指定されている場合は partCode が優先されます。
-                          type: string
-                          example: part01
-                        part:
-                          description: 役職情報
-                          type: object
-                          properties:
-                            partCode:
-                              description: 役職CD
-                              type: string
-                              example: part01
-                  itemValues:
-                    description: 予備項目情報
-                    type: array
-                    items:
-                      required:
-                        - no
-                      type: object
-                      properties:
-                        no:
-                          description: 予備項目番号
-                          type: integer
-                          example: 1
-                        value:
-                          description: 予備項目内容
-                          type: string
-                          example: 予備1
-                  remark:
-                    description: 備考
-                    type: string
-                    example: 備考
-
-    # --------------------------------------------------------------------------------------------------
-
-    PutUpdateUserRequest:
+    ScimUserRequest:
       content:
         application/scim+json:
           schema:
@@ -3548,7 +3422,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    PostCreateUserGroupInfoRequest:
+    ScimGroupRequest:
       content:
         application/scim+json:
           schema:
@@ -3560,7 +3434,7 @@ components:
               displayName:
                 description: ユーザグループ名称
                 type: string
-                example: 開発部
+                example: 営業部
               members:
                 description: 所属ユーザ情報
                 allOf:
@@ -3591,7 +3465,7 @@ components:
                   displayKana:
                     description: ユーザグループ名称カナ
                     type: string
-                    example: カイハツブ
+                    example: エイギョウブ
                   parentGroup:
                     description: 親グループ情報
                     type: object
@@ -3601,7 +3475,7 @@ components:
                           親グループID<br>
                           value と groupCode のどちらも指定されている場合は value が優先されます。
                         type: string
-                        example: 102
+                        example: 105
                       groupCode:
                         description: 親グループCD
                         type: string
@@ -3739,7 +3613,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    PostCreatePartInfoRequest:
+    ScimPartRequest:
       content:
         application/scim+json:
           schema:
@@ -3751,47 +3625,19 @@ components:
               displayName:
                 description: 役職名称
                 type: string
-                example: 部長
+                example: 一般
               displayKana:
                 description: 役職名称カナ
                 type: string
-                example: ブチョウ
+                example: イッパン
               partCode:
                 description: 役職CD
                 type: string
-                example: part03
+                example: part01
               orderNo:
                 description: 並び順
                 type: integer
-                example: 3
-
-    # --------------------------------------------------------------------------------------------------
-
-    PutUpdatePartInfoRequest:
-      content:
-        application/scim+json:
-          schema:
-            required:
-              - displayName
-              - partCode
-            type: object
-            properties:
-              displayName:
-                description: 役職名称
-                type: string
-                example: 部長
-              displayKana:
-                description: 役職名称カナ
-                type: string
-                example: ブチョウ
-              partCode:
-                description: 役職CD
-                type: string
-                example: part03
-              orderNo:
-                description: 並び順
-                type: integer
-                example: 3
+                example: 1
 
     # --------------------------------------------------------------------------------------------------
 
@@ -3840,56 +3686,48 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error_code:
-                type: integer
-                example: 400
-              error_message:
-                type: string
-                example: "{エラーメッセージ}"
+            allOf:
+              - $ref: "#/components/schemas/ErrorResponse"
+              - type: object
+                properties:
+                  error_code:
+                    example: 400
 
     ErrorResponses401:
       description: "Error response"
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error_code:
-                type: integer
-                example: 401
-              error_message:
-                type: string
-                example: "{エラーメッセージ}"
+            allOf:
+              - $ref: "#/components/schemas/ErrorResponse"
+              - type: object
+                properties:
+                  error_code:
+                    example: 401
 
     ErrorResponses403:
       description: "Error response"
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error_code:
-                type: integer
-                example: 403
-              error_message:
-                type: string
-                example: "{エラーメッセージ}"
+            allOf:
+              - $ref: "#/components/schemas/ErrorResponse"
+              - type: object
+                properties:
+                  error_code:
+                    example: 403
 
     ErrorResponses404:
       description: "Error response"
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error_code:
-                type: integer
-                example: 404
-              error_message:
-                type: string
-                example: "{エラーメッセージ}"
+            allOf:
+              - $ref: "#/components/schemas/ErrorResponse"
+              - type: object
+                properties:
+                  error_code:
+                    example: 404
 
     ErrorResponses500:
       description: "Error response"
@@ -3913,14 +3751,48 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              error_code:
-                type: integer
-                example: 500
-              error_message:
-                type: string
-                example: "{エラーメッセージ}"
+            allOf:
+              - $ref: "#/components/schemas/ErrorResponse"
+              - type: object
+                properties:
+                  error_code:
+                    example: 500
+
+    ScimErrorResponse400:
+      description: "Error response"
+      content:
+        application/scim+json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ScimErrorResponse"
+              - type: object
+                properties:
+                  status:
+                    example: 400
+
+    ScimErrorResponse401:
+      description: "Error response"
+      content:
+        application/scim+json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ScimErrorResponse"
+              - type: object
+                properties:
+                  status:
+                    example: 401
+
+    ScimErrorResponse404:
+      description: "Error response"
+      content:
+        application/scim+json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ScimErrorResponse"
+              - type: object
+                properties:
+                  status:
+                    example: 404
 
     # --------------------------------------------------------------------------------------------------
 
@@ -3936,9 +3808,9 @@ components:
                 type: integer
                 example: 999
               message_type:
-                allOf:
-                  - $ref: "#/components/schemas/message_type"
-                  - example: 0
+                description: メッセージタイプ(3:INFO 固定)
+                type: integer
+                example: 3
               message:
                 description: メッセージ内容
                 type: string
@@ -3958,9 +3830,9 @@ components:
                 type: integer
                 example: 999
               message_type:
-                allOf:
-                  - $ref: "#/components/schemas/message_type"
-                  - example: 0
+                description: メッセージタイプ(3:INFO 固定)
+                type: integer
+                example: 3
               message:
                 description: メッセージ内容
                 type: string
@@ -4216,8 +4088,9 @@ components:
                 type: integer
                 example: 999
               message_type:
+                description: メッセージタイプ(3:INFO 固定)
                 type: integer
-                example: 0
+                example: 3
               message:
                 type: string
                 example: 書類が削除されました (ID = 999)
@@ -4240,9 +4113,9 @@ components:
                 type: integer
                 example: 1
               message_type:
-                allOf:
-                  - $ref: "#/components/schemas/message_type"
-                  - example: 3
+                description: メッセージタイプ(3:INFO 固定)
+                type: integer
+                example: 3
               message:
                 description: メッセージ内容
                 type: string
@@ -4295,9 +4168,9 @@ components:
                 type: integer
                 example: 1
               message_type:
-                allOf:
-                  - $ref: "#/components/schemas/message_type"
-                  - example: 3
+                description: メッセージタイプ(3:INFO 固定)
+                type: integer
+                example: 3
               message:
                 description: メッセージ内容
                 type: string
@@ -4321,9 +4194,9 @@ components:
                 type: integer
                 example: 1
               message_type:
-                allOf:
-                  - $ref: "#/components/schemas/message_type"
-                  - example: 3
+                description: メッセージタイプ(3:INFO 固定)
+                type: integer
+                example: 3
               message:
                 description: メッセージ内容
                 type: string
@@ -5275,12 +5148,7 @@ components:
                     type: string
                     example: user_table
               message_type:
-                description: |
-                  メッセージタイプ<br>
-                  -1 or 0：No Error<br>
-                  1：Error<br>
-                  2：Warning<br>
-                  3：INFO<br>
+                description: メッセージタイプ(3:INFO 固定)
                 type: integer
                 example: 3
               message:
@@ -6026,9 +5894,9 @@ components:
                   - 102
                   - 103
               message_type:
-                allOf:
-                  - $ref: "#/components/schemas/message_type"
-                  - example: 3
+                description: メッセージタイプ(3:INFO 固定)
+                type: integer
+                example: 3
               message:
                 description: メッセージ内容
                 type: string
@@ -6499,188 +6367,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    GetUserInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: User
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Users/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:User
-                        userName: u001
-                        name:
-                          formatted: 田中
-                        displayName: 田中
-                        active: true
-                        password: "*"
-                        emails:
-                          - value: domain_admin@example.com
-                            type: work
-                            primary: true
-                        urn:atled:scim:schemas:1.0:User:
-                          userCode: u001
-                          kana: タナカ
-                          groups:
-                            - value: 100
-                              display: 営業部
-                              ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
-                              groupCode: group01
-                              primary: true
-                              part:
-                                displayName: 一般
-                                partCode: part01
-                          itemValues:
-                            - no: 1
-                              value: 予備1
-                            - no: 2
-                              value: 予備2
-                          remark: 備考
-                      - id: 101
-                        externalId: ""
-                        meta:
-                          resourceType: User
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Users/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:User
-                        userName: u002
-                        name:
-                          formatted: 佐藤
-                        displayName: 佐藤
-                        active: true
-                        password: "*"
-                        emails:
-                          - value: domain_admin@example.com
-                            type: work
-                            primary: true
-                        urn:atled:scim:schemas:1.0:User:
-                          userCode: u002
-                          kana: サトウ
-                          groups:
-                            - value: 100
-                              display: 営業部
-                              ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
-                              groupCode: group01
-                              primary: true
-                              part:
-                                displayName: 課長
-                                partCode: part02
-                          itemValues:
-                            - no: 1
-                              value: 予備1
-                            - no: 2
-                              value: 予備2
-                          remark: 備考
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetTargetUserInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 1
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: User
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Users/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:User
-                        userName: u001
-                        name:
-                          formatted: 田中
-                        displayName: 田中
-                        active: true
-                        password: "*"
-                        emails:
-                          - value: domain_admin@example.com
-                            type: work
-                            primary: true
-                        urn:atled:scim:schemas:1.0:User:
-                          userCode: u001
-                          kana: タナカ
-                          groups:
-                            - value: 100
-                              display: 営業部
-                              ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
-                              groupCode: group01
-                              primary: true
-                              part:
-                                displayName: 一般
-                                partCode: part01
-                          itemValues:
-                            - no: 1
-                              value: 予備1
-                            - no: 2
-                              value: 予備2
-                          remark: 備考
-
-    # --------------------------------------------------------------------------------------------------
-
-    PostCreateUserResponses201:
+    ScimUserResponse:
       description: Successful response
       content:
         application/scim+json:
@@ -6750,7 +6437,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    PutUpdateUserResponses200:
+    ScimGroupResponse:
       description: Successful response
       content:
         application/scim+json:
@@ -6766,153 +6453,6 @@ components:
                 description: 検索結果件数
                 type: integer
                 example: 1
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: User
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Users/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:User
-                        userName: u001
-                        name:
-                          formatted: 田中
-                        displayName: 田中
-                        active: true
-                        password: "*"
-                        emails:
-                          - value: domain_admin@example.com
-                            type: work
-                            primary: true
-                        urn:atled:scim:schemas:1.0:User:
-                          userCode: u001
-                          kana: タナカ
-                          groups:
-                            - value: 100
-                              display: 営業部
-                              ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
-                              groupCode: group01
-                              primary: true
-                              part:
-                                displayName: 一般
-                                partCode: part01
-                          itemValues:
-                            - no: 1
-                              value: 予備1
-                          remark: 備考
-
-    # --------------------------------------------------------------------------------------------------
-
-    PatchUpdateUserResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 1
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: User
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Users/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:User
-                        userName: u002
-                        name:
-                          formatted: 田中
-                        displayName: 田中
-                        active: true
-                        password: "*"
-                        emails:
-                          - value: domain_admin@example.com
-                            type: work
-                            primary: true
-                        urn:atled:scim:schemas:1.0:User:
-                          userCode: u002
-                          kana: タナカ
-                          groups:
-                            - value: 100
-                              display: 営業部
-                              ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
-                              groupCode: group01
-                              primary: true
-                              part:
-                                displayName: 一般
-                                partCode: part01
-                          itemValues:
-                            - no: 1
-                              value: 予備1
-                          remark: 備考
-
-    # --------------------------------------------------------------------------------------------------
-
-    DeleteUserResponses204:
-      description: Successful response
-      content:
-        application/scim+json: {}
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetUserGroupInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
               startIndex:
                 description: |
                   取得開始番号<br>
@@ -6963,120 +6503,7 @@ components:
                                 displayKana: カチョウ
                                 partCode: part02
                         urn:atled:scim:schemas:1.0:Group:
-                          groupCode: 100
-                          displayKana: エイギョウブ
-                          parentGroup:
-                            value: 105
-                          orderNo: 1
-                      - id: 101
-                        externalId: ""
-                        meta:
-                          resourceType: Group
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Groups/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 総務部
-                        members:
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 102
-                            display: 加藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u003
-                              userName: u003
-                              part:
-                                displayName: 一般
-                                displayKana: イッパン
-                                partCode: part01
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 103
-                            display: 後藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u004
-                              userName: u004
-                              part:
-                                displayName: 課長
-                                displayKana: カチョウ
-                                partCode: part02
-                        urn:atled:scim:schemas:1.0:Group:
-                          groupCode: 101
-                          displayKana: ソウムブ
-                          parentGroup:
-                            value: 105
-                          orderNo: 1
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetTargetUserGroupInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザグループ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_group_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Group
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Groups/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 営業部
-                        members:
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 100
-                            display: 田中
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u001
-                              userName: u001
-                              part:
-                                displayName: 一般
-                                displayKana: イッパン
-                                partCode: part01
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 101
-                            display: 佐藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u002
-                              userName: u002
-                              part:
-                                displayName: 課長
-                                displayKana: カチョウ
-                                partCode: part02
-                        urn:atled:scim:schemas:1.0:Group:
-                          groupCode: 100
+                          groupCode: group01
                           displayKana: エイギョウブ
                           parentGroup:
                             value: 105
@@ -7084,310 +6511,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    PostCreateUserGroupInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザグループ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_group_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Group
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Groups/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 営業部
-                        members:
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 100
-                            display: 田中
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u001
-                              userName: u001
-                              part:
-                                displayName: 一般
-                                displayKana: イッパン
-                                partCode: part01
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 101
-                            display: 佐藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u002
-                              userName: u002
-                              part:
-                                displayName: 課長
-                                displayKana: カチョウ
-                                partCode: part02
-                        urn:atled:scim:schemas:1.0:Group:
-                          groupCode: 100
-                          displayKana: カイハツブ
-                          parentGroup:
-                            value: 102
-                          orderNo: 1
-
-    # --------------------------------------------------------------------------------------------------
-
-    PutUpdateUserGroupInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザグループ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_group_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Group
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Groups/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 営業部
-                        members:
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 100
-                            display: 田中
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u001
-                              userName: u001
-                              part:
-                                displayName: 一般
-                                displayKana: イッパン
-                                partCode: part01
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 101
-                            display: 佐藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u002
-                              userName: u002
-                              part:
-                                displayName: 課長
-                                displayKana: カチョウ
-                                partCode: part02
-                        urn:atled:scim:schemas:1.0:Group:
-                          groupCode: 102
-                          displayKana: カイハツブ
-                          parentGroup:
-                            value: 102
-                          orderNo: 1
-
-    # --------------------------------------------------------------------------------------------------
-
-    PatchUpdateUserGroupInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: ユーザグループ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_group_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Group
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Groups/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 営業部
-                        members:
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 100
-                            display: 田中
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u001
-                              userName: u001
-                              part:
-                                displayName: 一般
-                                displayKana: イッパン
-                                partCode: part01
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 101
-                            display: 佐藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u002
-                              userName: u002
-                              part:
-                                displayName: 課長
-                                displayKana: カチョウ
-                                partCode: part02
-                        urn:atled:scim:schemas:1.0:Group:
-                          groupCode: 102
-                          displayKana: カイハツブ
-                          parentGroup:
-                            value: 102
-                          orderNo: 1
-
-    # --------------------------------------------------------------------------------------------------
-
-    DeleteUserGroupInfoResponses204:
-      description: Successful response
-      content:
-        application/scim+json: {}
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetPartInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 2
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: 役職情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_part_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 一般
-                        displayKana: イッパン
-                        partCode: part01
-                        orderNo: 1
-                      - id: 101
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 課長
-                        displayKana: カチョウ
-                        partCode: part02
-                        orderNo: 2
-                      - id: 102
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 部長
-                        displayKana: ブチョウ
-                        partCode: part03
-                        orderNo: 3
-
-    # --------------------------------------------------------------------------------------------------
-
-    GetTargetPartInfoResponses200:
+    ScimPartResponse:
       description: Successful response
       content:
         application/scim+json:
@@ -7435,151 +6559,7 @@ components:
 
     # --------------------------------------------------------------------------------------------------
 
-    PostCreatePartInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 1
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: 役職情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_part_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 部長
-                        displayKana: ブチョウ
-                        partCode: part03
-                        orderNo: 3
-
-    # --------------------------------------------------------------------------------------------------
-
-    PutUpdatePartInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 1
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: 役職情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_part_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 部長
-                        displayKana: ブチョウ
-                        partCode: part03
-                        orderNo: 3
-
-    # --------------------------------------------------------------------------------------------------
-
-    PatchUpdatePartInfoResponses200:
-      description: Successful response
-      content:
-        application/scim+json:
-          schema:
-            type: object
-            properties:
-              schemas:
-                description: スキーマ
-                type: array
-                items:
-                  example: urn:ietf:params:scim:api:messages:2.0:ListResponse
-              totalResults:
-                description: 検索結果件数
-                type: integer
-                example: 1
-              startIndex:
-                description: |
-                  取得開始番号<br>
-                  クエリパラメータの「startIndex」を指定してリクエストした場合のみ応答に含まれる。
-                type: integer
-                example: 1
-              itemsPerPage:
-                description: |
-                  1 ページあたりの件数<br>
-                  クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
-                example: 10
-              Resources:
-                description: 役職情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_part_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 社員
-                        displayKana: シャイン
-                        partCode: part01
-                        orderNo: 1
-
-    # --------------------------------------------------------------------------------------------------
-
-    DeletePartInfoResponses204:
+    DeleteScimInfoResponses204:
       description: Successful response
       content:
         application/scim+json: {}
@@ -7656,7 +6636,7 @@ components:
                         true 固定。
                       type: boolean
                       example: true
-              urn:atled:scim:schemas:1.0:User":
+              urn:atled:scim:schemas:1.0:User:
                 description: X-point 拡張属性
                 type: object
                 properties:
@@ -7692,6 +6672,36 @@ components:
   # -----------------------------------------------
 
   schemas:
+    ErrorResponse:
+      description: "Error response"
+      type: object
+      properties:
+        error_code:
+          type: integer
+          example: 400
+        error_message:
+          type: string
+          example: "{エラーメッセージ}"
+
+    ScimErrorResponse:
+      description: "Error response"
+      type: object
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+            example: urn:ietf:params:scim:api:messages:2.0:Error
+        scimType:
+          type: string
+          example: "{エラー内容}"
+        detail:
+          type: string
+          example: "{エラー詳細}"
+        status:
+          type: string
+          example: 400
+
     doc_form:
       description: フォーム情報
       type: object
@@ -7824,15 +6834,6 @@ components:
         writedate:
           description: コメント登録日時
           type: string
-
-    message_type:
-      description: |
-        メッセージタイプ<br>
-        -1 or 0：no error<br>
-        1：ERROR<br>
-        2：WARNING<br>
-        3：INFO
-      type: integer
 
     lumpapply:
       description: |
@@ -8957,13 +7958,13 @@ components:
           description: |
             ワークフロー種別<br>
             -1: 下書き保存<br>
-            0：申請<br>
+            0：申請、再申請<br>
             1：承認<br>
             2：保留<br>
             3：差し戻し<br>
             4：却下<br>
             5：取り戻し<br>
-            ※ワークフロー操作を伴う場合のみ指定
+            ※承認完了書類の修正保存を行う場合はワークフロー種別を指定せずにリクエストしてください。
           type: integer
         wf_comment:
           description: |
@@ -9460,8 +8461,9 @@ components:
           description: 添付番号
           type: integer
         message_type:
-          allOf:
-            - $ref: "#/components/schemas/message_type"
+          description: メッセージタイプ(0:NoError 固定)
+          type: integer
+          example: 0
         message:
           description: メッセージ内容
           type: string
@@ -9482,8 +8484,9 @@ components:
           description: 添付番号
           type: integer
         message_type:
-          allOf:
-            - $ref: "#/components/schemas/message_type"
+          description: メッセージタイプ(0:NoError 固定)
+          type: integer
+          example: 0
         message:
           description: メッセージ内容
           type: string
