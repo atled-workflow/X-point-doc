@@ -326,6 +326,9 @@ paths:
       description: |
         指定された ID の書類を表示するための HTML（JavaScript 含む）一式がダウンロードされます。
         
+        本APIで書類を表示した場合、閉じるナビボタンで書類を閉じることができません。  
+        書類を閉じる場合はブラウザのウィンドウやタブの×ボタンから閉じてください。
+        
         **APIトークンの必要権限**
         * 閲覧権限
       operationId: ViewDocument
@@ -354,6 +357,9 @@ paths:
       summary: 新規書類・関連書類作成
       description: |
         書類の新規作成、関連書類の作成を行うための書類ビューHTML がダウンロードされます。
+
+        本APIで書類を表示した場合、閉じるナビボタンで書類を閉じることができません。  
+        書類を閉じる場合はブラウザのウィンドウやタブの×ボタンから閉じてください。
         
         **APIトークンの必要権限**
         * 閲覧権限
@@ -385,6 +391,9 @@ paths:
       description: |
         リクエスト時に、表示する書類ビューのフィールドに事前入力する値、事前添付するファイルが指定可能な新規書類・関連書類作成 API です。<br>
         GETメソッド版同様、書類の新規作成、関連書類の作成を行うための書類ビューHTML がダウンロードされます。
+
+        本APIで書類を表示した場合、閉じるナビボタンで書類を閉じることができません。  
+        書類を閉じる場合はブラウザのウィンドウやタブの×ボタンから閉じてください。
         
         **APIトークンの必要権限**
         * 閲覧権限
@@ -424,6 +433,7 @@ paths:
         - APIKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/path_docid_required"
+        - $ref: "#/components/parameters/query_history"
       responses:
         "200":
           $ref: "#/components/responses/GetStatusResponses200"
@@ -2434,6 +2444,18 @@ components:
         type: integer
         example: 10
 
+    query_history:
+      description: |
+        承認履歴情報取得フラグ<br>
+        true：承認履歴情報を取得する。<br>
+        false：承認履歴情報を取得しない。<br>
+        デフォルトは false です。
+      name: history
+      in: query
+      schema:
+        type: boolean
+        example: true
+
     # -----------------------------------------------
     # リクエスト components/requestBodies
     # -----------------------------------------------
@@ -2991,7 +3013,7 @@ components:
                   どちらも指定されている場合はフォーム名称と一致するフォームで REST API が実行されます。
                 type: string
                 example: form01
-              form_name:
+              formname:
                 description: フォーム名称
                 type: string
                 example: フォーム01
@@ -3283,7 +3305,7 @@ components:
                         優先フラグ<br>
                         未使用項目のため指定する必要はありません。
                       type: boolean
-                      example: ""
+                      example: true
               urn:atled:scim:schemas:1.0:User:
                 description: X-point 拡張属性
                 type: object
@@ -3442,13 +3464,13 @@ components:
                 allOf:
                   - $ref: "#/components/schemas/members_iteme"
                   - example:
-                      - value: 100
+                      - value: "100"
                         urn:atled:scim:schemas:1.0:GroupMember:
                           usercode: u001
                           partCode: part01
                           part:
                             partCode: part01
-                      - value: 101
+                      - value: "101"
                         urn:atled:scim:schemas:1.0:GroupMember:
                           usercode: u002
                           partCode: part02
@@ -4234,7 +4256,7 @@ components:
                   step:
                     max: 3
                     current: 2
-                  current_version: 1
+                  current_version: 3
                   writer:
                     usercode: u001
                     username: 田中
@@ -4343,6 +4365,299 @@ components:
                                 partname: 一般
                               statuscode: 0
                               status: 未読
+                  histories:
+                    [{
+                      version: 3,
+                      flow_results:
+                        [
+                          {
+                            stepno: 0,
+                            steptitle: 申請,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u001,
+                                      username: 田中圭太,
+                                      stampname: 田中,
+                                      datetime: 2023-01-01 12:00:00,
+                                      groupcd: group01,
+                                      groupname: 営業部,
+                                      partcd: part01,
+                                      partname: 一般,
+                                    }],
+                                  statuscode: 0,
+                                  status: 申請,
+                                },
+                              ],
+                          },
+                          {
+                            stepno: 1,
+                            steptitle: 承認,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u002,
+                                      username: 佐藤哲郎,
+                                      stampname: 佐藤,
+                                      datetime: 2023-01-01 12:00:00,
+                                      groupcd: group01,
+                                      groupname: 営業部,
+                                      partcd: part02,
+                                      partname: 課長,
+                                    }],
+                                  statuscode: 1,
+                                  status: 承認,
+                                },
+                              ],
+                            cond: AND,
+                            cond_num: 1,
+                            adminskip: 0,
+                            skip: 0,
+                            backstepno: 0,
+                          },
+                          {
+                            stepno: 4,
+                            steptitle: 総務承認,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u004,
+                                      username: 濱崎貴子,
+                                      stampname: 濱崎,
+                                      datetime: "",
+                                      groupcd: group02,
+                                      groupname: 総務課,
+                                      partcd: part01,
+                                      partname: 一般,
+                                    }],
+                                  statuscode: 0,
+                                  status: 未処理,
+                                },
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u006,
+                                      username: 芥川幸三,
+                                      stampname: 芥川,
+                                      datetime: "",
+                                      groupcd: group02,
+                                      groupname: 総務課,
+                                      partcd: part03,
+                                      partname: 部長,
+                                    }],
+                                  statuscode: 0,
+                                  status: 未処理,
+                                },
+                              ],
+                            cond: AND,
+                            cond_num: 0,
+                            adminskip: 0,
+                            skip: 0,
+                            backstepno: 0,
+                          }
+                        ],
+                    },
+                    {
+                      version: 2,
+                      flow_results:
+                        [
+                          {
+                            stepno: 0,
+                            steptitle: 申請,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u001,
+                                      username: 田中圭太,
+                                      stampname: 田中,
+                                      datetime: 2023-01-01 12:00:00,
+                                      groupcd: group01,
+                                      groupname: 営業部,
+                                      partcd: part01,
+                                      partname: 一般,
+                                    }],
+                                  statuscode: 0,
+                                  status: 申請,
+                                },
+                              ],
+                          },
+                          {
+                            stepno: 1,
+                            steptitle: 承認,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u002,
+                                      username: 佐藤哲郎,
+                                      stampname: 佐藤,
+                                      datetime: 2023-01-01 12:00:00,
+                                      groupcd: group01,
+                                      groupname: 営業部,
+                                      partcd: part02,
+                                      partname: 課長,
+                                    }],
+                                  statuscode: 3,
+                                  status: 差し戻し,
+                                },
+                              ],
+                            cond: AND,
+                            cond_num: 1,
+                            adminskip: 0,
+                            skip: 0,
+                            backstepno: 0,
+                          },
+                          {
+                            stepno: 4,
+                            steptitle: 総務承認,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u004,
+                                      username: 濱崎貴子,
+                                      stampname: 濱崎,
+                                      datetime: "",
+                                      groupcd: group02,
+                                      groupname: 総務課,
+                                      partcd: part01,
+                                      partname: 一般,
+                                    }],
+                                  statuscode: 0,
+                                  status: 未処理,
+                                },
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u006,
+                                      username: 芥川幸三,
+                                      stampname: 芥川,
+                                      datetime: "",
+                                      groupcd: group02,
+                                      groupname: 総務課,
+                                      partcd: part03,
+                                      partname: 部長,
+                                    }],
+                                  statuscode: 0,
+                                  status: 未処理,
+                                },
+                              ],
+                            cond: AND,
+                            cond_num: 0,
+                            adminskip: 0,
+                            skip: 0,
+                            backstepno: 0,
+                          }
+                        ],
+                    },
+                    {
+                      version: 1,
+                      flow_results:
+                        [
+                          {
+                            stepno: 0,
+                            steptitle: 申請,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u001,
+                                      username: 田中圭太,
+                                      stampname: 田中,
+                                      datetime: 2023-01-01 12:00:00,
+                                      groupcd: group01,
+                                      groupname: 営業部,
+                                      partcd: part01,
+                                      partname: 一般,
+                                    }],
+                                  statuscode: 0,
+                                  status: 申請,
+                                },
+                              ],
+                          },
+                          {
+                            stepno: 1,
+                            steptitle: 承認,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u002,
+                                      username: 佐藤哲郎,
+                                      stampname: 佐藤,
+                                      datetime: 2023-01-01 12:00:00,
+                                      groupcd: group01,
+                                      groupname: 営業部,
+                                      partcd: part02,
+                                      partname: 課長,
+                                    }],
+                                  statuscode: 3,
+                                  status: 差し戻し,
+                                },
+                              ],
+                            cond: AND,
+                            cond_num: 1,
+                            adminskip: 0,
+                            skip: 0,
+                            backstepno: 0,
+                          },
+                          {
+                            stepno: 4,
+                            steptitle: 総務承認,
+                            aprvusers:
+                              [
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u004,
+                                      username: 濱崎貴子,
+                                      stampname: 濱崎,
+                                      datetime: "",
+                                      groupcd: group02,
+                                      groupname: 総務課,
+                                      partcd: part01,
+                                      partname: 一般,
+                                    }],
+                                  statuscode: 0,
+                                  status: 未処理,
+                                },
+                                {
+                                  aprv:
+                                    [{
+                                      usercode: u006,
+                                      username: 芥川幸三,
+                                      stampname: 芥川,
+                                      datetime: "",
+                                      groupcd: group02,
+                                      groupname: 総務課,
+                                      partcd: part03,
+                                      partname: 部長,
+                                    }],
+                                  statuscode: 0,
+                                  status: 未処理,
+                                },
+                              ],
+                            cond: AND,
+                            cond_num: 0,
+                            adminskip: 0,
+                            skip: 0,
+                            backstepno: 0,
+                          }
+                        ],
+                    }
+                    ]
             通常フォーム:
               value:
                 document:
@@ -4375,6 +4690,7 @@ components:
                     stampname: ""
                     datetime: ""
                   flow_versions: []
+                  histories: []
 
     # --------------------------------------------------------------------------------------------------
 
@@ -5729,7 +6045,7 @@ components:
                             - id: 3
                               name: 顧客カード
                               code: form03
-                              route: 
+                              route:
                                 - id: -1
                                   name: ""
 
@@ -6230,7 +6546,7 @@ components:
                       "勝 太郎": 8.8
                       "木戸 武史": 0
                   calc_type: sum
-    
+
     # --------------------------------------------------------------------------------------------------
 
     GetXpointInfoResponses200:
@@ -7530,7 +7846,7 @@ components:
                         type: string
                       "交通費":
                         type: integer
-    
+
     summary_queries_data:
       type: object
       properties:
@@ -7561,7 +7877,7 @@ components:
             * max：最大
             * min：最小
           type: string
-    
+
     cross_queries_data:
       type: object
       properties:
@@ -7950,6 +8266,93 @@ components:
           type: array
           items:
             example: []
+
+    flow_results:
+      description: 承認状況情報
+      type: array
+      items:
+        type: object
+        properties:
+          stepno:
+            description: ステップ番号
+            type: integer
+          steptitle:
+            description: ステップタイトル
+            type: string
+          aprvusers:
+            description: 処理者情報
+            type: array
+            items:
+              type: object
+              properties:
+                aprv:
+                  type: object
+                  properties:
+                    usercode:
+                      description: ユーザコード
+                      type: string
+                    username:
+                      description: ユーザ名
+                      type: string
+                    stampname:
+                      description: 印影名
+                      type: string
+                    datetime:
+                      description: ワークフロー操作日時
+                      type: string
+                    groupcd:
+                      description: ユーザグループコード
+                      type: string
+                    groupname:
+                      description: ユーザグループ名称
+                      type: string
+                    partcd:
+                      description: 役職コード
+                      type: string
+                    partname:
+                      description: 役職名称
+                      type: string
+                statuscode:
+                  description: |
+                    ステップ状態コード<br><br>
+                    ・申請ステップの場合
+                    |コード|名称|
+                    |----|----|
+                    |0|申請|
+
+                    ・承認ステップの場合
+                    |コード|名称|
+                    |----|----|
+                    |0|未処理|
+                    |1|承認|
+                    |2|却下|
+                    |3|差し戻し|
+                    |4|保留|
+
+                    ・回覧ステップの場合
+                    |コード|名称|
+                    |----|----|
+                    |0|未読|
+                    |1|既読|
+                  type: integer
+                status:
+                  description: ステップ状態名称
+                  type: string
+          cond:
+            description: 承認条件
+            type: string
+          cond_num:
+            description: 承認条件の指定人数
+            type: integer
+          adminskip:
+            description: 管理者スキップフラグ
+            type: integer
+          skip:
+            description: スキップフラグ
+            type: integer
+          backstepno:
+            description: 差し戻し先ステップ番号
+            type: integer
 
     # -----------------------------------------------------------------------------------------
 
@@ -8633,91 +9036,18 @@ components:
                 type: object
                 properties:
                   flow_results:
-                    description: 承認状況情報
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        stepno:
-                          description: ステップ番号
-                          type: integer
-                        steptitle:
-                          description: ステップタイトル
-                          type: string
-                        aprvusers:
-                          description: 処理者情報
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              aprv:
-                                type: object
-                                properties:
-                                  usercode:
-                                    description: ユーザコード
-                                    type: string
-                                  username:
-                                    description: ユーザ名
-                                    type: string
-                                  stampname:
-                                    description: 印影名
-                                    type: string
-                                  datetime:
-                                    description: ワークフロー操作日時
-                                    type: string
-                                  groupcd:
-                                    description: ユーザグループコード
-                                    type: string
-                                  groupname:
-                                    description: ユーザグループ名称
-                                    type: string
-                                  partcd:
-                                    description: 役職コード
-                                    type: string
-                                  partname:
-                                    description: 役職名称
-                                    type: string
-                              statuscode:
-                                description: |
-                                  ステップ状態コード<br><br>
-                                  ・申請ステップの場合
-                                  |コード|名称|
-                                  |----|----|
-                                  |0|申請|
-
-                                  ・承認ステップの場合
-                                  |コード|名称|
-                                  |----|----|
-                                  |0|未処理|
-                                  |1|承認|
-                                  |2|却下|
-                                  |3|差し戻し|
-                                  |4|保留|
-
-                                  ・回覧ステップの場合
-                                  |コード|名称|
-                                  |----|----|
-                                  |0|未読|
-                                  |1|既読|
-                                type: integer
-                              status:
-                                description: ステップ状態名称
-                                type: string
-                        cond:
-                          description: 承認条件
-                          type: string
-                        cond_num:
-                          description: 承認条件の指定人数
-                          type: integer
-                        adminskip:
-                          description: 管理者スキップフラグ
-                          type: integer
-                        skip:
-                          description: スキップフラグ
-                          type: integer
-                        backstepno:
-                          description: 差し戻し先ステップ番号
-                          type: integer
+                    $ref: "#/components/schemas/flow_results"
+            histories:
+              description: 承認履歴情報 クエリパラメータ history がtrueの場合に返されます。通常フォームの場合は空配列が返されます。
+              type: array
+              items:
+                type: object
+                properties:
+                  version:
+                    description: バージョン番号
+                    type: integer
+                  flow_results:
+                    $ref: "#/components/schemas/flow_results"
 
     GetLumpapplyListResponses200:
       type: object
@@ -8934,7 +9264,7 @@ components:
                   クエリグループに属するクエリの一覧
                 allOf:
                   - $ref: "#/components/schemas/queries"
-    
+
     GetQueryResponses200:
       type: object
       properties:
