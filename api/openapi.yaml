@@ -1,4 +1,4 @@
-openapi: 3.0.3
+﻿openapi: 3.0.3
 info:
   title: X-point API
   version: 1.0.0
@@ -13,10 +13,15 @@ servers:
         description: X-pointのサブドメイン
 tags:
   - name: 書類編集・承認操作API
+    description: 書類のワークフロー操作や添付ファイルの追加等、書類関連の操作を行うAPIです。
   - name: システムAPI
+    description: 管理者向けのフォーム管理やマスタ管理を行うAPIです。
   - name: ユーザー別API
+    description: 認証ユーザに紐づくクエリ操作や書類検索を行うAPIです。
   - name: SCIM API
+    description: SCIM 2.0 プロトコルに対応したAPIです。
   - name: その他API
+    description: X-pointのバージョン情報等を取得する認証不要のAPIです。
 paths:
   /api/v1/documents:
     post:
@@ -113,7 +118,7 @@ paths:
         "403":
           $ref: "#/components/responses/ErrorResponses403"
         "500":
-          $ref: "#/components/responses/ErrorResponses500_noReasons"
+          $ref: "#/components/responses/ErrorResponses500"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -611,6 +616,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/GetLumpapplyListResponses200"
+        "403":
+          $ref: "#/components/responses/ErrorResponses403"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -685,6 +692,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/GetFormsListResponses200"
+        "403":
+          $ref: "#/components/responses/ErrorResponses403"
 
   # --------------------------------------------------------------------------------------------------
 
@@ -1130,7 +1139,7 @@ paths:
 
   # --------------------------------------------------------------------------------------------------
 
-  /api/v1/query/:
+  /api/v1/query:
     get:
       tags:
         - ユーザー別API
@@ -1224,6 +1233,7 @@ paths:
         OAuth2 認証のアクセストークン取得時に、ドメインコードが省略可能か否かを判断する際に使用します。<br>
         ユーザー認証無しで利用可能です。
       operationId: GetXpointInfo
+      security: []
       responses:
         "200":
           $ref: "#/components/responses/GetXpointInfoResponses200"
@@ -1713,7 +1723,7 @@ components:
       name: seq
       in: path
       schema:
-        type: string
+        type: integer
         example: 1
       required: true
 
@@ -1792,7 +1802,7 @@ components:
       name: webhookId
       in: path
       schema:
-        type: string
+        type: integer
         example: 999
       required: true
 
@@ -1887,8 +1897,8 @@ components:
       name: fcd
       in: query
       schema:
-        type: integer
-        example: 999
+        type: string
+        example: S01
 
     query_formname:
       description: フォーム名称
@@ -1911,8 +1921,8 @@ components:
       name: routecd
       in: query
       schema:
-        type: integer
-        example: 999
+        type: string
+        example: route01
       required: true
 
     query_fromdocid:
@@ -2077,7 +2087,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "33341"
+        example: 33341
 
     query_formCode:
       description: フォームコード
@@ -2127,7 +2137,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "10"
+        example: 10
         minimum: 0
         maximum: 1000
 
@@ -2181,7 +2191,7 @@ components:
       in: query
       schema:
         type: boolean
-        example: "false"
+        example: false
 
     query_keyword:
       description: |
@@ -2246,7 +2256,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "10"
+        example: 10
       required: true
 
     query_fid:
@@ -2257,7 +2267,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "1"
+        example: 1
 
     query_step:
       description: |
@@ -2268,7 +2278,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "1"
+        example: 1
 
     query_recordNo:
       description: |
@@ -2278,7 +2288,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "0"
+        example: 0
 
     query_getLine:
       description: |
@@ -2289,7 +2299,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "50"
+        example: 50
         minimum: 0
         maximum: 1000
 
@@ -2389,7 +2399,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "2"
+        example: 2
         minimum: 0
         maximum: 1000
 
@@ -2399,7 +2409,7 @@ components:
       in: query
       schema:
         type: integer
-        example: "2"
+        example: 2
 
     query_execFlg:
       description: |
@@ -2625,15 +2635,16 @@ components:
                 description: |
                   インポートデータ<br>
                   インポートするデータを code（itemcd）、value（itemval）で指定します。
-                allOf:
-                  - $ref: "#/components/schemas/simplemaster_data"
-                  - example:
-                      - code: name
-                        value: 田中
-                      - code: age
-                        value: 25
-                      - code: height
-                        value: 170.31
+                type: array
+                items:
+                  $ref: "#/components/schemas/simplemaster_data"
+                example:
+                  - code: name
+                    value: 田中
+                  - code: age
+                    value: "25"
+                  - code: height
+                    value: "170.31"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -2711,6 +2722,9 @@ components:
                   <br>
                   **注意事項**<br>
                   * docid 配列に承認状況が承認完了以外の書類 ID を指定した場合はエラー応答が返されます。
+                type: array
+                items:
+                  type: integer
                 example:
                   - 100
                   - 101
@@ -3025,7 +3039,7 @@ components:
               fromdocid:
                 description: 関連元書類ID
                 type: integer
-                example: "1"
+                example: 1
               proxy_user:
                 description: 代理申請者ユーザCD
                 type: string
@@ -3064,7 +3078,7 @@ components:
                   電帳法書類区分で「1：電子取引」を指定した場合は 1 以上の整数の指定が必須です。<br>
                   デフォルトは 0 です。
                 type: integer
-                example: "1"
+                example: 1
               evidence_type:
                 description: |
                   アップロードファイル対応明細行No<br>
@@ -3073,7 +3087,7 @@ components:
                   0：その他<br>
                   1：電子取引
                 type: integer
-                example: "1"
+                example: 1
 
     # --------------------------------------------------------------------------------------------------
 
@@ -3120,7 +3134,7 @@ components:
                   true：同名ファイルを上書きして添付する。<br>
                   false：同名ファイルを別ファイルとして添付する。<br>
                 type: boolean
-                example: "true"
+                example: true
               reason:
                 description: |
                   更新理由<br>
@@ -3135,7 +3149,7 @@ components:
                   電帳法書類区分で「1：電子取引」を指定した場合は 1 以上の整数の指定が必須です。<br>
                   デフォルトは 0 です。
                 type: integer
-                example: "1"
+                example: 1
               evidence_type:
                 description: |
                   電帳法書類区分<br>
@@ -3144,7 +3158,7 @@ components:
                   0：その他<br>
                   1：電子取引
                 type: integer
-                example: "1"
+                example: 1
 
     # --------------------------------------------------------------------------------------------------
 
@@ -3170,7 +3184,7 @@ components:
                   true：添付ファイル削除<br>
                   false：添付ファイル更新
                 type: boolean
-                example: "false"
+                example: false
               user_code:
                 description: |
                   ユーザコード<br>
@@ -3206,7 +3220,7 @@ components:
                   対応明細行No<br>
                   電帳法対応オプションの添付型フォームの書類かつフォームに明細行が存在する場合に、ファイルに対応する明細行を指定します。
                 type: integer
-                example: "1"
+                example: 1
               evidence_type:
                 description: |
                   電帳法書類区分<br>
@@ -3215,7 +3229,7 @@ components:
                   0：その他<br>
                   1：電子取引<br>
                 type: integer
-                example: "1"
+                example: 1
 
     # --------------------------------------------------------------------------------------------------
 
@@ -3241,7 +3255,7 @@ components:
                   false：上書きしない<br>
                   デフォルトは false です。<br>
                 type: boolean
-                example: "false"
+                example: false
 
     # --------------------------------------------------------------------------------------------------
 
@@ -3332,7 +3346,7 @@ components:
                             ユーザグループ ID またはユーザグループ CDのいずれか指定必須。<br>
                             どちらも指定されている場合はユーザグループ ID が優先されます。
                           type: string
-                          example: 100
+                          example: "100"
                         groupCode:
                           description: ユーザグループCD
                           type: string
@@ -3461,21 +3475,22 @@ components:
                 example: 営業部
               members:
                 description: 所属ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/members_iteme"
-                  - example:
-                      - value: "100"
-                        urn:atled:scim:schemas:1.0:GroupMember:
-                          usercode: u001
-                          partCode: part01
-                          part:
-                            partCode: part01
-                      - value: "101"
-                        urn:atled:scim:schemas:1.0:GroupMember:
-                          usercode: u002
-                          partCode: part02
-                          part:
-                            partCode: part02
+                type: array
+                items:
+                  $ref: "#/components/schemas/members_iteme"
+                example:
+                  - value: "100"
+                    urn:atled:scim:schemas:1.0:GroupMember:
+                      usercode: u001
+                      partCode: part01
+                      part:
+                        partCode: part01
+                  - value: "101"
+                    urn:atled:scim:schemas:1.0:GroupMember:
+                      usercode: u002
+                      partCode: part02
+                      part:
+                        partCode: part02
               urn:atled:scim:schemas:1.0:Group:
                 description: X-point 拡張属性（ユーザグループ）
                 required:
@@ -3499,7 +3514,7 @@ components:
                           親グループID<br>
                           value と groupCode のどちらも指定されている場合は value が優先されます。
                         type: string
-                        example: 105
+                        example: "105"
                       groupCode:
                         description: 親グループCD
                         type: string
@@ -3522,21 +3537,22 @@ components:
                 example: 開発部
               members:
                 description: 所属ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/members_iteme"
-                  - example:
-                      - value: 100
-                        urn:atled:scim:schemas:1.0:GroupMember:
-                          usercode: u001
-                          partCode: part01
-                          part:
-                            partCode: part01
-                      - value: 101
-                        urn:atled:scim:schemas:1.0:GroupMember:
-                          usercode: u002
-                          partCode: part02
-                          part:
-                            partCode: part02
+                type: array
+                items:
+                  $ref: "#/components/schemas/members_iteme"
+                example:
+                  - value: "100"
+                    urn:atled:scim:schemas:1.0:GroupMember:
+                      usercode: u001
+                      partCode: part01
+                      part:
+                        partCode: part01
+                  - value: "101"
+                    urn:atled:scim:schemas:1.0:GroupMember:
+                      usercode: u002
+                      partCode: part02
+                      part:
+                        partCode: part02
               urn:atled:scim:schemas:1.0:Group:
                 description: X-point 拡張属性（ユーザグループ）
                 required:
@@ -3560,7 +3576,7 @@ components:
                           親グループID<br>
                           value と groupCode のどちらも指定されている場合は value が優先されます。
                         type: string
-                        example: 102
+                        example: "102"
                       groupCode:
                         description: 親グループCD
                         type: string
@@ -3572,8 +3588,6 @@ components:
       content:
         application/scim+json:
           schema:
-            required:
-              - schemas
             allOf:
               - $ref: "#/components/schemas/PatchUpdateUserGroupInfoRequest"
           examples:
@@ -3768,7 +3782,7 @@ components:
                 example: "{エラーメッセージ}"
               reasons:
                 type: string
-                example: ["{エラーメッセージ}"]
+                example: "{エラーメッセージ}"
 
     ErrorResponses500_noReasons:
       description: "Error response"
@@ -3792,7 +3806,7 @@ components:
               - type: object
                 properties:
                   status:
-                    example: 400
+                    example: "400"
 
     ScimErrorResponse401:
       description: "Error response"
@@ -3804,7 +3818,7 @@ components:
               - type: object
                 properties:
                   status:
-                    example: 401
+                    example: "401"
 
     ScimErrorResponse404:
       description: "Error response"
@@ -3816,7 +3830,7 @@ components:
               - type: object
                 properties:
                   status:
-                    example: 404
+                    example: "404"
 
     # --------------------------------------------------------------------------------------------------
 
@@ -4023,19 +4037,20 @@ components:
                                 type: string
                                 example: テキスト
               attachments:
-                allOf:
-                  - $ref: "#/components/schemas/attachments"
-                  - example:
-                      - content_type: text/csv
-                        seq: 1234
-                        name: filename.csv
-                        size: 684
-                        remarks: CSV data1
-                      - content_type: text/csv
-                        seq: 1235
-                        name: filename2.csv
-                        size: 12345
-                        remarks: CSV data2
+                type: array
+                items:
+                  $ref: "#/components/schemas/attachments"
+                example:
+                  - content_type: text/csv
+                    seq: 1234
+                    name: filename.csv
+                    size: 684
+                    remarks: CSV data1
+                  - content_type: text/csv
+                    seq: 1235
+                    name: filename2.csv
+                    size: 12345
+                    remarks: CSV data2
               comments:
                 type: array
                 items:
@@ -4087,17 +4102,18 @@ components:
                         type: string
                         example: back
               relations:
-                allOf:
-                  - $ref: "#/components/schemas/relations"
-                  - example:
-                      - docid: 999
-                        title1: 件名
-                        title2: 件名2
-                        form_name: 経費申請書
-                      - docid: 999
-                        title1: 件名
-                        title2: 件名2
-                        form_name: 経費申請書
+                type: array
+                items:
+                  $ref: "#/components/schemas/relations"
+                example:
+                  - docid: 999
+                    title1: 件名
+                    title2: 件名2
+                    form_name: 経費申請書
+                  - docid: 999
+                    title1: 件名
+                    title2: 件名2
+                    form_name: 経費申請書
 
     # --------------------------------------------------------------------------------------------------
 
@@ -4163,12 +4179,12 @@ components:
                     attentionflg: true
                     content: 重要コメントです
                     writername: 田中
-                    writedata: 2023/01/01 12:00:00
+                    writedate: 2023/01/01 12:00:00
                   - seqno: 2
                     attentionflg: false
                     content: 通常コメントです
                     writername: 佐藤
-                    writedata: 2023/01/01 12:00:00
+                    writedate: 2023/01/01 12:00:00
             コメントなし:
               value:
                 docid: 999
@@ -4251,7 +4267,7 @@ components:
                     name: 営業部ルート
                   type: workflow
                   status:
-                    code: 1
+                    code: "1"
                     name: 承認中
                   step:
                     max: 3
@@ -4377,7 +4393,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u001,
                                       username: 田中圭太,
                                       stampname: 田中,
@@ -4386,7 +4402,7 @@ components:
                                       groupname: 営業部,
                                       partcd: part01,
                                       partname: 一般,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 申請,
                                 },
@@ -4399,7 +4415,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u002,
                                       username: 佐藤哲郎,
                                       stampname: 佐藤,
@@ -4408,7 +4424,7 @@ components:
                                       groupname: 営業部,
                                       partcd: part02,
                                       partname: 課長,
-                                    }],
+                                    },
                                   statuscode: 1,
                                   status: 承認,
                                 },
@@ -4426,7 +4442,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u004,
                                       username: 濱崎貴子,
                                       stampname: 濱崎,
@@ -4435,13 +4451,13 @@ components:
                                       groupname: 総務課,
                                       partcd: part01,
                                       partname: 一般,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 未処理,
                                 },
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u006,
                                       username: 芥川幸三,
                                       stampname: 芥川,
@@ -4450,7 +4466,7 @@ components:
                                       groupname: 総務課,
                                       partcd: part03,
                                       partname: 部長,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 未処理,
                                 },
@@ -4474,7 +4490,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u001,
                                       username: 田中圭太,
                                       stampname: 田中,
@@ -4483,7 +4499,7 @@ components:
                                       groupname: 営業部,
                                       partcd: part01,
                                       partname: 一般,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 申請,
                                 },
@@ -4496,7 +4512,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u002,
                                       username: 佐藤哲郎,
                                       stampname: 佐藤,
@@ -4505,7 +4521,7 @@ components:
                                       groupname: 営業部,
                                       partcd: part02,
                                       partname: 課長,
-                                    }],
+                                    },
                                   statuscode: 3,
                                   status: 差し戻し,
                                 },
@@ -4523,7 +4539,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u004,
                                       username: 濱崎貴子,
                                       stampname: 濱崎,
@@ -4532,13 +4548,13 @@ components:
                                       groupname: 総務課,
                                       partcd: part01,
                                       partname: 一般,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 未処理,
                                 },
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u006,
                                       username: 芥川幸三,
                                       stampname: 芥川,
@@ -4547,7 +4563,7 @@ components:
                                       groupname: 総務課,
                                       partcd: part03,
                                       partname: 部長,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 未処理,
                                 },
@@ -4571,7 +4587,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u001,
                                       username: 田中圭太,
                                       stampname: 田中,
@@ -4580,7 +4596,7 @@ components:
                                       groupname: 営業部,
                                       partcd: part01,
                                       partname: 一般,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 申請,
                                 },
@@ -4593,7 +4609,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u002,
                                       username: 佐藤哲郎,
                                       stampname: 佐藤,
@@ -4602,7 +4618,7 @@ components:
                                       groupname: 営業部,
                                       partcd: part02,
                                       partname: 課長,
-                                    }],
+                                    },
                                   statuscode: 3,
                                   status: 差し戻し,
                                 },
@@ -4620,7 +4636,7 @@ components:
                               [
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u004,
                                       username: 濱崎貴子,
                                       stampname: 濱崎,
@@ -4629,13 +4645,13 @@ components:
                                       groupname: 総務課,
                                       partcd: part01,
                                       partname: 一般,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 未処理,
                                 },
                                 {
                                   aprv:
-                                    [{
+                                    {
                                       usercode: u006,
                                       username: 芥川幸三,
                                       stampname: 芥川,
@@ -4644,7 +4660,7 @@ components:
                                       groupname: 総務課,
                                       partcd: part03,
                                       partname: 部長,
-                                    }],
+                                    },
                                   statuscode: 0,
                                   status: 未処理,
                                 },
@@ -4673,7 +4689,7 @@ components:
                     name: ""
                   type: standard
                   status:
-                    code: 0
+                    code: "0"
                     name: 下書き
                   step:
                     max: 0
@@ -5203,8 +5219,8 @@ components:
                   properties:
                     id:
                       description: フォームグループID
-                      type: string
-                      example: group01
+                      type: integer
+                      example: 1
                     name:
                       description: フォームグループ名称
                       type: string
@@ -5217,21 +5233,22 @@ components:
                       description: |
                         所属フォーム情報<br>
                         所属フォームが存在しない場合は空配列が返される。
-                      allOf:
-                        - $ref: "#/components/schemas/form"
-                        - example:
-                            - id: 1
-                              name: 経費申請書
-                              code: form01
-                              page_count: 1
-                              table_name: table01
-                              tsffile_name: form01.tsf
-                            - id: 2
-                              name: 休暇届
-                              code: form02
-                              page_count: 1
-                              table_name: table02
-                              tsffile_name: form02.tsf
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/form"
+                      example:
+                        - id: 1
+                          name: 経費申請書
+                          code: form01
+                          page_count: 1
+                          table_name: table01
+                          tsffile_name: form01.tsf
+                        - id: 2
+                          name: 休暇届
+                          code: form02
+                          page_count: 1
+                          table_name: table02
+                          tsffile_name: form02.tsf
 
     # --------------------------------------------------------------------------------------------------
 
@@ -5278,24 +5295,25 @@ components:
                 type: string
                 example: user_table
               fields:
-                allOf:
-                  - $ref: "#/components/schemas/master_fields"
-                  - example:
-                      - id: id
-                        type: varchar
-                        length: 10
-                        primary_key: true
-                        index: true
-                      - id: name
-                        type: varchar
-                        length: 50
-                        primary_key: false
-                        index: true
-                      - id: weight
-                        type: numeric
-                        length: 10.2
-                        primary_key: false
-                        index: false
+                type: array
+                items:
+                  $ref: "#/components/schemas/master_fields"
+                example:
+                  - id: id
+                    type: varchar
+                    length: "10"
+                    primary_key: true
+                    index: true
+                  - id: name
+                    type: varchar
+                    length: "50"
+                    primary_key: false
+                    index: true
+                  - id: weight
+                    type: numeric
+                    length: "10.2"
+                    primary_key: false
+                    index: false
 
     # --------------------------------------------------------------------------------------------------
 
@@ -5323,10 +5341,10 @@ components:
                   table_name: ""
                   total_count: 2
                   data:
-                    - id: 1
+                    - id: "1"
                       code: item1
                       value: アイテム1
-                    - id: 2
+                    - id: "2"
                       code: item2
                       value: アイテム2
             ユーザ固有マスタ:
@@ -5339,11 +5357,11 @@ components:
                   table_name: "m_customer"
                   total_count: 2
                   data:
-                    - code: 1
+                    - code: "1"
                       name: 株式会社えいとれっど商事
                       kana: カブシキガイシャエイトレッドショウジ
                       bank_name: えいとれっど銀行
-                    - code: 2
+                    - code: "2"
                       name: 株式会社えいとれっど商社
                       kana: カブシキガイシャエイトレッドショウシャ
                       bank_name: えいとれっど銀行
@@ -5407,24 +5425,25 @@ components:
                 example: 0
               result:
                 description: インポート結果情報
-                allOf:
-                  - $ref: "#/components/schemas/simplemaster_result"
-                  - example:
-                      - status: SUCCESS
-                        data:
-                          code: name
-                          value: 田中
-                        message: 新規登録が行われました。
-                      - status: SUCCESS
-                        data:
-                          code: age
-                          value: 25
-                        message: 新規登録が行われました。
-                      - status: SUCCESS
-                        data:
-                          code: height
-                          value: 170.31
-                        message: 新規登録が行われました。
+                type: array
+                items:
+                  $ref: "#/components/schemas/simplemaster_result"
+                example:
+                  - status: SUCCESS
+                    data:
+                      code: name
+                      value: 田中
+                    message: 新規登録が行われました。
+                  - status: SUCCESS
+                    data:
+                      code: age
+                      value: "25"
+                    message: 新規登録が行われました。
+                  - status: SUCCESS
+                    data:
+                      code: height
+                      value: "170.31"
+                    message: 新規登録が行われました。
 
     # --------------------------------------------------------------------------------------------------
 
@@ -5493,7 +5512,7 @@ components:
                     route_code: route01
                     title1: 件名
                     url: https://script.xxx.com/macros/s/sample/exec
-                    status_code: 200
+                    status_code: "200"
                     send_date: 2023/01/01 12:00:00
                     uuid: xxxxxxxx-0017-4c74-b48a-91a9e9b629a8
                   - domain_code: domain01
@@ -5502,7 +5521,7 @@ components:
                     route_code: route02
                     title1: 件名
                     url: https://script.xxx.com/macros/s/sample/exec
-                    status_code: 200
+                    status_code: "200"
                     send_date: 2023/01/01 12:00:00
                     uuid: xxxxxxxx-0018-4c74-b48a-91a9e9b629a8
             ログが存在しない:
@@ -5537,7 +5556,7 @@ components:
               status_code:
                 description: ステータスコード
                 type: string
-                example: 200
+                example: "200"
               uuid:
                 description: UUID
                 type: string
@@ -5591,7 +5610,7 @@ components:
                         type: array
                         items:
                           type: string
-                          example: 5222
+                          example: "5222"
                       Content-Type:
                         type: array
                         items:
@@ -5635,7 +5654,7 @@ components:
                             type: object
                             properties:
                               code:
-                                type: string
+                                type: integer
                                 example: 1
                               name:
                                 type: string
@@ -5698,8 +5717,8 @@ components:
                                 type: object
                                 properties:
                                   stat:
-                                    type: integer
-                                    example: 1
+                                    type: string
+                                    example: "1"
                                   send_date:
                                     type: string
                                     example: 2023/01/01 12:00:00
@@ -5710,8 +5729,8 @@ components:
                                     type: string
                                     example: doc01
                                   domid:
-                                    type: integer
-                                    example: 50
+                                    type: string
+                                    example: "50"
                                   formname:
                                     type: string
                                     example: 経費申請書
@@ -5757,103 +5776,104 @@ components:
                             type: object
                             properties:
                               steps:
-                                allOf:
-                                  - $ref: "#/components/schemas/steps_status0"
-                                  - example:
-                                      - step:
-                                          no: 0
+                                type: array
+                                items:
+                                  anyOf:
+                                    - $ref: "#/components/schemas/steps_status0"
+                                    - $ref: "#/components/schemas/steps"
+                                example:
+                                  - step:
+                                      no: 0
+                                      name: 申請
+                                    aprvusers:
+                                      - user:
+                                          code: u001
+                                          name: 田中
+                                          stampName: 田
+                                        group:
+                                          code: group01
+                                          name: 営業部
+                                        part:
+                                          code: part01
+                                          name: 一般
+                                        aprvdate: 2023/01/01 12:00:00
+                                        status:
+                                          code: 0
                                           name: 申請
-                                        aprvusers:
-                                          - user:
-                                              code: u001
-                                              name: 田中
-                                              stampName: 田
-                                            group:
-                                              code: group01
-                                              name: 営業部
-                                            part:
-                                              code: part01
-                                              name: 一般
-                                            aprvdate: 2023/01/01 12:00:00
-                                            status:
-                                              code: 0
-                                              name: 申請
-                                  - $ref: "#/components/schemas/steps"
-                                  - example:
-                                      - step:
-                                          no: 1
-                                          name: 承認
-                                          condition:
-                                            type: AND
-                                        aprvusers:
-                                          - user:
-                                              code: u002
-                                              name: 佐藤
-                                              stampName: 佐
-                                            group:
-                                              code: group01
-                                              name: 営業部
-                                            part:
-                                              code: part02
-                                              name: 課長
-                                            aprvdate: 2023/01/01 12:00:00
-                                            status:
-                                              code: 0
-                                              name: 未処理
-                                      - step:
-                                          no: 2
-                                          name: 承認
-                                          condition:
-                                            type: AND
-                                        aprvusers:
-                                          - user:
-                                              code: u003
-                                              name: 加藤
-                                              stampName: 加
-                                            group:
-                                              code: group01
-                                              name: 営業部
-                                            part:
-                                              code: part03
-                                              name: 部長
-                                            aprvdate: 2023/01/01 12:00:00
-                                            status:
-                                              code: 0
-                                              name: 未処理
-                                      - step:
-                                          no: 3
-                                          name: 承認
-                                          condition:
-                                            type: OR
-                                        aprvusers:
-                                          - user:
-                                              code: u004
-                                              name: 山田
-                                              stampName: 山
-                                            group:
-                                              code: group01
-                                              name: 営業部
-                                            part:
-                                              code: part03
-                                              name: 部長
-                                            aprvdate: 2023/01/01 12:00:00
-                                            status:
-                                              code: 0
-                                              name: 未処理
-                                          - user:
-                                              code: u005
-                                              name: 後藤
-                                              stampName: 後
-                                            group:
-                                              code: group01
-                                              name: 営業部
-                                            part:
-                                              code: part03
-                                              name: 部長
-                                            aprvdate: 2023/01/01 12:00:00
-                                            status:
-                                              code: 0
-                                              name: 未処理
+                                  - step:
+                                      no: 1
+                                      name: 承認
+                                      condition:
+                                        type: AND
+                                    aprvusers:
+                                      - user:
+                                          code: u002
+                                          name: 佐藤
+                                          stampName: 佐
+                                        group:
+                                          code: group01
+                                          name: 営業部
+                                        part:
+                                          code: part02
+                                          name: 課長
+                                        aprvdate: 2023/01/01 12:00:00
+                                        status:
+                                          code: 0
+                                          name: 未処理
+                                  - step:
+                                      no: 2
+                                      name: 承認
+                                      condition:
+                                        type: AND
+                                    aprvusers:
+                                      - user:
+                                          code: u003
+                                          name: 加藤
+                                          stampName: 加
+                                        group:
+                                          code: group01
+                                          name: 営業部
+                                        part:
+                                          code: part03
+                                          name: 部長
+                                        aprvdate: 2023/01/01 12:00:00
+                                        status:
+                                          code: 0
+                                          name: 未処理
+                                  - step:
+                                      no: 3
+                                      name: 承認
+                                      condition:
+                                        type: OR
+                                    aprvusers:
+                                      - user:
+                                          code: u004
+                                          name: 山田
+                                          stampName: 山
+                                        group:
+                                          code: group01
+                                          name: 営業部
+                                        part:
+                                          code: part03
+                                          name: 部長
+                                        aprvdate: 2023/01/01 12:00:00
+                                        status:
+                                          code: 0
+                                          name: 未処理
+                                      - user:
+                                          code: u005
+                                          name: 後藤
+                                          stampName: 後
+                                        group:
+                                          code: group01
+                                          name: 営業部
+                                        part:
+                                          code: part03
+                                          name: 部長
+                                        aprvdate: 2023/01/01 12:00:00
+                                        status:
+                                          code: 0
+                                          name: 未処理
               response:
                 type: object
                 properties:
@@ -5863,59 +5883,73 @@ components:
                       Transfer-Encoding:
                         type: array
                         items:
+                          type: string
                           example: chunked
                       x-empty-key:
                         description: 実際のキーは空文字列になります。✕："x-empty-key" ◯：""
                         type: array
                         items:
+                          type: string
                           example: HTTP/1.1 200 OK
                       Alt-Svc:
                         type: array
                         items:
+                          type: string
                           example: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000
                       Server:
                         type: array
                         items:
+                          type: string
                           example: GSE
                       X-Content-Type-Options:
                         type: array
                         items:
+                          type: string
                           example: nosniff
                       Pragma:
                         type: array
                         items:
+                          type: string
                           example: no-cache
                       Date:
                         type: array
                         items:
+                          type: string
                           example: Mon, 09 Oct 2023 19:00:14 GMT
                       Accept-Ranges:
                         type: array
                         items:
+                          type: string
                           example: none
                       Referrer-Policy:
                         type: array
                         items:
+                          type: string
                           example: origin
                       Cache-Control:
                         type: array
                         items:
+                          type: string
                           example: no-cache, no-store, max-age=0, must-revalidate
                       Vary:
                         type: array
                         items:
+                          type: string
                           example: Accept-Encoding
                       Expires:
                         type: array
                         items:
+                          type: string
                           example: Mon, 01 Jan 1990 00:00:00 GMT
                       X-XSS-Protection:
                         type: array
                         items:
+                          type: string
                           example: 1; mode=block
                       Content-Type:
                         type: array
                         items:
+                          type: string
                           example: text/html; charset=utf-8
                   body:
                     type: string
@@ -6021,33 +6055,34 @@ components:
                       description: |
                         所属フォーム情報<br>
                         所属フォームが存在しない場合は空配列が返される。
-                      allOf:
-                        - $ref: "#/components/schemas/use_form"
-                        - example:
-                            - id: 1
-                              name: 経費申請書
-                              code: form01
-                              route:
-                                - id: -1
-                                  name: (自動選択ルート)
-                                - id: 999
-                                  code: route01
-                                  name: 営業部ルート
-                            - id: 2
-                              name: 交通費清算書
-                              code: form02
-                              route:
-                                - id: -1
-                                  name: (自動選択ルート)
-                                - id: 1000
-                                  code: route02
-                                  name: 営業部ルート
-                            - id: 3
-                              name: 顧客カード
-                              code: form03
-                              route:
-                                - id: -1
-                                  name: ""
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/use_form"
+                      example:
+                        - id: 1
+                          name: 経費申請書
+                          code: form01
+                          route:
+                            - id: -1
+                              name: (自動選択ルート)
+                            - id: 999
+                              code: route01
+                              name: 営業部ルート
+                        - id: 2
+                          name: 交通費清算書
+                          code: form02
+                          route:
+                            - id: -1
+                              name: (自動選択ルート)
+                            - id: 1000
+                              code: route02
+                              name: 営業部ルート
+                        - id: 3
+                          name: 顧客カード
+                          code: form03
+                          route:
+                            - id: -1
+                              name: ""
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6093,37 +6128,38 @@ components:
                 description: |
                   承認状況情報<br>
                   該当する書類が存在しない場合は空配列が返される。
-                allOf:
-                  - $ref: "#/components/schemas/approval_list"
-                  - example:
-                      - docid: 100
-                        hidden: true
-                        attachment: true
-                        comment: false
-                        title1: 1月分経費
-                        title2: 営業部
-                        form_name: 経費申請書
-                        status: 承認中
-                        display_status: 承認中
-                        apply_datetime: 2023/01/01 12:00:00
-                        apply_user: 佐藤
-                        approval_user:
-                          - 加藤
-                        lastaprv_datetime: 2023/01/01 12:00:00
-                      - docid: 101
-                        hidden: true
-                        attachment: true
-                        comment: false
-                        title1: 2月分経費
-                        title2: 営業部
-                        form_name: 経費申請書
-                        status: 承認中
-                        display_status: 承認中
-                        apply_datetime: 2023/01/01 12:00:00
-                        apply_user: 佐藤
-                        approval_user:
-                          - 加藤
-                        lastaprv_datetime: 2023/01/01 12:00:00
+                type: array
+                items:
+                  $ref: "#/components/schemas/approval_list"
+                example:
+                  - docid: 100
+                    hidden: true
+                    attachment: true
+                    comment: false
+                    title1: 1月分経費
+                    title2: 営業部
+                    form_name: 経費申請書
+                    status: 承認中
+                    display_status: 承認中
+                    apply_datetime: 2023/01/01 12:00:00
+                    apply_user: 佐藤
+                    approval_user:
+                      - 加藤
+                    lastaprv_datetime: 2023/01/01 12:00:00
+                  - docid: 101
+                    hidden: true
+                    attachment: true
+                    comment: false
+                    title1: 2月分経費
+                    title2: 営業部
+                    form_name: 経費申請書
+                    status: 承認中
+                    display_status: 承認中
+                    apply_datetime: 2023/01/01 12:00:00
+                    apply_user: 佐藤
+                    approval_user:
+                      - 加藤
+                    lastaprv_datetime: 2023/01/01 12:00:00
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6136,62 +6172,64 @@ components:
             properties:
               status_list:
                 description: 承認状況リスト
-                allOf:
-                  - $ref: "#/components/schemas/status_list"
-                  - example:
-                      - type: 0
-                        name: 承認待ち
-                        count: 0
-                      - type: 1
-                        name: 差し戻され
-                        count: 5
-                      - type: 2
-                        name: 下書き
-                        count: 1
-                      - type: 3
-                        name: 保留
-                        count: 1
-                      - type: 4
-                        name: 承認中(申請)
-                        count: 10
-                      - type: 5
-                        name: 差し戻し
-                        count: 0
-                      - type: 6
-                        name: 承認完了(申請)
-                        count: 100
-                      - type: 7
-                        name: 却下
-                        count: 0
-                      - type: 8
-                        name: 回覧
-                        count: 6
-                      - type: 9
-                        name: 承認中(承認)
-                        count: 0
-                      - type: 10
-                        name: 承認完了(承認)
-                        count: 0
+                type: array
+                items:
+                  $ref: "#/components/schemas/status_list"
+                example:
+                  - type: 0
+                    name: 承認待ち
+                    count: 0
+                  - type: 1
+                    name: 差し戻され
+                    count: 5
+                  - type: 2
+                    name: 下書き
+                    count: 1
+                  - type: 3
+                    name: 保留
+                    count: 1
+                  - type: 4
+                    name: 承認中(申請)
+                    count: 10
+                  - type: 5
+                    name: 差し戻し
+                    count: 0
+                  - type: 6
+                    name: 承認完了(申請)
+                    count: 100
+                  - type: 7
+                    name: 却下
+                    count: 0
+                  - type: 8
+                    name: 回覧
+                    count: 6
+                  - type: 9
+                    name: 承認中(承認)
+                    count: 0
+                  - type: 10
+                    name: 承認完了(承認)
+                    count: 0
               wait_list:
                 description: 承認待ち書類リスト
-                allOf:
-                  - $ref: "#/components/schemas/wait_list"
-                  - example:
-                      - docid: 100
-                        name: 経費申請書
-                        title: 1月分経費
-                        writername: 佐藤
-                        writedate: 2023/01/01 12:00:00
-                      - docid: 100
-                        name: 経費申請書
-                        title: 1月分経費
-                        writername: 加藤
-                        writedate: 2023/01/01 12:00:00
-                      - docid: 100
-                        name: 経費申請書
-                        title: 1月分経費
-                        writername: 田中
-                        writedate: 2023/01/01 12:00:00
+                type: array
+                items:
+                  $ref: "#/components/schemas/wait_list"
+                example:
+                  - docid: 100
+                    name: 経費申請書
+                    title: 1月分経費
+                    writername: 佐藤
+                    writedate: 2023/01/01 12:00:00
+                  - docid: 100
+                    name: 経費申請書
+                    title: 1月分経費
+                    writername: 加藤
+                    writedate: 2023/01/01 12:00:00
+                  - docid: 100
+                    name: 経費申請書
+                    title: 1月分経費
+                    writername: 田中
+                    writedate: 2023/01/01 12:00:00
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6206,6 +6244,9 @@ components:
                 description: |
                   書類ID配列<br>
                   非表示／表示設定した書類 ID
+                type: array
+                items:
+                  type: integer
                 example:
                   - 100
                   - 101
@@ -6238,49 +6279,50 @@ components:
                   検索結果の書類情報<br>
                   クエリパラメータで指定した「size」分の書類情報が返されます。<br>
                   （size を指定していない場合は 50 件）
-                allOf:
-                  - $ref: "#/components/schemas/search_items"
-                  - example:
-                      - docid: 1000
-                        has_attachments: true
-                        has_comments: true
-                        title1: 1月分経費
-                        title2: 営業部
-                        form:
-                          id: 100
-                          code: form01
-                          name: 経費申請書
-                        route:
-                          code: route01
-                          name: 営業部ルート
-                        step: 4
-                        stat: 1
-                        write_datetime: 2023/01/01 12:00:00
-                        update_datetime: 2023/01/01 12:00:00
-                        writer: 田中
-                        current_approvers:
-                          - 佐藤
-                        url: https://xxxxx.atledcloud.jp/xpoint/form.do?act=view&fid=100&docid=1000
-                      - docid: 1001
-                        has_attachments: true
-                        has_comments: true
-                        title1: 1月分経費
-                        title2: 営業部
-                        form:
-                          id: 100
-                          code: form01
-                          name: 経費申請書
-                        route:
-                          code: route01
-                          name: 営業部ルート
-                        step: 4
-                        stat: 1
-                        write_datetime: 2023/01/01 12:00:00
-                        update_datetime: 2023/01/01 12:00:00
-                        writer: 加藤
-                        current_approvers:
-                          - 佐藤
-                        url: https://xxxxx.atledcloud.jp/xpoint/form.do?act=view&fid=100&docid=1001
+                type: array
+                items:
+                  $ref: "#/components/schemas/search_items"
+                example:
+                  - docid: 1000
+                    has_attachments: true
+                    has_comments: true
+                    title1: 1月分経費
+                    title2: 営業部
+                    form:
+                      id: 100
+                      code: form01
+                      name: 経費申請書
+                    route:
+                      code: route01
+                      name: 営業部ルート
+                    step: 4
+                    stat: 1
+                    write_datetime: 2023/01/01 12:00:00
+                    update_datetime: 2023/01/01 12:00:00
+                    writer: 田中
+                    current_approvers:
+                      - 佐藤
+                    url: https://xxxxx.atledcloud.jp/xpoint/form.do?act=view&fid=100&docid=1000
+                  - docid: 1001
+                    has_attachments: true
+                    has_comments: true
+                    title1: 1月分経費
+                    title2: 営業部
+                    form:
+                      id: 100
+                      code: form01
+                      name: 経費申請書
+                    route:
+                      code: route01
+                      name: 営業部ルート
+                    step: 4
+                    stat: 1
+                    write_datetime: 2023/01/01 12:00:00
+                    update_datetime: 2023/01/01 12:00:00
+                    writer: 加藤
+                    current_approvers:
+                      - 佐藤
+                    url: https://xxxxx.atledcloud.jp/xpoint/form.do?act=view&fid=100&docid=1001
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6388,18 +6430,18 @@ components:
                       record:
                         "件名1": 客先訪問
                         "件名2": 営業部
-                        "書類No": 100
+                        "書類No": "100"
                         "訪問先": 株式会社xxx
                         "訪問要件": 商談
-                        "交通費": 1500
+                        "交通費": "1500"
                     - docid: 200
                       record:
                         "件名1": 客先訪問
                         "件名2": 営業部
-                        "書類No": 200
+                        "書類No": "200"
                         "訪問先": 株式会社yyy
                         "訪問要件": 商談
-                        "交通費": 1800
+                        "交通費": "1800"
             一覧クエリ(クエリ実行OFF):
               value:
                 query:
@@ -6452,18 +6494,18 @@ components:
                       record:
                         "件名1": 客先訪問
                         "件名2": 営業部
-                        "書類No": 100
+                        "書類No": "100"
                         "訪問先": 株式会社xxx
                         "訪問要件": 商談
-                        "交通費": 1500
+                        "交通費": "1500"
                     - docid: 200
                       record:
                         "件名1": 客先訪問
                         "件名2": 営業部
-                        "書類No": 200
+                        "書類No": "200"
                         "訪問先": 株式会社yyy
                         "訪問要件": 商談
-                        "交通費": 1800
+                        "交通費": "1800"
             サマリクエリ:
               value:
                 query:
@@ -6500,9 +6542,9 @@ components:
                 exec_result:
                   data:
                     - "年月": 2023/01
-                      "合計金額": 100000
+                      "合計金額": "100000"
                     - "年月": 2023/02
-                      "合計金額": 50000
+                      "合計金額": "50000"
                   calc_type: sum
             クロス集計クエリ:
               value:
@@ -6540,11 +6582,11 @@ components:
                 exec_result:
                   data:
                     "2023/01":
-                      "勝 太郎": 5.5
-                      "木戸 武史": 3
+                      "勝 太郎": "5.5"
+                      "木戸 武史": "3"
                     "2023/02":
-                      "勝 太郎": 8.8
-                      "木戸 武史": 0
+                      "勝 太郎": "8.8"
+                      "木戸 武史": "0"
                   calc_type: sum
 
     # --------------------------------------------------------------------------------------------------
@@ -6578,6 +6620,9 @@ components:
                 description: |
                   利用可能機能リスト<br>
                   サポートされている機能であってもライセンスや設定で無効化されている場合は出力されない。
+                type: array
+                items:
+                  type: string
                 example:
                   - oauth2_base
                   - rest_base
@@ -6682,6 +6727,9 @@ components:
                   - "master": マスタ管理権限
                   - "query": クエリ管理権限
                   - "wkfl": ワークフロー管理権限
+                type: array
+                items:
+                  type: string
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6696,6 +6744,7 @@ components:
                 description: スキーマ
                 type: array
                 items:
+                  type: string
                   example: urn:ietf:params:scim:api:messages:2.0:ListResponse
               totalResults:
                 description: 検索結果件数
@@ -6711,47 +6760,49 @@ components:
                 description: |
                   1 ページあたりの件数<br>
                   クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
+                type: integer
                 example: 10
               Resources:
                 description: ユーザ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: User
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Users/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:User
-                        userName: u001
-                        name:
-                          formatted: 田中
-                        displayName: 田中
-                        active: true
-                        password: "*"
-                        emails:
-                          - value: domain_admin@example.com
-                            type: work
-                            primary: true
-                        urn:atled:scim:schemas:1.0:User:
-                          userCode: u001
-                          kana: タナカ
-                          groups:
-                            - value: 100
-                              display: 営業部
-                              ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
-                              groupCode: group01
-                              primary: true
-                              part:
-                                displayName: 一般
-                                partCode: part01
-                          itemValues:
-                            - no: 1
-                              value: 予備1
-                          remark: 備考
+                type: array
+                items:
+                  $ref: "#/components/schemas/resources_item"
+                example:
+                  - id: "100"
+                    externalId: ""
+                    meta:
+                      resourceType: User
+                      created: 2023-01-01T12:00:00.000Z
+                      lastModified: 2023-01-01T12:00:00.000Z
+                      location: /xpoint/scim/v2/apitest/Users/xxx
+                    schemas:
+                      - urn:ietf:params:scim:schemas:core:2.0:User
+                    userName: u001
+                    name:
+                      formatted: 田中
+                    displayName: 田中
+                    active: true
+                    password: "*"
+                    emails:
+                      - value: domain_admin@example.com
+                        type: work
+                        primary: true
+                    urn:atled:scim:schemas:1.0:User:
+                      userCode: u001
+                      kana: タナカ
+                      groups:
+                        - value: "100"
+                          display: 営業部
+                          ＄ref: /xpoint/scim/v2/apitest/Groups/xxx
+                          groupCode: group01
+                          primary: true
+                          part:
+                            displayName: 一般
+                            partCode: part01
+                      itemValues:
+                        - no: 1
+                          value: 予備1
+                      remark: 備考
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6766,6 +6817,7 @@ components:
                 description: スキーマ
                 type: array
                 items:
+                  type: string
                   example: urn:ietf:params:scim:api:messages:2.0:ListResponse
               totalResults:
                 description: 検索結果件数
@@ -6781,51 +6833,53 @@ components:
                 description: |
                   1 ページあたりの件数<br>
                   クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
+                type: integer
                 example: 10
               Resources:
                 description: ユーザグループ情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_group_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Group
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Groups/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 営業部
-                        members:
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 100
-                            display: 田中
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u001
-                              userName: u001
-                              part:
-                                displayName: 一般
-                                displayKana: イッパン
-                                partCode: part01
-                          - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
-                            value: 101
-                            display: 佐藤
-                            type: User
-                            urn:atled:scim:schemas:1.0:GroupMember:
-                              userCode: u002
-                              userName: u002
-                              part:
-                                displayName: 課長
-                                displayKana: カチョウ
-                                partCode: part02
-                        urn:atled:scim:schemas:1.0:Group:
-                          groupCode: group01
-                          displayKana: エイギョウブ
-                          parentGroup:
-                            value: 105
-                          orderNo: 1
+                type: array
+                items:
+                  $ref: "#/components/schemas/resources_group_item"
+                example:
+                  - id: "100"
+                    externalId: ""
+                    meta:
+                      resourceType: Group
+                      created: 2023-01-01T12:00:00.000Z
+                      lastModified: 2023-01-01T12:00:00.000Z
+                      location: /xpoint/scim/v2/apitest/Groups/xxx
+                    schemas:
+                      - urn:ietf:params:scim:schemas:core:2.0:Group
+                    displayName: 営業部
+                    members:
+                      - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
+                        value: "100"
+                        display: 田中
+                        type: User
+                        urn:atled:scim:schemas:1.0:GroupMember:
+                          userCode: u001
+                          userName: u001
+                          part:
+                            displayName: 一般
+                            displayKana: イッパン
+                            partCode: part01
+                      - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
+                        value: "101"
+                        display: 佐藤
+                        type: User
+                        urn:atled:scim:schemas:1.0:GroupMember:
+                          userCode: u002
+                          userName: u002
+                          part:
+                            displayName: 課長
+                            displayKana: カチョウ
+                            partCode: part02
+                    urn:atled:scim:schemas:1.0:Group:
+                      groupCode: group01
+                      displayKana: エイギョウブ
+                      parentGroup:
+                        value: "105"
+                      orderNo: 1
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6840,6 +6894,7 @@ components:
                 description: スキーマ
                 type: array
                 items:
+                  type: string
                   example: urn:ietf:params:scim:api:messages:2.0:ListResponse
               totalResults:
                 description: 検索結果件数
@@ -6855,25 +6910,27 @@ components:
                 description: |
                   1 ページあたりの件数<br>
                   クエリパラメータの「count」を指定してリクエストした場合のみ応答に含まれる。
+                type: integer
                 example: 10
               Resources:
                 description: 役職情報
-                allOf:
-                  - $ref: "#/components/schemas/resources_part_item"
-                  - example:
-                      - id: 100
-                        externalId: ""
-                        meta:
-                          resourceType: Part
-                          created: 2023-01-01T12:00:00.000Z
-                          lastModified: 2023-01-01T12:00:00.000Z
-                          location: /xpoint/scim/v2/apitest/Parts/xxx
-                        schemas:
-                          - urn:ietf:params:scim:schemas:core:2.0:Group
-                        displayName: 一般
-                        displayKana: イッパン
-                        partCode: part01
-                        orderNo: 1
+                type: array
+                items:
+                  $ref: "#/components/schemas/resources_part_item"
+                example:
+                  - id: "100"
+                    externalId: ""
+                    meta:
+                      resourceType: Part
+                      created: 2023-01-01T12:00:00.000Z
+                      lastModified: 2023-01-01T12:00:00.000Z
+                      location: /xpoint/scim/v2/apitest/Parts/xxx
+                    schemas:
+                      - urn:ietf:params:scim:schemas:core:2.0:Group
+                    displayName: 一般
+                    displayKana: イッパン
+                    partCode: part01
+                    orderNo: 1
 
     # --------------------------------------------------------------------------------------------------
 
@@ -6894,7 +6951,7 @@ components:
               id:
                 description: ユーザID
                 type: string
-                example: 100
+                example: "100"
               meta:
                 description: メタデータ
                 type: object
@@ -6921,6 +6978,7 @@ components:
                 description: スキーマ
                 type: array
                 items:
+                  type: string
                   example: urn:ietf:params:scim:schemas:core:2.0:User
               userName:
                 description: ログインID
@@ -7018,7 +7076,7 @@ components:
           example: "{エラー詳細}"
         status:
           type: string
-          example: 400
+          example: "400"
 
     doc_form:
       description: フォーム情報
@@ -7066,8 +7124,8 @@ components:
             |4|差し戻され|
             |5|差し戻し|
             |6|承認完了|
-          type: integer
-          example: 1
+          type: string
+          example: "1"
         name:
           description: 書類状態名称
           type: string
@@ -7136,7 +7194,7 @@ components:
       properties:
         seqno:
           description: コメント番号
-          type: string
+          type: integer
         attentionflg:
           description: |
             重要コメントフラグ<br>
@@ -7242,7 +7300,7 @@ components:
       properties:
         id:
           description: フォームID
-          type: string
+          type: integer
         name:
           description: フォーム名称
           type: string
@@ -7264,7 +7322,7 @@ components:
       properties:
         id:
           description: フォームID
-          type: string
+          type: integer
         name:
           description: フォーム名称
           type: string
@@ -7344,7 +7402,7 @@ components:
           description: |
             データ桁数<br>
             データ型が"numeric"の場合は"整数桁数,小数桁数"の形式で返される。
-          type: integer
+          type: string
         primary_key:
           description: |
             主キー<br>
@@ -7361,13 +7419,14 @@ components:
       properties:
         id:
           description: id
-          type: integer
-        name:
-          description: 氏名
           type: string
-        height:
-          description: 身長
-          type: integer
+        code:
+          description: コード
+          type: string
+        value:
+          description: 値
+          type: string
+      additionalProperties: true
 
     simplemaster_data:
       type: object
@@ -7523,6 +7582,8 @@ components:
                     type: string
                   name:
                     type: string
+              aprvdate:
+                type: string
               status:
                 type: object
                 properties:
@@ -7549,7 +7610,7 @@ components:
     proxy_list:
       type: object
       properties:
-        use:
+        user:
           description: 代理ユーザ情報
           type: object
           properties:
@@ -7628,7 +7689,8 @@ components:
             現在ステップの承認者
           type: array
           items:
-            example:
+            type: string
+            example: u001
         lastaprv_datetime:
           description: 最終更新日時
           type: string
@@ -7752,7 +7814,8 @@ components:
           description: 現在ステップの承認者
           type: array
           items:
-            example:
+            type: string
+            example: u001
         url:
           description: 書類URL
           type: string
@@ -7786,6 +7849,7 @@ components:
           description: |
             フォーム件数<br>
             クエリが参照するフォームの件数
+          type: integer
         fid:
           description: |
             フォームID<br>
@@ -7795,6 +7859,7 @@ components:
           description: |
             フォーム名<br>
             フォーム件数が 1 の場合に出力される
+          type: string
         forms:
           description: |
             フォーム情報一覧<br>
@@ -7839,13 +7904,13 @@ components:
                       "件名2":
                         type: string
                       "書類No":
-                        type: integer
+                        type: string
                       "訪問先":
                         type: string
                       "訪問要件":
                         type: string
                       "交通費":
-                        type: integer
+                        type: string
 
     summary_queries_data:
       type: object
@@ -7955,6 +8020,7 @@ components:
           description: スキーマ
           type: array
           items:
+            type: string
             example: "urn:ietf:params:scim:schemas:core:2.0:User"
         userName:
           description: ログインID
@@ -8100,6 +8166,7 @@ components:
           description: スキーマ
           type: array
           items:
+            type: string
             example: "urn:ietf:params:scim:schemas:core:2.0:User"
         displayName:
           description: ユーザグループ名称
@@ -8380,7 +8447,7 @@ components:
           description: |
             差し戻し先ステップ番号<br>
             差し戻しの場合必須
-          type: string
+          type: integer
         form_code:
           description: |
             フォームコード<br>
@@ -8422,8 +8489,9 @@ components:
                     type: string
                   group1:
                     description: 表明細項目
-                    allOf:
-                      - $ref: "#/components/schemas/g_field"
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/g_field"
         lumpapply:
           allOf:
             - $ref: "#/components/schemas/lumpapply"
@@ -8482,6 +8550,9 @@ components:
             |4|申請者へ差し戻し|
             |5|承認者へ差し戻し|
             |6|承認完了|
+          type: array
+          items:
+            type: integer
         current_step:
           description: |
             検索条件「現在ステップ」<br>
@@ -8516,7 +8587,7 @@ components:
           description: |
             検索条件「日付複合条件」<br>
             過去期間指定：0 / 日付直接指定：1
-          type: string
+          type: integer
         date_span:
           description: |
             検索条件「過去期間」<br>
@@ -8840,8 +8911,9 @@ components:
                     type: string
                   group1:
                     description: 表明細項目
-                    allOf:
-                      - $ref: "#/components/schemas/g_field"
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/g_field"
         lumpapply:
           allOf:
             - $ref: "#/components/schemas/lumpapply"
@@ -8853,8 +8925,9 @@ components:
           description: 書類ID
           type: integer
         comment_list:
-          allOf:
-            - $ref: "#/components/schemas/comment_list"
+          type: array
+          items:
+            $ref: "#/components/schemas/comment_list"
 
     PostAttachmentsResponses200:
       type: object
@@ -9144,8 +9217,9 @@ components:
                     type: string
                   fields:
                     description: フィールド情報
-                    allOf:
-                      - $ref: "#/components/schemas/fields"
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/fields"
 
     GetMasterListResponses200:
       type: object
@@ -9154,8 +9228,9 @@ components:
           description: |
             マスタ情報<br>
             マスタが存在しない場合は空配列が返される。
-          allOf:
-            - $ref: "#/components/schemas/master"
+          type: array
+          items:
+            $ref: "#/components/schemas/master"
 
     GetMasterDataResponses200:
       type: object
@@ -9196,8 +9271,9 @@ components:
                 マスタデータ情報<br>
                 マスタデータが配列で返される。<br>
                 ※作成したマスタ情報によって項目が異なります
-              allOf:
-                - $ref: "#/components/schemas/master_data"
+              type: array
+              items:
+                $ref: "#/components/schemas/master_data"
 
     GetWebhooklogResponses200:
       type: object
@@ -9206,8 +9282,9 @@ components:
           description: |
             ログデータ<br>
             ログが存在しない場合は空配列が返されます。
-          allOf:
-            - $ref: "#/components/schemas/webhooklog_data"
+          type: array
+          items:
+            $ref: "#/components/schemas/webhooklog_data"
 
     GetWebhookConfigResponses200:
       type: object
@@ -9225,8 +9302,9 @@ components:
           description: |
             Webhook 設定情報<br>
             取得対象の Webhook 設定が存在しない場合は空配列を返す
-          allOf:
-            - $ref: "#/components/schemas/webhooks_config"
+          type: array
+          items:
+            $ref: "#/components/schemas/webhooks_config"
 
     GetProxyInfoResponses200:
       type: object
@@ -9235,8 +9313,9 @@ components:
           description: |
             代理権限リスト<br>
             代理権限が設定されていない場合は空配列が返される。
-          allOf:
-            - $ref: "#/components/schemas/proxy_list"
+          type: array
+          items:
+            $ref: "#/components/schemas/proxy_list"
 
     GetQueryListResponses200:
       type: object
@@ -9262,8 +9341,9 @@ components:
                 description: |
                   クエリ情報一覧<br>
                   クエリグループに属するクエリの一覧
-                allOf:
-                  - $ref: "#/components/schemas/queries"
+                type: array
+                items:
+                  $ref: "#/components/schemas/queries"
 
     GetQueryResponses200:
       type: object
@@ -9310,17 +9390,18 @@ components:
               description: |
                 フォーム情報<br>
                 フォーム件数が 2 以上の場合に出力される
-              type: object
-              properties:
-                fid:
-                  description: フォームID
-                  type: integer
-                form_name:
-                  description: フォーム名
-                  type: string
-                subtbl:
-                  description: 表定義
-                  type: string
+              type: array
+              items:
+                properties:
+                  fid:
+                    description: フォームID
+                    type: integer
+                  form_name:
+                    description: フォーム名
+                    type: string
+                  subtbl:
+                    description: 表定義
+                    type: string
             toprowmark:
               description: 先頭行文字
               type: string
@@ -9360,7 +9441,7 @@ components:
                     * line：折れ線
                     * area：領域
                   type: string
-                graph_3d:
+                graph3d:
                   description: |
                     3D表示
                     * true：3D表示する
@@ -9451,6 +9532,7 @@ components:
                 properties:
                   userName:
                     type: string
+                additionalProperties: true
 
     PatchUpdateUserGroupInfoRequest:
       type: object
@@ -9475,6 +9557,7 @@ components:
                 properties:
                   displayName:
                     type: string
+                additionalProperties: true
 
     PatchUpdatePartInfoRequest:
       type: object
@@ -9503,3 +9586,4 @@ components:
                     type: string
                   partCode:
                     type: string
+                additionalProperties: true
