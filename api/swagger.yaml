@@ -6601,6 +6601,8 @@ paths:
                       resourceType: Group
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:GroupMember'
                     'urn:atled:scim:schemas:1.0:Group':
                       displayKana: エイギョウブ
                       groupCode: group01
@@ -6689,7 +6691,10 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:Group'
+                          - 'urn:atled:scim:schemas:1.0:GroupMember'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:Group':
@@ -6908,6 +6913,8 @@ paths:
                       resourceType: Group
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:GroupMember'
                     'urn:atled:scim:schemas:1.0:Group':
                       displayKana: エイギョウブ
                       groupCode: group01
@@ -6996,7 +7003,10 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:Group'
+                          - 'urn:atled:scim:schemas:1.0:GroupMember'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:Group':
@@ -7256,6 +7266,8 @@ paths:
                       resourceType: Group
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:GroupMember'
                     'urn:atled:scim:schemas:1.0:Group':
                       displayKana: エイギョウブ
                       groupCode: group01
@@ -7344,7 +7356,10 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:Group'
+                          - 'urn:atled:scim:schemas:1.0:GroupMember'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:Group':
@@ -7508,6 +7523,8 @@ paths:
                       resourceType: Group
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:GroupMember'
                     'urn:atled:scim:schemas:1.0:Group':
                       displayKana: エイギョウブ
                       groupCode: group01
@@ -7596,7 +7613,10 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:Group'
+                          - 'urn:atled:scim:schemas:1.0:GroupMember'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:Group':
@@ -7870,6 +7890,8 @@ paths:
                       resourceType: Group
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:GroupMember'
                     'urn:atled:scim:schemas:1.0:Group':
                       displayKana: エイギョウブ
                       groupCode: group01
@@ -7958,7 +7980,10 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:Group'
+                          - 'urn:atled:scim:schemas:1.0:GroupMember'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:Group':
@@ -8290,7 +8315,7 @@ paths:
                     orderNo: 1
                     partCode: part01
                     schemas:
-                      - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Part'
                 items:
                   properties:
                     displayKana:
@@ -8339,7 +8364,8 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example: 'urn:atled:scim:schemas:1.0:Part'
+                        type: string
                       type: array
                   type: object
                 type: array
@@ -8453,7 +8479,7 @@ paths:
                     orderNo: 1
                     partCode: part01
                     schemas:
-                      - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Part'
                 items:
                   properties:
                     displayKana:
@@ -8502,7 +8528,8 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example: 'urn:atled:scim:schemas:1.0:Part'
+                        type: string
                       type: array
                   type: object
                 type: array
@@ -8695,7 +8722,7 @@ paths:
                     orderNo: 1
                     partCode: part01
                     schemas:
-                      - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Part'
                 items:
                   properties:
                     displayKana:
@@ -8744,7 +8771,8 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example: 'urn:atled:scim:schemas:1.0:Part'
+                        type: string
                       type: array
                   type: object
                 type: array
@@ -8873,7 +8901,7 @@ paths:
                     orderNo: 1
                     partCode: part01
                     schemas:
-                      - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Part'
                 items:
                   properties:
                     displayKana:
@@ -8922,7 +8950,8 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example: 'urn:atled:scim:schemas:1.0:Part'
+                        type: string
                       type: array
                   type: object
                 type: array
@@ -9091,7 +9120,7 @@ paths:
                     orderNo: 1
                     partCode: part01
                     schemas:
-                      - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Part'
                 items:
                   properties:
                     displayKana:
@@ -9140,7 +9169,8 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example: 'urn:atled:scim:schemas:1.0:Part'
+                        type: string
                       type: array
                   type: object
                 type: array
@@ -9323,6 +9353,7 @@ paths:
                     password: '*'
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                      - 'urn:atled:scim:schemas:1.0:User'
                     'urn:atled:scim:schemas:1.0:User':
                       groups:
                         - display: 営業部
@@ -9420,7 +9451,9 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:User'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:User':
@@ -9709,6 +9742,7 @@ paths:
                     password: '*'
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                      - 'urn:atled:scim:schemas:1.0:User'
                     'urn:atled:scim:schemas:1.0:User':
                       groups:
                         - display: 営業部
@@ -9806,7 +9840,9 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:User'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:User':
@@ -10117,6 +10153,7 @@ paths:
                     password: '*'
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                      - 'urn:atled:scim:schemas:1.0:User'
                     'urn:atled:scim:schemas:1.0:User':
                       groups:
                         - display: 営業部
@@ -10214,7 +10251,9 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:User'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:User':
@@ -10410,6 +10449,7 @@ paths:
                     password: '*'
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                      - 'urn:atled:scim:schemas:1.0:User'
                     'urn:atled:scim:schemas:1.0:User':
                       groups:
                         - display: 営業部
@@ -10507,7 +10547,9 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:User'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:User':
@@ -10851,6 +10893,7 @@ paths:
                     password: '*'
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                      - 'urn:atled:scim:schemas:1.0:User'
                     'urn:atled:scim:schemas:1.0:User':
                       groups:
                         - display: 営業部
@@ -10948,7 +10991,9 @@ paths:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:User'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:User':
@@ -13571,7 +13616,10 @@ definitions:
       schemas:
         description: スキーマ
         items:
-          example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+          example:
+            - 'urn:ietf:params:scim:schemas:core:2.0:User'
+            - 'urn:atled:scim:schemas:1.0:Group'
+            - 'urn:atled:scim:schemas:1.0:GroupMember'
           type: string
         type: array
       'urn:atled:scim:schemas:1.0:Group':
@@ -13675,7 +13723,9 @@ definitions:
       schemas:
         description: スキーマ
         items:
-          example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+          example:
+            - 'urn:ietf:params:scim:schemas:core:2.0:User'
+            - 'urn:atled:scim:schemas:1.0:User'
           type: string
         type: array
       'urn:atled:scim:schemas:1.0:User':
@@ -13788,7 +13838,8 @@ definitions:
       schemas:
         description: スキーマ
         items:
-          example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+          example: 'urn:atled:scim:schemas:1.0:Part'
+          type: string
         type: array
     type: object
   route_code:
@@ -19481,6 +19532,8 @@ x-components:
                       resourceType: Group
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:GroupMember'
                     'urn:atled:scim:schemas:1.0:Group':
                       displayKana: エイギョウブ
                       groupCode: group01
@@ -19569,7 +19622,10 @@ x-components:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:Group'
+                          - 'urn:atled:scim:schemas:1.0:GroupMember'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:Group':
@@ -19638,7 +19694,7 @@ x-components:
                     orderNo: 1
                     partCode: part01
                     schemas:
-                      - 'urn:ietf:params:scim:schemas:core:2.0:Group'
+                      - 'urn:atled:scim:schemas:1.0:Part'
                 items:
                   properties:
                     displayKana:
@@ -19687,7 +19743,8 @@ x-components:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example: 'urn:atled:scim:schemas:1.0:Part'
+                        type: string
                       type: array
                   type: object
                 type: array
@@ -19741,6 +19798,7 @@ x-components:
                     password: '*'
                     schemas:
                       - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                      - 'urn:atled:scim:schemas:1.0:User'
                     'urn:atled:scim:schemas:1.0:User':
                       groups:
                         - display: 営業部
@@ -19838,7 +19896,9 @@ x-components:
                     schemas:
                       description: スキーマ
                       items:
-                        example: 'urn:ietf:params:scim:schemas:core:2.0:User'
+                        example:
+                          - 'urn:ietf:params:scim:schemas:core:2.0:User'
+                          - 'urn:atled:scim:schemas:1.0:User'
                         type: string
                       type: array
                     'urn:atled:scim:schemas:1.0:User':
