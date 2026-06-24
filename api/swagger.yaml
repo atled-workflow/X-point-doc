@@ -1160,36 +1160,40 @@ paths:
                       type: array
                     update:
                       description: コメント更新者情報
-                      properties:
-                        code:
-                          description: コメント更新者ユーザコード
-                          example: u002
-                          type: string
-                        date:
-                          description: コメント更新日時
-                          example: '2023/01/01 12:00:00'
-                          type: string
-                        name:
-                          description: コメント更新者ユーザ名
-                          example: 佐藤
-                          type: string
-                      type: object
+                      items:
+                        properties:
+                          code:
+                            description: コメント更新者ユーザコード
+                            example: u002
+                            type: string
+                          date:
+                            description: コメント更新日時
+                            example: '2023/01/01 12:00:00'
+                            type: string
+                          name:
+                            description: コメント更新者ユーザ名
+                            example: 佐藤
+                            type: string
+                        type: object
+                      type: array
                     writer:
                       description: コメント登録者情報
-                      properties:
-                        code:
-                          description: コメント登録者ユーザコード
-                          example: u001
-                          type: string
-                        date:
-                          description: コメント登録日時
-                          example: '2023/01/01 12:00:00'
-                          type: string
-                        name:
-                          description: コメント登録者ユーザ名
-                          example: 田中
-                          type: string
-                      type: object
+                      items:
+                        properties:
+                          code:
+                            description: コメント登録者ユーザコード
+                            example: u001
+                            type: string
+                          date:
+                            description: コメント登録日時
+                            example: '2023/01/01 12:00:00'
+                            type: string
+                          name:
+                            description: コメント登録者ユーザ名
+                            example: 田中
+                            type: string
+                        type: object
+                      type: array
                   type: object
                 type: array
               document:
@@ -15693,36 +15697,40 @@ x-components:
                       type: array
                     update:
                       description: コメント更新者情報
-                      properties:
-                        code:
-                          description: コメント更新者ユーザコード
-                          example: u002
-                          type: string
-                        date:
-                          description: コメント更新日時
-                          example: '2023/01/01 12:00:00'
-                          type: string
-                        name:
-                          description: コメント更新者ユーザ名
-                          example: 佐藤
-                          type: string
-                      type: object
+                      items:
+                        properties:
+                          code:
+                            description: コメント更新者ユーザコード
+                            example: u002
+                            type: string
+                          date:
+                            description: コメント更新日時
+                            example: '2023/01/01 12:00:00'
+                            type: string
+                          name:
+                            description: コメント更新者ユーザ名
+                            example: 佐藤
+                            type: string
+                        type: object
+                      type: array
                     writer:
                       description: コメント登録者情報
-                      properties:
-                        code:
-                          description: コメント登録者ユーザコード
-                          example: u001
-                          type: string
-                        date:
-                          description: コメント登録日時
-                          example: '2023/01/01 12:00:00'
-                          type: string
-                        name:
-                          description: コメント登録者ユーザ名
-                          example: 田中
-                          type: string
-                      type: object
+                      items:
+                        properties:
+                          code:
+                            description: コメント登録者ユーザコード
+                            example: u001
+                            type: string
+                          date:
+                            description: コメント登録日時
+                            example: '2023/01/01 12:00:00'
+                            type: string
+                          name:
+                            description: コメント登録者ユーザ名
+                            example: 田中
+                            type: string
+                        type: object
+                      type: array
                   type: object
                 type: array
               document:
