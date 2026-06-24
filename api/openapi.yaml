@@ -6777,6 +6777,7 @@ components:
                       location: /xpoint/scim/v2/apitest/Users/xxx
                     schemas:
                       - urn:ietf:params:scim:schemas:core:2.0:User
+                      - urn:atled:scim:schemas:1.0:User
                     userName: u001
                     name:
                       formatted: 田中
@@ -6850,6 +6851,8 @@ components:
                       location: /xpoint/scim/v2/apitest/Groups/xxx
                     schemas:
                       - urn:ietf:params:scim:schemas:core:2.0:Group
+                      - urn:atled:scim:schemas:1.0:Group
+                      - urn:atled:scim:schemas:1.0:GroupMember
                     displayName: 営業部
                     members:
                       - ＄ref: /xpoint/scim/v2/apitest/Users/xxx
@@ -6926,7 +6929,7 @@ components:
                       lastModified: 2023-01-01T12:00:00.000Z
                       location: /xpoint/scim/v2/apitest/Parts/xxx
                     schemas:
-                      - urn:ietf:params:scim:schemas:core:2.0:Group
+                      - urn:atled:scim:schemas:1.0:Part
                     displayName: 一般
                     displayKana: イッパン
                     partCode: part01
@@ -8021,7 +8024,9 @@ components:
           type: array
           items:
             type: string
-            example: "urn:ietf:params:scim:schemas:core:2.0:User"
+            example: 
+              - urn:ietf:params:scim:schemas:core:2.0:User
+              - urn:atled:scim:schemas:1.0:User
         userName:
           description: ログインID
           type: string
@@ -8167,7 +8172,10 @@ components:
           type: array
           items:
             type: string
-            example: "urn:ietf:params:scim:schemas:core:2.0:User"
+            example:
+              - urn:ietf:params:scim:schemas:core:2.0:User
+              - urn:atled:scim:schemas:1.0:Group
+              - urn:atled:scim:schemas:1.0:GroupMember
         displayName:
           description: ユーザグループ名称
           type: string
@@ -8303,7 +8311,8 @@ components:
           description: スキーマ
           type: array
           items:
-            example: "urn:ietf:params:scim:schemas:core:2.0:User"
+            type: string
+            example: "urn:atled:scim:schemas:1.0:Part"
         displayName:
           description: 役職名称
           type: string
