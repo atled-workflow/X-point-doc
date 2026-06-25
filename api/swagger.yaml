@@ -1371,8 +1371,8 @@ paths:
                           items:
                             properties:
                               g_field1:
-                                example: 100
-                                type: integer
+                                example: '100'
+                                type: string
                               g_field2:
                                 example: テキスト
                                 type: string
@@ -4451,6 +4451,10 @@ paths:
                         example: 管理者
                         type: string
                     type: object
+                  lumpapplyid:
+                    description: 自動申請設定ID
+                    example: '999'
+                    type: integer
                   name:
                     description: 自動申請登録名称
                     example: 営業部の経費申請書作成
@@ -4695,7 +4699,7 @@ paths:
                           type: string
                         id:
                           description: id
-                          type: string
+                          type: integer
                         value:
                           description: 値
                           type: string
@@ -7484,6 +7488,7 @@ paths:
                     description: スキーマ
                     items:
                       example: []
+                      type: string
                     type: array
                 type: object
       responses:
@@ -8883,6 +8888,7 @@ paths:
                     description: スキーマ
                     items:
                       example: []
+                      type: string
                     type: array
                 type: object
       responses:
@@ -10425,6 +10431,7 @@ paths:
                     description: スキーマ
                     items:
                       example: []
+                      type: string
                     type: array
                 type: object
       responses:
@@ -11490,7 +11497,7 @@ definitions:
                   type: string
                 id:
                   description: id
-                  type: string
+                  type: integer
                 value:
                   description: 値
                   type: string
@@ -12363,6 +12370,7 @@ definitions:
         description: スキーマ
         items:
           example: []
+          type: string
         type: array
     type: object
   PatchUpdateUserGroupInfoRequest:
@@ -12387,6 +12395,7 @@ definitions:
         description: スキーマ
         items:
           example: []
+          type: string
         type: array
     type: object
   PatchUpdateUserRequest:
@@ -12417,6 +12426,7 @@ definitions:
         description: スキーマ
         items:
           example: []
+          type: string
         type: array
     type: object
   PostAttachmentsResponses200:
@@ -13368,7 +13378,7 @@ definitions:
         type: string
       id:
         description: id
-        type: string
+        type: integer
       value:
         description: 値
         type: string
@@ -15908,8 +15918,8 @@ x-components:
                           items:
                             properties:
                               g_field1:
-                                example: 100
-                                type: integer
+                                example: '100'
+                                type: string
                               g_field2:
                                 example: テキスト
                                 type: string
@@ -16531,6 +16541,10 @@ x-components:
                         example: 管理者
                         type: string
                     type: object
+                  lumpapplyid:
+                    description: 自動申請設定ID
+                    example: '999'
+                    type: integer
                   name:
                     description: 自動申請登録名称
                     example: 営業部の経費申請書作成
@@ -16582,10 +16596,10 @@ x-components:
                   code: keiyaku_master
                   data:
                     - code: item1
-                      id: '1'
+                      id: 1
                       value: アイテム1
                     - code: item2
-                      id: '2'
+                      id: 2
                       value: アイテム2
                   name: 契約区分マスタ
                   table_name: ''
@@ -16615,7 +16629,7 @@ x-components:
                           type: string
                         id:
                           description: id
-                          type: string
+                          type: integer
                         value:
                           description: 値
                           type: string
@@ -20303,6 +20317,7 @@ x-components:
                     description: スキーマ
                     items:
                       example: []
+                      type: string
                     type: array
                 type: object
       description: |
@@ -20396,6 +20411,7 @@ x-components:
                     description: スキーマ
                     items:
                       example: []
+                      type: string
                     type: array
                 type: object
     PatchUpdateUserRequest:
@@ -20494,6 +20510,7 @@ x-components:
                     description: スキーマ
                     items:
                       example: []
+                      type: string
                     type: array
                 type: object
     PatchWebhookUpdateRequest:
