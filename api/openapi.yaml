@@ -4028,8 +4028,8 @@ components:
                             type: object
                             properties:
                               g_field1:
-                                type: integer
-                                example: 100
+                                type: string
+                                example: "100"
                               g_field2:
                                 type: string
                                 example: テキスト
@@ -4858,6 +4858,10 @@ components:
                 description: 自動申請情報
                 type: object
                 properties:
+                  lumpapplyid:
+                    description: 自動申請設定ID
+                    type: integer
+                    example: "999"
                   name:
                     description: 自動申請登録名称
                     type: string
@@ -5345,10 +5349,10 @@ components:
                   table_name: ""
                   total_count: 2
                   data:
-                    - id: "1"
+                    - id: 1
                       code: item1
                       value: アイテム1
-                    - id: "2"
+                    - id: 2
                       code: item2
                       value: アイテム2
             ユーザ固有マスタ:
@@ -7426,7 +7430,7 @@ components:
       properties:
         id:
           description: id
-          type: string
+          type: integer
         code:
           description: コード
           type: string
@@ -9523,6 +9527,7 @@ components:
           description: スキーマ
           type: array
           items:
+            type: string
             example: []
         Operations:
           description: ログイン ID を指定した値に置換する
@@ -9554,6 +9559,7 @@ components:
           description: スキーマ
           type: array
           items:
+            type: string
             example: []
         Operations:
           description: オペレーション
@@ -9579,6 +9585,7 @@ components:
           description: スキーマ
           type: array
           items:
+            type: string
             example: []
         Operations:
           description: オペレーション
